@@ -1,5 +1,10 @@
 var QUERY = {};
 
+
+QUERY.AUTH = {
+  login: 'select * from `users` where `phone` = ?'
+};
+
 QUERY.HOME = {
   READ: "select * from `agent_wallet_history` as awh " +
   "where `agent_id`= ? " +
