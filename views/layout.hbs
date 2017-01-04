@@ -3,36 +3,57 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!--<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css" />-->
+    
+    <link rel="stylesheet" href='/stylesheets/layout.css' />
+    <link rel="stylesheet" href='/stylesheets/reset.css' />
+    <link rel="stylesheet" href="/vendor/plugins/plyr/dist/plyr.css" />
+    <link rel="stylesheet" href="/vendor/plugins/star-rating-svg/star-rating-svg.css" />
     <link rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />
-    <!--<link rel="stylesheet" href="/vendor/ionicons-2.0.1/css/ionicons.min.css" />
-    <link rel="stylesheet" href="/vendor/dist/css/AdminLTE.min.css" />
-    <link rel="stylesheet" href="/vendor/dist/css/skins/_all-skins.min.css" />
-    <link rel="stylesheet" href="/vendor/plugins/datepicker/datepicker3.css" />
-    <link rel="stylesheet" href="/vendor/plugins/daterangepicker/daterangepicker.css" />
-    <link rel="stylesheet" href="/vendor/plugins/datatables/dataTables.bootstrap.css" />-->
-    <!--<link rel='stylesheet' href='/stylesheets/styles.css' />-->
-    <link rel='stylesheet' href='/stylesheets/layout.css' />
-    <link rel='stylesheet' href='/stylesheets/reset.css' />
+
     <title>{{title}}</title>
 </head>
 
-<body class="hold-transition skin-red sidebar-mini {{#if (isEquals current_path 'login')}}login-page{{/if}}">
-    {{#if (isEquals current_path 'login')}}
-    {{{body}}}
-    {{else}}
-    <div class="wrapper">
-        {{> header}}
-        {{> left_nav}}
-        <div class="content-wrapper">
-            {{> page_header}}
-            <section class="content">{{{body}}}</section>
-        </div>
-    </div>
-    {{> footer}}
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" class="body_bg_01">
+   
+  {{#if (isEquals current_path 'login')}}
+      {{{body}}}
+  {{else}}        
+      {{> left_nav}}
+      {{{body}}}    
+  {{/if}}
+
+  <script src="{{host}}/vendor/plugins/requirejs/require.2.3.2.js"></script>  
+  <script src="{{host}}/javascripts/app.js"></script>  
+
+  {{#if (isEquals current_path 'login')}}
+  <script src="./javascripts/login.js"></script>
+  {{else}}
+      
+    {{!-- /edulist --}}
+    {{#if (isEquals current_path 'edulist')}}          
+    <script src="{{host}}/javascripts/left_nav.js"></script>            
     {{/if}}
-    <script src="/vendor/plugins/requirejs/require.2.3.2.js"></script>
-    <script src="/javascripts/app.js"></script>
-    {{#if (isEquals current_path 'login')}}<script src="javascripts/login.js"></script>{{/if}}
+    
+    {{!-- /edulist/[course_id] --}}
+    {{#if (isEquals current_path 'course') }} 
+    <script src="{{host}}/javascripts/course.js"></script>
+    {{/if}}
+
+    {{!-- /edulist/[course_id]/[course_list_id] --}}
+    {{#if (isEquals current_path 'courselist')}}
+    <script src="{{host}}/javascripts/courselist.js"></script>
+    {{/if}}
+
+    {{#if (isEquals current_path 'video')}}
+    <script src="{{host}}/javascripts/video.js"></script>
+    {{/if}}
+
+    {{#if (isEquals current_path 'evaluate')}}
+    <script src="{{host}}/javascripts/evaluate.js"></script>
+    {{/if}}
+
+  {{/if}}
+
 </body>
+
 </html>

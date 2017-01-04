@@ -1,0 +1,51 @@
+
+{{> page_header}}
+
+  <form action="#" method="POST">
+    
+    <section id="quiz_section">
+      {{#each course_list}}
+        <div class="quiz_select">
+          <strong class="question">{{question}}</strong>
+          {{#if option_id}}
+          <ol class="selection">
+          {{#each quiz_options}}
+            <li>
+              <a href="#" class="link">
+                <i class="ico ico_unchecked"></i>
+                <span class="answer" data-id="{{lookup ../quiz_option_ids @index}}">{{this}}</span>                
+              </a>
+            </li>
+          {{/each}}
+          </ol>
+          <div id="alert_{{id}}" class="result_quiz blind"></div>
+          {{else}}
+          <div class="not-select">
+            <input type="text" name="input_{{id}}" class="answer_quiz_input brd-round" autocomplete="off" />
+          </div>          
+          {{/if}}
+        </div>
+      {{/each}}      
+    </section>  
+    
+  </form>
+
+  <br /><br /><br />
+
+	<!-- 모든 문제에 답을 넣어야 정답확인 버튼이 활성화된다.-->
+  <a href="#" id="check_answers" class="blind">
+    <div class="btn_play check_answers">
+      <span class="ico ico_play"></span>
+      <span class="txt">정답확인</span>
+    </div>
+  </a>
+  
+	<!-- 정답을 확인할 후에 다음으로 버튼이 활성화된다. -->
+  <a href="{{next_url}}" id="next_step" class="">
+    <div class="btn_play btn-orange">
+      <span class="ico ico_play"></span>
+      <span class="txt">다음으로</span>
+    </div>
+  </a>
+
+  

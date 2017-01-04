@@ -7,9 +7,7 @@ var bodyParser = require('body-parser');
 
 /*routes*/
 var routes = require('./routes/index');
-var api = require('./routes/_bak/api');
-var agents = require('./routes/_bak/agents');
-var players = require('./routes/_bak/players');
+var api = require('./routes/api');
 
 /*routes*/
 var app = express();
@@ -29,7 +27,7 @@ hbs.registerPartials(__dirname + '/views/modal');
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.use(cookieSession({
-  keys: ['FC_Admin']
+  keys: ['FC_mobile']
 }));
 
 app.use(flash());
@@ -44,9 +42,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 
 app.use('/', routes);
-app.use('/agents', agents);
-app.use('/players', players);
-
 app.use('/api/v1', api);
 
 // catch 404 and forward to error handler

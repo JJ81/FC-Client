@@ -340,7 +340,7 @@
 .ico_play{
 	background-position: -69px -30px;
 	position: relative;
-	top: 4px;
+	top: 14px;
 	left: -5px;
 
 }
@@ -353,14 +353,14 @@
 	background: #42b24c;
 	font-size: 16px;
 	text-align: center;
-	height: 40px;
+	height: 60px;
 	color :#fff;
 	cursor: pointer;
 }
 
 .btn_play .txt{
 	position: relative;
-	top: -3px;
+	top: 8px;
 }
 
 

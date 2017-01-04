@@ -1,0 +1,23 @@
+
+{{> page_header}}
+
+  <hr />
+  
+  <div class="evaluation_section endOfCourse">
+    <h3 class="tit">수고하셨습니다.</h3>
+
+    {{#if next_course}}
+    <a href="{{next_course}}" style="text-decoration: none;">
+    <div class="btn_submit btn-clr-orange next-course">
+      <span class="txt">다음 강의 듣기</span>
+    </div>
+    </a>
+    {{/if}}
+
+    <a href="{{root_url}}" style="text-decoration: none;">
+      <div class="btn_submit btn-clr-grey">
+        <span class="txt">처음으로</span>
+      </div>
+    </a>
+
+  </div>
