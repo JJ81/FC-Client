@@ -5,15 +5,19 @@
 requirejs.config({
 	paths: {
 		jquery : ['/vendor/plugins/jQuery/jquery-2.2.3.min'],
-		jqueryCookie : '/vendor/plugins/jquery_cookie/jquery.cookie.1.4.1',
+		jqueryCookie : '/vendor/plugins/jquery_cookie/jquery.cookie.1.4.1',    
+    jqueryRating: '/vendor/plugins/star-rating-svg/star-rating-svg',
+    jqueryTimer : '/vendor/plugins/jquery_timer/jquery.timer',
     plyr: '/vendor/plugins/plyr/src/js/plyr',
-    rating: '/vendor/plugins/star-rating-svg/star-rating-svg'
 	},
 	shim : {
 		'jqueryCookie' : {
 			deps: ['jquery']
 		},
-    'rating': {
+    'jqueryRating': {
+      deps: ['jquery']
+    },
+    'jqueryTimer': {
       deps: ['jquery']
     }
 	}

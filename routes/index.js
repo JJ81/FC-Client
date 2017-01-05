@@ -59,7 +59,7 @@ passport.use(new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
   }, function (req, phone, password, done) {
-    connection.query(QUERY.AUTH.INFO, [phone], function (err, data) {
+    connection.query(QUERY.AUTH.SEL_INFO, [phone], function (err, data) {
       if (err) {
         return done(null, false);
       } else {
@@ -140,20 +140,21 @@ router.get('/edu(old)?list', isAuthenticated, function(req, res){
       courses_length; 
 
   if (req.url === '/edulist') {
-    query = QUERY.EDU.CURRENT;
+    query = QUERY.EDU.SEL_CURRENT;
     header = '이달의 교육과정';
   } else if (req.url === '/eduoldlist') {
-    query = QUERY.EDU.PASSED;
+    query = QUERY.EDU.SEL_PASSED;
     header = '지난 교육과정';
   }
 
-	connection.query(query, [req.user.user_id, req.user.user_id], function (err, data) {
+	var query = connection.query(query, [req.user.user_id, req.user.user_id], function (err, data) {
 
 		if (err) {
 			// 쿼리 실패시
 			console.error(err);
 		} else {     
-			//console.log(data);
+      console.log(query.sql);
+			// console.log(data);
       courses = data;
       courses_length = courses.length;
       training_user_id = courses[0].training_user_id;
@@ -203,18 +204,20 @@ router.get('/edu(old)?list/:training_user_id/:course_id', isAuthenticated, funct
   //    아무진행도 하지 않은 경우 course_list 의 첫번째 id 를 가져온다.
   //    알부 진행한 경우 log_edu_user_progress 에 없는 id 중 course_list 에서 order 가 가장 낮은 id 를 가져온다.
 
-	var course_id = req.params.course_id,
-      // 학습을 시작/반복/이어할 세션 id
-      min_course_list_id = null;
+	var training_user_id = req.params.training_user_id,
+      course_id = req.params.course_id,
+      min_course_list_id = null; // 학습을 시작/반복/이어할 세션 id
 		
 		async.series([
 			function (callback) {				
-				connection.query(QUERY.COURSE.INDEX, [course_id], function (err, data) {
-					callback(err, data[0]); // results[0]
+				var query = connection.query(QUERY.COURSE.SEL_INDEX, [training_user_id, training_user_id, course_id], function (err, data) {
+					console.log(query.sql);
+          callback(err, data[0]); // results[0]
 				});
 			},
 			function (callback) {
-				connection.query(QUERY.COURSE.SESSION_LIST, [req.user.user_id, course_id], function (err, data) {
+				var query = connection.query(QUERY.COURSE.SEL_SESSION_LIST, [req.user.user_id, course_id], function (err, data) {
+          //console.log(query.sql);
 					callback(err, data); // results[1]
 				});
 			}
@@ -247,7 +250,8 @@ router.get('/edu(old)?list/:training_user_id/:course_id', isAuthenticated, funct
 					header: results[0].course_name,
 					course: results[0],
           course_list: results[1],
-          course_list_id: min_course_list_id
+          course_list_id: min_course_list_id,
+          training_user_id: training_user_id
 				});									
 			}
 		});
@@ -273,7 +277,7 @@ router.get('/edu(old)?list/:training_user_id/:course_id/:course_list_id', isAuth
 
   async.series([
     function (callback) {
-      connection.query(QUERY.COURSE_LIST.INDEX, [course_list_id], function (err, data) {
+      connection.query(QUERY.COURSE_LIST.SEL_INDEX, [course_list_id], function (err, data) {
         course_list = data[0];
         callback(err, data); // results[0]
       });
@@ -282,17 +286,35 @@ router.get('/edu(old)?list/:training_user_id/:course_id/:course_list_id', isAuth
       
       switch (course_list.type) {
         case 'VIDEO':
-          connection.query(QUERY.COURSE_LIST.VIDEO, [course_list.video_id], function (err, data) {
+          connection.query(QUERY.COURSE_LIST.SEL_VIDEO, [course_list.video_id], function (err, data) {
             callback(err, data); // results[1]
           });          
           break;
 
         default: // QUIZ / FINAL
-          connection.query(QUERY.COURSE_LIST.QUIZ, [course_list.quiz_group_id], function (err, data) {
+          connection.query(QUERY.COURSE_LIST.SEL_QUIZ, [course_list.quiz_group_id], function (err, data) {
             callback(err, data); // results[1]
           });
           break;
       }
+    },
+    function (callback) {
+      switch (course_list.type) {
+        case 'VIDEO':      
+          // 비디오 총 시청시간 조회
+          connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
+            req.user.user_id,
+            course_list.video_id        
+          ], function (err, data) {
+            callback(err, data); // results[2]
+          });
+          break;
+        
+        default:
+          callback(null, null);
+          break;
+      }
+
     }
   ], function (err, results) {
     if (err) {
@@ -311,6 +333,12 @@ router.get('/edu(old)?list/:training_user_id/:course_id/:course_list_id', isAuth
       // console.log('next_url : ' + next_url);
 
       if (course_list.type === 'VIDEO') {
+
+          // 비디오 총 시청시간을 조회한다.
+          // console.log('total_played_seconds : ' + results[2][0].total_played_seconds);
+
+          // console.log(results[1][0]);
+
           // 비디오뷰 출력
           res.render('video', {
             current_path: 'video',
@@ -319,9 +347,14 @@ router.get('/edu(old)?list/:training_user_id/:course_id/:course_list_id', isAuth
             host: req.get('origin'),
             loggedIn: req.user,
             header: course_list.title,
-            course_list: results[1][0],
-            next_url: next_url
+            content: results[1][0],
+            total_played_seconds: results[2][0].total_played_seconds,
+            next_url: next_url,            
+            training_user_id: training_user_id,
+            course_id: course_id,
+            course_list_id: course_list_id        
           });
+
       }		        
       else {
 
@@ -348,8 +381,11 @@ router.get('/edu(old)?list/:training_user_id/:course_id/:course_list_id', isAuth
             host: req.get('origin'),
             loggedIn: req.user,
             header: course_list.title,
-            course_list: results[1],
-            next_url: next_url
+            contents: results[1],
+            next_url: next_url,            
+            training_user_id: training_user_id,
+            course_id: course_id,
+            course_list_id: course_list_id
           });
       }
     }
@@ -387,13 +423,13 @@ router.get('/complete/:training_user_id/:course_id', isAuthenticated, function (
   // 다음 강의코드를 구한다.
   async.series([
     function (callback) {
-      connection.query(QUERY.COURSE.COURSE_GROUP, [ course_id, training_user_id ], function (err, data) {
+      connection.query(QUERY.COURSE.SEL_COURSE_GROUP, [ course_id, training_user_id ], function (err, data) {
         course_group = data[0];
         callback(err, data); // results[0]
       });
     },
     function (callback) {
-      connection.query(QUERY.COURSE.NEXT_COURSE, [ course_group.group_id, course_group.order, training_user_id ], function (err, data) {
+      connection.query(QUERY.COURSE.SEL_NEXT_COURSE, [ course_group.group_id, course_group.order, training_user_id ], function (err, data) {
         callback(err, data); // results[1]
       });
     }

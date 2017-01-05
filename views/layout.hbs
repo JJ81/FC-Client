@@ -40,13 +40,15 @@
     {{/if}}
 
     {{!-- /edulist/[course_id]/[course_list_id] --}}
-    {{#if (isEquals current_path 'courselist')}}
-    <script src="{{host}}/javascripts/courselist.js"></script>
+    {{#if (isEquals current_path 'quiz')}}
+    <script src="{{host}}/javascripts/quiz.js"></script>
     {{/if}}
 
     {{#if (isEquals current_path 'video')}}
     <script src="{{host}}/javascripts/video.js"></script>
     {{/if}}
+
+    
 
     {{#if (isEquals current_path 'evaluate')}}
     <script src="{{host}}/javascripts/evaluate.js"></script>

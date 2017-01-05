@@ -7,7 +7,7 @@
 
 requirejs([
   'jquery',
-  'rating'
+  'jqueryRating'
 ], function (jQuery) {
 
   var $ = jQuery;

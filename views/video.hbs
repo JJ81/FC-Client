@@ -1,17 +1,21 @@
 
 {{> page_header}}
 
-  <section id="video_section">
-    <div id="videoplayer" class="tmp_video">
-      <div class="js-player" data-type="{{course_list.video_type}}" data-video-id="{{course_list.video_id}}"></div>
-      <!--<div class="js-player" data-type="vimeo" data-video-id="196277011"></div>-->
-    <div>
-  </section>
+<section id="video_section">
+  <div id="videoplayer" data-id="{{content.id}}" data-total-play="{{total_played_seconds}}" class="tmp_video">
+    <div class="js-player" data-type="{{content.video_type}}" data-video-id="{{content.video_id}}"></div>
+    <!--<div class="js-player" data-type="vimeo" data-video-id="196277011"></div>-->
+  <div>
+</section>
 
-	<!-- 다음으로 넘어갈 수 있을 조건이 충족될 경우 다음 아래의 버튼이 출력된다. -->
-  <a id="go_next_item" href="{{next_url}}">
-    <div class="btn_play btn-orange">
-      <span class="ico ico_play"></span>
-      <span class="txt">다음으로</span>
-    </div>
-  </a>
+<!-- 다음으로 넘어갈 수 있을 조건이 충족될 경우 다음 아래의 버튼이 출력된다. -->
+<a href="{{next_url}}">
+  <div class="btn_play btn-orange blind"     
+    data-training-user-id="{{training_user_id}}"
+    data-course-id="{{course_id}}"
+    data-course-list-id="{{course_list_id}}"  
+  >
+    <span class="ico ico_play"></span>
+    <span class="txt">다음으로</span>
+  </div>
+</a>

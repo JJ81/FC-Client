@@ -15,7 +15,7 @@
 					<span class="progress_bg">
 					<span class="progress" style="width: {{course.completed_rate}}%"></span>
 					</span>
-					<span class="achievement">{{course.completed_rate}}% 완료</span>
+					<span class="achievement">{{course.completed_rate}}% {{#if course.course_end_dt}}(완료일시 : {{ stime course.course_end_dt}}){{/if}}</span>
 			</span>
 			</span>
 	</li>
@@ -76,8 +76,11 @@
 
 <!-- 학습시작 -->
 {{#ifCond course_list.length '>' 0 }}
-<a href="{{../current_url}}/{{../course_list_id}}" style="text-decoration: none;">
-    <div class="btn_play">
+<a href="{{current_url}}/{{course_list_id}}" style="text-decoration: none;">
+    <div class="btn_play"
+      data-course-id="{{course.course_id}}" 
+      data-training-user-id="{{training_user_id}}"
+    >
     	<span class="ico ico_play"></span>
     {{#if (isEquals course.completed_rate 0)}}
     	<span class="txt">학습하기</span>

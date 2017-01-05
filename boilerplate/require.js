@@ -1,17 +1,17 @@
 /**
  * Created by parkseokje
- * 이달의 교육
+ * 퀴즈, 파이널 테스트
+ * TODO
  */
 
 'use strict';
 
-requirejs(
-    [
-        'jquery'
-    ],
-    function (jQuery) {
+requirejs([
+    'jquery'
+  ],
+  function (jQuery) {
 
-        var $ = jQuery;
+    var $ = jQuery;
 
-    }
+  }
 );
