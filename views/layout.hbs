@@ -56,6 +56,10 @@
     <script src="{{host}}/javascripts/complete.js"></script>
     {{/if}}    
 
+    {{#if (isEquals current_path 'profile')}}
+    <script src="{{host}}/javascripts/profile.js"></script>
+    {{/if}}        
+
   {{/if}}
 
 </body>

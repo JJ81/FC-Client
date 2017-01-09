@@ -11,7 +11,25 @@ QUERY.AUTH = {
   SEL_INFO: 
 	  'SELECT `id`, `name`, `email`, `password` ' +  
 	  '  FROM `users` ' +
-		' WHERE `phone` = ?; '
+		' WHERE `phone` = ?; ',
+
+  // 비밀번호 변경
+  UPD_CHANGE_PWD: 
+    'UPDATE `users` SET ' +
+    '       `password` = ? ' +
+    ' WHERE `id` = ?; ',
+
+  // 이메일 변경
+  UPD_CHANGE_EMAIL: 
+    'UPDATE `users` SET ' +
+    '       `email` = ? ' +
+    ' WHERE `id` = ?; ', 
+
+  // 핸드폰 변경
+  UPD_CHANGE_PHONE: 
+    'UPDATE `users` SET ' +
+    '       `phone` = ? ' +
+    ' WHERE `id` = ?; ',       
 };
 
 QUERY.EDU = {

@@ -14,6 +14,7 @@ var video = require('./routes/video'); // 비디오
 var quiz = require('./routes/quiz'); // 퀴즈/파이널
 var evaluate = require('./routes/evaluate'); // 평가
 var complete = require('./routes/complete'); // 완료
+var profile = require('./routes/profile'); // 정보수정
 var api = require('./routes/api');
 
 /*routes*/
@@ -84,6 +85,7 @@ app.use('/video', video);
 app.use('/quiz', quiz);
 app.use('/evaluate', evaluate);
 app.use('/complete', complete);
+app.use('/profile', profile);
 app.use('/api/v1', api);
 
 // catch 404 and forward to error handler
