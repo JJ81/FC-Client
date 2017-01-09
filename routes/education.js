@@ -36,16 +36,22 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
 	query = connection.query(query, [req.user.user_id, req.user.user_id], function (err, data) {
 		if (err) {
 			// 쿼리 실패시
+      return res.json({
+        success: false,
+        msg: err
+      });
 		} else {     
       ////console.log(query.sql);
-			console.log(data);
+			// console.log(data);
       courses = data;
 
       if (courses.length > 0) {
         // 학습하기 버튼 클릭 시 시작 세션 id를 구한다.
         // 기본은 id 가 가장 작은 세션이다.
         // 그 다음은 완료하지 않은 세션 중 id 가 가장 작은 세션이다. 
+        next_training_user_id = courses[0].training_user_id;
         next_course_id = courses[0].course_id;
+        
         for (i = 0; i < courses.length; i++) {
           if (courses[i].completed_rate !== 100) {
             next_training_user_id = courses[i].training_user_id; 

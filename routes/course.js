@@ -210,7 +210,7 @@ router.post('/log/end', function (req, res) {
               inputs.training_user_id
             ], 
             function (err, data) {
-              console.log(query.sql);
+              // console.log(query.sql);
               callback(err, data);
             }
           );          

@@ -16,7 +16,7 @@ var async = require('async');
 router.post('/log/checkanswer', function (req, res) {
 
   var inputs = req.body.data;
-  console.log(inputs);
+  // console.log(inputs);
 
   // quiz_id 를 SELECT IN Parameter 로 생성한다. ex. (1, 2)
   var quiz_ids = inputs.map(function(input) { return parseInt(input.quiz_id); });
@@ -54,8 +54,8 @@ router.post('/log/checkanswer', function (req, res) {
               user_quiz = inputs[quiz_start_index];
               data_quiz = data[quiz_start_index];
 
-              console.log('user_quiz : ' + user_quiz);
-              console.log('data_quiz : ' + data_quiz);
+              // console.log('user_quiz : ' + user_quiz);
+              // console.log('data_quiz : ' + data_quiz);
               
               if (user_quiz.answer_column === 'answer_desc') {
 
@@ -80,17 +80,17 @@ router.post('/log/checkanswer', function (req, res) {
                 user_quiz.answer_ids = JSON.parse("[" + user_quiz.answer_ids + "]");   
                 data_quiz.answer = JSON.parse("[" + data_quiz.answer + "]");                         
                 
-                console.log('quiz_id : ' + user_quiz.quiz_id);
-                console.log(user_quiz.answer_ids);
-                console.log(data_quiz.answer);
+                // console.log('quiz_id : ' + user_quiz.quiz_id);
+                // console.log(user_quiz.answer_ids);
+                // console.log(data_quiz.answer);
 
-                if (user_quiz.answer_ids.length !== data_quiz.answer.length || data_quiz.answer.length === 0)
+                if (user_quiz.answer_ids.length !== data_quiz.answer.length || !data_quiz.answer.length || !user_quiz.answer_ids.length)
                   result.iscorrect = false;
                 else {
                   for (var i = 0; i < data_quiz.answer.length; i++) {
                     for (var j = 0; j < user_quiz.answer_ids.length; j++) {
-                      console.log('answer1 : ' + data_quiz.answer[i]);
-                      console.log('answer2 : ' + user_quiz.answer_ids[j]);
+                      // console.log('answer1 : ' + data_quiz.answer[i]);
+                      // console.log('answer2 : ' + user_quiz.answer_ids[j]);
 
                       if (user_quiz.answer_ids[j] !== data_quiz.answer[i])     
                         result.iscorrect = false;
@@ -123,7 +123,7 @@ router.post('/log/checkanswer', function (req, res) {
                   }
                 );
 
-                console.log(result);
+                // console.log(result);
 
                 results.push(result);
               } // endif

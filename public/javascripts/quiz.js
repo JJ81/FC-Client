@@ -147,6 +147,9 @@ requirejs([
             }              
           });
 
+          if (answer_ids.length === 0)
+            answer_ids = '';
+
           answers.push ({
             quiz_id: $(this).data('quiz-id'),
             answer_ids: answer_ids,
