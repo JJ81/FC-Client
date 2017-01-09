@@ -13,7 +13,7 @@ module.exports = function () {
 				user : config.user,
 				password : config.password,
 				database: config.database,
-                mutipleStatements: true
+        mutipleStatements: true
 			});
 		},
 

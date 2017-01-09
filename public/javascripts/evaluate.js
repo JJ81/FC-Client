@@ -1,6 +1,9 @@
 /**
  * Created by parkseokje
  * 강의평가
+ * TODO
+ * 1. 강의/강사평가 
+ * 2. 평가 완료 후 완료페이지로 이동
  */
 
 'use strict';
@@ -10,7 +13,12 @@ requirejs([
   'jqueryRating'
 ], function (jQuery) {
 
-  var $ = jQuery;
+  var $ = jQuery,
+      btn_submit = $('.btn_submit'), // 평가 제출하기
+      next_url = btn_submit.parent().attr('href'),      
+      course_id = btn_submit.data('course-id'),
+      course_rating = $('.my-rating.course'), // 강의평가
+      teacher_rating = $('.my-rating.teacher'); // 강사평가
 
   // http://nashio.github.io/star-rating-svg/demo/
   $(".my-rating").starRating({
@@ -34,5 +42,43 @@ requirejs([
         }
       }
   });
+
+  // 제출하기
+  btn_submit.on('click', function (e) {
+    e.preventDefault();
+
+    if (course_rating.attr('data-rating') === '' || teacher_rating.attr('data-rating') === '') {
+      alert("평가부탁드립니다.");
+      return false;
+    }
+
+    if (confirm("제출하시겠습니까?")) {
+      ratingLogger();
+    } else {
+      return false;
+    }
+  });
+
+  // 강의/강사평가 기록
+  function ratingLogger () {
+
+    $.ajax({   
+      type: "POST",
+      url: "/api/v1/log/evaluate",   
+      data: { 
+        course_id: course_id,
+        course_rating: course_rating.attr('data-rating'), 
+        teacher_rating: teacher_rating.attr('data-rating') 
+      }
+    }).done(function (res) { 
+      if (!res.success) {
+        console.error(res.msg);
+      } else {
+        console.info('강의/강사평가 기록');
+        location.href = next_url;
+      } 
+    });
+    
+  }    
 
 });

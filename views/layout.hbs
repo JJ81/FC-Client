@@ -30,7 +30,7 @@
   {{else}}
       
     {{!-- /edulist --}}
-    {{#if (isEquals current_path 'edulist')}}          
+    {{#if (isEquals current_path 'education')}}          
     <script src="{{host}}/javascripts/left_nav.js"></script>            
     {{/if}}
     
@@ -46,13 +46,15 @@
 
     {{#if (isEquals current_path 'video')}}
     <script src="{{host}}/javascripts/video.js"></script>
-    {{/if}}
-
-    
+    {{/if}}    
 
     {{#if (isEquals current_path 'evaluate')}}
     <script src="{{host}}/javascripts/evaluate.js"></script>
     {{/if}}
+
+    {{#if (isEquals current_path 'complete')}}
+    <script src="{{host}}/javascripts/complete.js"></script>
+    {{/if}}    
 
   {{/if}}
 

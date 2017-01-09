@@ -77,8 +77,9 @@ requirejs(
       });                
 
       // plyr [ended] event
-      video.addEventListener('video has ended', function() {
+      video.addEventListener('ended', function() {
         console.log('ended');
+        timer.stop();
         endTimeLogger();
       });
 
@@ -89,7 +90,7 @@ requirejs(
 
         $.ajax({   
           type: "POST",
-          url: "/api/v1/log/video/playtime",   
+          url: "/video/log/playtime",   
           data: { video_id: video_id, timer_played_seconds: timer_played_seconds }   
         }).done(function (res) { 
           if (!res.success) {
@@ -115,7 +116,7 @@ requirejs(
 
         $.ajax({   
           type: "POST",
-          url: "/api/v1/log/session/starttime",
+          url: "/session/log/starttime",
           data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }   
         }).done(function (res) { 
           if (!res.success) {
@@ -135,7 +136,7 @@ requirejs(
 
         $.ajax({   
           type: "POST",
-          url: "/api/v1/log/session/endtime",
+          url: "/session/log/endtime",
           data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }
         }).done(function (res) { 
           if (!res.success) {
@@ -156,7 +157,7 @@ requirejs(
 
         $.ajax({   
           type: "POST",
-          url: "/api/v1/log/video/endtime",   
+          url: "/video/log/endtime",   
           data: { video_id: video_id }   
         }).done(function (res) { 
           if (!res.success) {
@@ -208,7 +209,7 @@ requirejs(
         return Math.floor(el.height());
       }        
 
-    // 학습하기
+    // 다음으로
     btn_play.on('click', function (event) {
       event.preventDefault();
 

@@ -48,7 +48,7 @@
     {{#if course_list}}
     <ol class="session">      
     	{{#each course_list}}
-        <a href="{{../../current_url}}/{{id}}" style="text-decoration: none;">            
+        <a href="/session/{{../training_user_id}}/{{../course.course_id}}/{{id}}" style="text-decoration: none;">            
         <li class="sess_list{{#if (isEquals done 0)}} disabled{{/if}}">
 				{{#if (isEquals type 'VIDEO')}}
 					<span class="ico video"></span>
@@ -76,11 +76,13 @@
 
 <!-- 학습시작 -->
 {{#ifCond course_list.length '>' 0 }}
-<a href="{{current_url}}/{{course_list_id}}" style="text-decoration: none;">
-    <div class="btn_play"
-      data-course-id="{{course.course_id}}" 
-      data-training-user-id="{{training_user_id}}"
-    >
+<a href="/session/{{training_user_id}}/{{course.course_id}}/{{course_list_id}}" 
+    id="btn_play_next" 
+    data-training-user-id="{{training_user_id}}"   
+    data-course-id="{{course.course_id}}"    
+    style="text-decoration: none;"
+  >
+    <div class="btn_play">
     	<span class="ico ico_play"></span>
     {{#if (isEquals course.completed_rate 0)}}
     	<span class="txt">학습하기</span>

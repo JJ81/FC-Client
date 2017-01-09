@@ -33,7 +33,7 @@ hbs.registerHelper('time', function (date) {
 });
 
 hbs.registerHelper('stime', function (date) {
-    return dateFormat(date, "yyyy-mm-dd HH:MM:ss");
+    return dateFormat(date, "yyyy-mm-dd HH:MM");
 });
 
 hbs.registerHelper('comparison', function(value , max){
