@@ -36,7 +36,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 
   async.series([
     function (callback) {
-      query = connection.query(QUERY.COURSE_LIST.SEL_INDEX, [course_list_id], function (err, data) {
+      query = connection.query(QUERY.COURSE_LIST.SEL_INDEX, [training_user_id, course_list_id], function (err, data) {
         course_list = data[0];
 
         // console.log('course_list : ');
@@ -55,7 +55,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
           break;
 
         default: // QUIZ / FINAL
-          connection.query(QUERY.COURSE_LIST.SEL_QUIZ, [req.user.user_id, course_list.quiz_group_id], function (err, data) {
+          connection.query(QUERY.COURSE_LIST.SEL_QUIZ, [course_list.quiz_group_id], function (err, data) {
             callback(err, data); // results[1]
           });
           break;
@@ -133,7 +133,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
               results[1][i].quiz_option_ids = JSON.parse('[' + tmp + ']');
           }
 
-          // console.log(results[1]);
+          console.log(results[1]);
 
           // 퀴즈뷰 출력
           res.render('quiz', {
@@ -147,7 +147,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
             next_url: next_url,            
             training_user_id: training_user_id,
             course_id: course_id,
-            course_list_id: course_list_id
+            course_list_id: course_list_id,
+            prev_yn: course_list.prev_yn
           });
       }
     }

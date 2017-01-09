@@ -89,7 +89,7 @@ router.post('/log/start', function (req, res) {
 
     // 트렌젝션 오류 발생
     if (err) { 
-      res.json({
+      return res.json({
         success: false,
         msg: err
       });
@@ -170,7 +170,7 @@ router.post('/log/end', function (req, res) {
 
     // 트렌젝션 오류 발생
     if (err) { 
-      res.json({
+      return res.json({
         success: false,
         msg: err
       });

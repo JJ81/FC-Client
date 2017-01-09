@@ -15,8 +15,8 @@ requirejs(
     ],
     function (plyr, jQuery) {
       var $ = jQuery,
-          timer_logging_interval = 5, // log every 5 seconds
-          timer = $.timer(1000 * timer_logging_interval, playTimeLogger, true),
+          timer_logging_interval = 0, // log every 5 seconds
+          timer = null,
           timer_played_seconds = 0,
           player_options = {
             autoplay: false,
@@ -33,8 +33,19 @@ requirejs(
           training_user_id = btn_play.data('training-user-id'),
           course_id = btn_play.data('course-id'),
           course_list_id = btn_play.data('course-list-id'),
-          video_duration = null; // 비디오 러닝타임
-                    
+          video_duration = null; // 비디오 러닝타임  
+
+      $(function () {
+        getVideoSettings();
+      });
+      
+      // 비디오 셋팅값을 조회한다.
+      function getVideoSettings() {
+        $.get("/video/settings", function(res) {
+          timer_logging_interval = res.interval;
+          timer = $.timer(1000 * timer_logging_interval, playTimeLogger, true);
+        });        
+      }
 
       // plyr [ready] event
       video.addEventListener('ready', function(event) {
@@ -80,6 +91,8 @@ requirejs(
       video.addEventListener('ended', function() {
         console.log('ended');
         timer.stop();
+
+        showPlayBtn (video_total_played_seconds + timer_logging_interval);
         endTimeLogger();
       });
 

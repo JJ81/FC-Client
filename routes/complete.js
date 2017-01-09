@@ -21,7 +21,8 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
   // 다음 강의코드를 구한다.
   async.series([
     function (callback) {
-      connection.query(QUERY.COURSE.SEL_COURSE_GROUP, [ course_id, training_user_id ], function (err, data) {
+      var query = connection.query(QUERY.COURSE.SEL_COURSE_GROUP, [ course_id, training_user_id ], function (err, data) {
+        console.log(query.sql);
         course_group = data[0];
         callback(err, data); // results[0]
       });
@@ -30,23 +31,24 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 
     // 다음 강의를 조회
     function (callback) {
-      connection.query(QUERY.COURSE.SEL_NEXT_COURSE, [ 
+      query = connection.query(QUERY.COURSE.SEL_NEXT_COURSE, [ 
           course_group.group_id, 
           course_id, 
           course_group.order, 
           training_user_id 
         ], 
         function (err, data) {
-          console.log(data);
+          console.log(query.sql);
           if (data.length === 0) {
             // SEL_NEXT_COURSE 가 없을 경우 SEL_NEXT_COURSE_2 를 조회
             // SEL_NEXT_COURSE : 아직 완료하지 않은 강의 중 다음 순서
-            connection.query(QUERY.COURSE.SEL_NEXT_COURSE_2, [
+            query = connection.query(QUERY.COURSE.SEL_NEXT_COURSE_2, [
                 course_group.group_id, 
                 course_id, 
                 course_group.order, 
               ], 
               function (err, data) {
+                console.log(query.sql);
                 callback(err, data); // results[1]
               }
             );
@@ -63,7 +65,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
       console.info(results);
 
       var next_course = null;
-      if (results[1])
+      if (results[1][0])
         next_course = '/' + 'course' + '/' + training_user_id + '/' + results[1][0].course_id;
       
       // 퀴즈뷰 출력

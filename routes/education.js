@@ -18,18 +18,12 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
 
 	// req.url 에 따라 쿼리문을 달리한다.
   var query = null,
-      // 사용자 교육 배정 id
-      training_user_id = null,
-      // 강의 목록 
-      course_list = null,
       // 완료/미완료 order (정렬순서) 가장 낮은 강의의 id
       next_course_id = null,
+      // 완료/미완료 order (정렬순서) 가장 낮은 사용자 강의의 id
+      next_training_user_id = null,      
       // 완료한 강의의 수
-      count_course_done = 0,
-      // 루프
-      i,
-      // 강의 개수
-      courses_length; 
+      count_course_done = 0;
 
   if (req.path === '/current') {
     query = QUERY.EDU.SEL_CURRENT;
@@ -40,34 +34,28 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
   }
 
 	query = connection.query(query, [req.user.user_id, req.user.user_id], function (err, data) {
-    ////console.log(query.sql);
 		if (err) {
 			// 쿼리 실패시
-			//console.error(err);
 		} else {     
       ////console.log(query.sql);
-			// //console.log(data);
+			console.log(data);
       courses = data;
 
       if (courses.length > 0) {
-        courses_length = courses.length;
-        training_user_id = courses[0].training_user_id;
-
         // 학습하기 버튼 클릭 시 시작 세션 id를 구한다.
         // 기본은 id 가 가장 작은 세션이다.
         // 그 다음은 완료하지 않은 세션 중 id 가 가장 작은 세션이다. 
-        if (courses_length !== 0) {
-          next_course_id = courses[0].course_id;
-          for (i = 0; i < courses_length; i++) {
-            if (courses[i].completed_rate !== 100) {
-              next_course_id = courses[i].course_id;
-              break;
-            }
+        next_course_id = courses[0].course_id;
+        for (i = 0; i < courses.length; i++) {
+          if (courses[i].completed_rate !== 100) {
+            next_training_user_id = courses[i].training_user_id; 
+            next_course_id = courses[i].course_id;
+            break;
           }
         }
 
         // 완료하지 않은 강의의 수
-        for (i = 0; i < courses_length; i++) {
+        for (var i = 0; i < courses.length; i++) {
           if (courses[i].completed_rate === 100) {
             count_course_done += 1;
           }
@@ -83,8 +71,8 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
 				loggedIn: req.user,        
 				header: header,
 				courses: data,
+        next_training_user_id: next_training_user_id,
         next_course_id: next_course_id,
-        training_user_id: training_user_id,
         count_course_done: count_course_done
 			});
 		}

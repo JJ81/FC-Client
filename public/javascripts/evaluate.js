@@ -64,7 +64,7 @@ requirejs([
 
     $.ajax({   
       type: "POST",
-      url: "/api/v1/log/evaluate",   
+      url: "/evaluate/log",   
       data: { 
         course_id: course_id,
         course_rating: course_rating.attr('data-rating'), 

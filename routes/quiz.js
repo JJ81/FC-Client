@@ -13,15 +13,10 @@ var async = require('async');
 
 // 퀴즈 정답확인
 // JSON.parse 는 string 개체를 JSON 개체로, JSON.stringify 는 JSON 개체를 string 로 변환한다.
-// passing parameters for IN :
-// https://github.com/mysqljs/mysql/issues/1263
-// bulk insert :
-// Nested arrays are turned into grouped lists (for bulk inserts), e.g. [['a', 'b'], ['c', 'd']] turns into ('a', 'b'), ('c', 'd')
-// TODO :
-// 1. 정답확인 시 로그 입력(log_user_quiz)
 router.post('/log/checkanswer', function (req, res) {
 
   var inputs = req.body.data;
+  console.log(inputs);
 
   // quiz_id 를 SELECT IN Parameter 로 생성한다. ex. (1, 2)
   var quiz_ids = inputs.map(function(input) { return parseInt(input.quiz_id); });
@@ -32,7 +27,7 @@ router.post('/log/checkanswer', function (req, res) {
         // console.log(query.sql);
         if (err) {
           // 쿼리 실패
-          res.json({
+          return res.json({
             success: false,
             msg: err
           });
@@ -47,8 +42,8 @@ router.post('/log/checkanswer', function (req, res) {
               user_answer = null, // 사용자가 입력한 답안
               data_quiz = null, // DB 에서 조회한 퀴즈 정보
               quiz_start_index = 0, // 첫번째 퀴즈
-              quiz_end_index = data.length - 1; // 마지막퀴즈
-          
+              quiz_end_index = data.length - 1; // 마지막퀴즈                   
+
           // async 시작
           async.whilst(
             function () {
@@ -58,6 +53,9 @@ router.post('/log/checkanswer', function (req, res) {
               // 사용자가 입력한 퀴즈 정보를 임시저장
               user_quiz = inputs[quiz_start_index];
               data_quiz = data[quiz_start_index];
+
+              console.log('user_quiz : ' + user_quiz);
+              console.log('data_quiz : ' + data_quiz);
               
               if (user_quiz.answer_column === 'answer_desc') {
 
@@ -74,25 +72,45 @@ router.post('/log/checkanswer', function (req, res) {
                 var result = {
                   quiz_id: user_quiz.quiz_id,         
                   correct_answer: data_quiz.answer, // id 로 넘어온다
-                  iscorrect: false,
+                  iscorrect: true,
                   answer_column: user_quiz.answer_column
                 };                    
 
-                // 정답여부 체크
-                if (user_quiz.answer_ids) {
-                  for (var j = 0; j < user_quiz.answer_ids.length; j++) {
-                    if (data_quiz.answer.indexOf(user_quiz.answer_ids[j]) > 0) {
-                      result.iscorrect = true;
-                      break;
+                // 정답여부 체크                
+                user_quiz.answer_ids = JSON.parse("[" + user_quiz.answer_ids + "]");   
+                data_quiz.answer = JSON.parse("[" + data_quiz.answer + "]");                         
+                
+                console.log('quiz_id : ' + user_quiz.quiz_id);
+                console.log(user_quiz.answer_ids);
+                console.log(data_quiz.answer);
+
+                if (user_quiz.answer_ids.length !== data_quiz.answer.length || data_quiz.answer.length === 0)
+                  result.iscorrect = false;
+                else {
+                  for (var i = 0; i < data_quiz.answer.length; i++) {
+                    for (var j = 0; j < user_quiz.answer_ids.length; j++) {
+                      console.log('answer1 : ' + data_quiz.answer[i]);
+                      console.log('answer2 : ' + user_quiz.answer_ids[j]);
+
+                      if (user_quiz.answer_ids[j] !== data_quiz.answer[i])     
+                        result.iscorrect = false;
+                      else {
+                        result.iscorrect = true;
+                        break;
+                      }
+                        
                     }
+
+                    if (!result.iscorrect) 
+                      break;
                   }
-                } 
+                }
 
                 // 옵션명 조회
                 var query = connection.query(QUERY.COURSE_LIST.SEL_OPTION, [
                     [JSON.parse("[" + data_quiz.answer + "]")]
                   ], 
-                  function (err, results1) {
+                  function (err, option_names) {
                     // //console.log(query.sql);
                     if (err) {
                       //console.log('옵션명 조회 시 오류 발생::');
@@ -100,12 +118,12 @@ router.post('/log/checkanswer', function (req, res) {
                     } else {
                       //console.log('옵션명 조회::');
                       //console.log(results1[0].correct_answer);                       
-                      result.correct_answer = results1[0].correct_answer; // ex. 보기1, 보기2                         
+                      result.correct_answer = option_names[0].correct_answer; // ex. 보기1, 보기2                         
                     }
                   }
                 );
 
-                //console.log(result);
+                console.log(result);
 
                 results.push(result);
               } // endif
@@ -133,7 +151,7 @@ router.post('/log/checkanswer', function (req, res) {
 
             // 트렌젝션 오류 발생
             if (err) { 
-              res.json({
+              return res.json({
                 success: false,
                 msg: err
               });

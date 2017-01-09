@@ -6,10 +6,10 @@
 	{{#each courses}}
 		<li class="item_wrap">
 				{{#if thumbnail}}
-				<a href="/course/{{../../training_user_id}}/{{course_id}}" class="list_item">
+				<a href="/course/{{training_user_id}}/{{course_id}}" class="list_item">
 				<img src="/uploads/{{thumbnail}}" alt="" width="100" class="img_list" />
 				{{else}}
-				<a href="/course/{{../../training_user_id}}/{{course_id}}" class="list_item no_img_list">
+				<a href="/course/{{training_user_id}}/{{course_id}}" class="list_item no_img_list">
 				{{/if}}
 					<span class="info">
             <span class="tit">{{course_name}}</span>
@@ -33,7 +33,7 @@
 
 <br /><br /><br />
 {{#ifCond courses.length '>' 0}}
-<a href="/course/{{training_user_id}}/{{next_course_id}}" style="text-decoration: none;">
+<a href="/course/{{next_training_user_id}}/{{next_course_id}}" style="text-decoration: none;">
 	<div class="btn_play">
 		<span class="ico ico_play"></span>
     

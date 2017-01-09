@@ -51,7 +51,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 });
 
 // 강의/강사평가
-router.post('/', function (req, res) {
+router.post('/log', function (req, res) {
 
   var inputs = {
     user_id: req.user.user_id,

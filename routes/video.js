@@ -11,6 +11,14 @@ var isAuthenticated = function (req, res, next) {
 require('../commons/helpers');
 var async = require('async');
 
+// 비디오 환경설정값을 리턴한다.
+router.get('/settings', function (req, res) {
+  return res.json({
+    success: true,
+    interval: 5
+  });
+});
+
 // url: /api/v1/log/video/playtime 
 // 비디오 재생시간(play_seconds, 재생중 매 1분마다) 기록
 router.post('/log/playtime', function (req, res) {
@@ -138,7 +146,7 @@ router.post('/log/endtime', function (req, res) {
 
     // 트렌젝션 오류 발생
     if (err) { 
-      res.json({
+      return res.json({
         success: false,
         msg: err
       });

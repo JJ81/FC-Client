@@ -25,20 +25,16 @@ requirejs([
     // 다음 강의 듣기
     btn_next_course.on('click', function (event) {
       event.preventDefault();
-      
-      endTimeLogger();
-      location.href = next_course_url;        
+      endTimeLogger(next_course_url);        
     });
 
     btn_complete_course.on('click', function (event) {
       event.preventDefault();
-      
-      endTimeLogger();
-      location.href = root_url;        
+      endTimeLogger(root_url);        
     });  
     
     // 교육과정 시작시간 기록
-    function endTimeLogger () {
+    function endTimeLogger (location_url) {
       
       $.ajax({   
         type: "POST",
@@ -53,6 +49,7 @@ requirejs([
           console.error(res.msg);
         } else {
           console.info('교육과정 종료일시 기록');
+          location.href = location_url;
         } 
       });
       

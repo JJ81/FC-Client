@@ -33,6 +33,7 @@ requirejs([
         validateOptionInputs();
       });
 
+      // 정답 체크/미체크, 정답확인 노출여부 판단
       quiz_options.click(function (e) {
         e.preventDefault();
 

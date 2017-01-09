@@ -56,6 +56,7 @@ QUERY.EDU = {
 		' 			  WHERE cl.`course_id` = @course_id ' +
 		'				) AS completed_rate ' +
     '     , (SELECT `end_dt` FROM `log_course_progress` WHERE `training_user_id` = @training_user_id AND `course_id` = @course_id) AS course_end_dt ' +
+    '     , e.name AS edu_name ' +
 		'  FROM `edu` AS e ' +
  		' INNER JOIN ( ' +
 		' 	    SELECT te.`edu_id`, tu.id AS training_user_id ' +
@@ -75,7 +76,7 @@ QUERY.EDU = {
 		' INNER JOIN `teacher` AS t ' +
 		'    ON c.`teacher_id` = t.`id` ' +    
 		' WHERE NOW() BETWEEN e.`start_dt` AND e.`end_dt` ' +
-    ' ORDER BY completed_rate, cg.`order`; ',
+    ' ORDER BY completed_rate, e.id, cg.`order`; ',
   
   // 지난 교육과정
 	SEL_PASSED: 
@@ -118,7 +119,7 @@ QUERY.EDU = {
 		' INNER JOIN `teacher` AS t ' +
 		'    ON c.`teacher_id` = t.`id` ' +    
 		' WHERE NOW() > e.`end_dt` ' +
-    ' ORDER BY completed_rate, cg.`order`; ',
+    ' ORDER BY completed_rate, e.id, cg.`order`; ',
   
   // 최초 학습시작 시 training_users 의 시작일시(start_dt)를 기록하여야 한다.
   UPD_TRAINING_USER_START_DT: 
@@ -202,7 +203,7 @@ QUERY.COURSE = {
     'SELECT cg.`course_id` ' +
     '  FROM `course_group` AS cg ' +
     ' WHERE cg.`id` = ( ' +
-	  '   SELECT MIN(`id`) ' +
+	  '   SELECT `id` ' +
 	  '     FROM `course_group` AS icg ' +
 	  '    WHERE `group_id` = ? ' +
     '      AND `course_id` <> ? ' +
@@ -288,6 +289,7 @@ QUERY.COURSE_LIST = {
     '     , @course_id := cl.`course_id` AS course_id ' +
     '     , @order := cl.`order` AS `order` ' +
     '     , (SELECT `id` FROM `course_list` WHERE `course_id` = @course_id AND `id` <> @id AND `order` >= @order ORDER BY `order`, `id` LIMIT 1) AS next_id ' +
+    '     , (SELECT CASE WHEN ISNULL(MAX(`id`)) THEN 0 ELSE 1 END FROM `log_session_progress` WHERE `training_user_id` = ? AND `course_list_id` = @id AND `end_dt` IS NOT NULL) AS prev_yn ' +
     '  FROM `course_list` AS cl ' +
     ' WHERE cl.`id` = ? ' +
     ' ORDER BY cl.`order`; ',
@@ -323,8 +325,7 @@ QUERY.COURSE_LIST = {
     '		        FROM `quiz_option` ' +
     '		       WHERE `opt_id` = @option_id ' +
     '		       GROUP BY `opt_id` ' +
-    '		     ) AS quiz_option_ids ' +
-    '      , (SELECT CASE WHEN ISNULL(MAX(`id`)) THEN 0 ELSE 1 END FROM `log_user_quiz` WHERE `user_id` = ? AND `quiz_id` = @quiz_id) AS prev_yn ' +
+    '		     ) AS quiz_option_ids ' +    
     '   FROM `quiz` AS q ' +
     '  INNER JOIN `quiz_group` AS qg ' +
     '     ON q.`id` = qg.`quiz_id` ' +
