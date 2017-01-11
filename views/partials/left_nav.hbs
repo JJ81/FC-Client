@@ -1,44 +1,31 @@
-<!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-        <!-- sidebar menu: : style can be found in sidebar.less -->
-        <ul class="sidebar-menu">
-            <li {{#if (isEquals current_path 'Home')}}class="active"{{/if}}>
-                <a href="/home">
-                    <i class="fa fa-home"></i>
-                    <span>Home</span>
-                </a>
-            </li>
-            <li {{#if (isEquals current_path 'Game Report')}}class="active"{{/if}}>
-                <a href="/report/game">
-                    <i class="fa fa-gamepad"></i>
-                    <span>Game Report</span>
-                </a>
-            </li>
-            <li {{#if (isEquals current_path 'Financial Report')}}class="active"{{/if}}>
-                <a href="/report/financial">
-                    <i class="fa fa-money" aria-hidden="true"></i>
-                    <span>Financial Report</span>
-                </a>
-            </li>
+<nav id="navigation" class="blind">
+    <div class="logo_section">
+        <img src="/images/img_logo.jpg" alt="로고" width="80" class="img_logo" />
+        <span class="logo-txt">오렌지나무시스템</span>
+    </div>
 
-          {{#unless (isEquals loggedIn.layer 3)}}
-              <li {{#if (isEquals current_path 'Agents')}}class="active"{{/if}}>
-                  <a href="/agents">
-                      <i class="fa fa-user" aria-hidden="true"></i>
-                      <span>Agents</span>
-                  </a>
-              </li>
-          {{/unless}}
+    <ol class="nav_list">
+        <li>
+            <a href="/education/current">
+                <span class="txt">이달의 교육과정</span>
+            </a>
+        </li>
+        <li>
+            <a href="/education/passed">
+                <span class="txt">지난 교육과정</span>
+            </a>
+        </li>
+        <li>
+            <a href="/profile">
+                <span class="txt">정보수정</span>
+            </a>
+        </li>
+        <li>
+            <a href="/logout">
+                <span class="txt">로그아웃</span>
+            </a>
+        </li>        
+    </ol>
+</nav> 
 
-            <li {{#if (isEquals current_path 'Players')}}class="active"{{/if}}>
-                <a href="/players">
-                    <i class="fa fa-users" aria-hidden="true"></i>
-                    <span>Players</span>
-                </a>
-            </li>
-        </ul>
-    </section>
-    <!-- /.sidebar -->
-</aside>
+<div id="bg_screen" class="bg_screen blind"></div>

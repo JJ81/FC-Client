@@ -6,18 +6,49 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 /*routes*/
-var routes = require('./routes/index');
-var api = require('./routes/_bak/api');
-var agents = require('./routes/_bak/agents');
-var players = require('./routes/_bak/players');
+var routes = require('./routes/index'); // all about login
+var education = require('./routes/education'); // 교육
+var course = require('./routes/course'); // 강의
+var session = require('./routes/session'); // 세션
+var video = require('./routes/video'); // 비디오
+var quiz = require('./routes/quiz'); // 퀴즈/파이널
+var evaluate = require('./routes/evaluate'); // 평가
+var complete = require('./routes/complete'); // 완료
+var profile = require('./routes/profile'); // 정보수정
+var api = require('./routes/api');
 
 /*routes*/
 var app = express();
 var hbs = require('hbs');
-
 var passport = require('passport');
 var flash = require('connect-flash');
 var cookieSession = require('cookie-session');
+
+//CORS All Accesss allowed
+app.use(function (req, res, next) {
+ res.setHeader('Access-Control-Allow-Origin', '*');
+ res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+ res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+
+ next();
+});
+
+app.all('/*', function (req, res, next) {
+ // CORS headers
+ res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+ res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+ // Set custom headers for CORS
+ res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+ if (req.method == 'OPTIONS') {
+   res.status(200).end();
+ } else {
+   res.locals ={
+     loggedIn : req.user
+   };
+   
+   next();
+ }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,8 +59,11 @@ hbs.registerPartials(__dirname + '/views/modal');
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
+global.PROJ_TITLE = "Orangenamu, Mobile ";
+global.AppRoot = process.env.PWD;
+
 app.use(cookieSession({
-  keys: ['FC_Admin']
+  keys: ['FC_Mobile']
 }));
 
 app.use(flash());
@@ -38,15 +72,20 @@ app.use(passport.session());
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 
 app.use('/', routes);
-app.use('/agents', agents);
-app.use('/players', players);
-
+app.use('/education', education);
+app.use('/course', course);
+app.use('/session', session);
+app.use('/video', video);
+app.use('/quiz', quiz);
+app.use('/evaluate', evaluate);
+app.use('/complete', complete);
+app.use('/profile', profile);
 app.use('/api/v1', api);
 
 // catch 404 and forward to error handler
