@@ -330,6 +330,28 @@ QUERY.COURSE_LIST = {
     '  INNER JOIN `quiz_group` AS qg ' +
     '     ON q.`id` = qg.`quiz_id` ' +
     '	   AND qg.`group_id` = ?; ',
+
+  // 특정 세션의 그룹아이디로 퀴즈를 조회한다.
+  GetQuizDataByGroupId:
+    "SELECT q.`id` AS quiz_id " +
+    "     , q.`type` " +
+    "     , q.`quiz_type` AS quiz_type " +
+    "     , q.`question` " +
+    "     , q.`answer_desc` " +
+    "     , q.`answer_desc` " +
+    "     , qg.`order` AS quiz_order " +
+    "     , q.`option_id` as `option_group_id` " +
+    "     , qo.`id` as `option_id` " +    
+    "     , qo.`option` " +
+    "     , qo.`order` AS option_order " +     
+    "     , qo.`iscorrect`  " +
+    "  FROM `quiz_group` AS qg " +
+    " INNER JOIN `quiz` AS q " +
+    "    ON qg.`quiz_id` = q.`id` " +
+    "  LEFT JOIN `quiz_option` AS qo " +
+    "    ON qo.`opt_id` = q.`option_id` " +
+    " WHERE qg.`group_id` = ? " +
+    " ORDER BY qg.`order`, qo.`order` ",
   
   // 정답체크 시 퀴즈에 대한 정보를 가져온다.
   // 클라이언트에서 정답체크 시 이후에 제거해야한다.

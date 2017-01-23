@@ -11,15 +11,102 @@ var isAuthenticated = function (req, res, next) {
 require('../commons/helpers');
 var async = require('async');
 
-// 퀴즈 정답확인
-// JSON.parse 는 string 개체를 JSON 개체로, JSON.stringify 는 JSON 개체를 string 로 변환한다.
+
+/**
+ * 퀴즈 정답확인
+ * JSON.parse 는 string 개체를 JSON 개체로, JSON.stringify 는 JSON 개체를 string 로 변환한다.
+ * (deprecated)
+ */
 router.post('/log/checkanswer', isAuthenticated, function (req, res) {
 
-  var inputs = req.body.data;
-  // console.log(inputs);
+  var _inputs = req.body.data;
+
+
+  console.log(_inputs);
+  // return res.json({
+  //   success: true
+  // });
+
+  connection.beginTransaction(function(err) {
+
+    // 트렌젝션 오류 발생
+    if (err) { 
+      return res.json({
+        success: false,
+        msg: err
+      });
+    }
+
+    var quiz_start_index = 0,
+        quiz_end_index = _inputs.length - 1;
+
+    async.whilst (
+      function () {
+        return quiz_start_index <= quiz_end_index;
+      },
+      function (callback) {
+        
+        // 사용자 입력 퀴즈 정보
+        quiz = _inputs[quiz_start_index];
+        
+        // 퀴즈별로 로그를 입력한다.
+        var query = connection.query(QUERY.LOG_QUIZ.INS_QUIZ, [
+            req.user.user_id,
+            quiz.quiz_id,
+            quiz.answer, // 사용자입력단안
+            quiz.iscorrect // 정답여부
+          ],
+          function (err, data) {
+            quiz_start_index++;
+            callback(err, data);
+          });
+      },
+      function (err, results) {
+        if (err) {
+
+          // 쿼리 오류 발생
+          return connection.rollback(function() {
+            res.json({
+              success: false,
+              msg: err
+            });
+          });
+        } else {
+          connection.commit(function(err) {
+            // 커밋 오류 발생
+            if (err) {
+              return connection.rollback(function() {
+                res.json({
+                  success: false,
+                  msg: err
+                });
+              });
+            }
+
+            // 커밋 성공
+            return res.json({
+              success: true
+            });
+          });
+        }
+      }
+    );      
+    
+  });  
+});
+
+/**
+ * 퀴즈 정답확인
+ * JSON.parse 는 string 개체를 JSON 개체로, JSON.stringify 는 JSON 개체를 string 로 변환한다.
+ * (deprecated)
+ */
+router.post('/log/checkanswer_deprecated', isAuthenticated, function (req, res) {
+
+  var _inputs = req.body.data;
+  // console.log(_inputs);
 
   // quiz_id 를 SELECT IN Parameter 로 생성한다. ex. (1, 2)
-  var quiz_ids = inputs.map(function(input) { return parseInt(input.quiz_id); });
+  var quiz_ids = _inputs.map(function(input) { return parseInt(input.quiz_id); });
   var query = connection.query(QUERY.COURSE_LIST.SEL_QUIZ_2, [
         [quiz_ids]
       ], 
@@ -51,7 +138,7 @@ router.post('/log/checkanswer', isAuthenticated, function (req, res) {
             },
             function (callback) {          
               // 사용자가 입력한 퀴즈 정보를 임시저장
-              user_quiz = inputs[quiz_start_index];
+              user_quiz = _inputs[quiz_start_index];
               data_quiz = data[quiz_start_index];
 
               // console.log('user_quiz : ' + user_quiz);
@@ -167,7 +254,7 @@ router.post('/log/checkanswer', isAuthenticated, function (req, res) {
               function (callback) {
                 
                 // 사용자 입력 퀴즈 정보
-                user_quiz = inputs[quiz_start_index];
+                user_quiz = _inputs[quiz_start_index];
 
                 // 선택형 또는 다지선다형일 경우
                 // if (user_quiz.answer_column !== 'answer_desc')

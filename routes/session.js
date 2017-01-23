@@ -10,6 +10,7 @@ var isAuthenticated = function (req, res, next) {
 };
 require('../commons/helpers');
 var async = require('async');
+var CourseService = require('../service/CourseService');
 
 /**
  * 세션 학습시작
@@ -47,24 +48,24 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 			callback(err, data); 
 			});
 		},
-		// 세션 정보 조회
+		// 세션 (비디오/퀴즈/파이널테스트) 정보 조회
 		// results[1]
 		function (callback) {
 			switch (course_list.type) {
 			case 'VIDEO':
 				connection.query(QUERY.COURSE_LIST.SEL_VIDEO, [course_list.video_id], function (err, data) {
-				callback(err, data); 
+					callback(err, data); 
 				});          
 				break;
 
 			default: // QUIZ / FINAL
-				connection.query(QUERY.COURSE_LIST.SEL_QUIZ, [course_list.quiz_group_id], function (err, data) {
-				callback(err, data); // results[1]
+				connection.query(QUERY.COURSE_LIST.GetQuizDataByGroupId, [ course_list.quiz_group_id ], function (err, data) {
+					callback(err, data); // results[1]
 				});
 				break;
 			}
 		},
-		// 비디오 세션일 경우 비디오 총 시청시간 조회
+		// (비디오 세션일 경우에만 해당) 비디오 총 시청시간 조회
 		// results[2]
 		function (callback) {
 			switch (course_list.type) {
@@ -94,11 +95,12 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 			next_url = null;
 		
 		// 다음 URL 을 설정한다.
-		if (course_list.next_id)
+		if (course_list.next_id) {
 			next_url = '/' + 'session' + '/' + training_user_id + '/' + course_id + '/' + course_list.next_id;
-		else
+		} else {
 			next_url = '/' + 'evaluate' + '/' + training_user_id + '/' + course_id; 
-		
+		}
+
 		// 비디오뷰 출력
 		if (course_list.type === 'VIDEO') {			
 			res.render('video', {
@@ -120,19 +122,22 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 		else {
 
 			// 보기옵션명과, 보기옵션id 를 배열로 변환한다.
-			var tmp = null;
-			for (var i = 0; i < results[1].length; i++) {
-				// quiz_options
-				tmp = results[1][i].quiz_options;
-				if (tmp)
-				results[1][i].quiz_options = tmp.split(',');
-				// quiz_option_ids
-				tmp = results[1][i].quiz_option_ids;
-				if (tmp)
-				results[1][i].quiz_option_ids = JSON.parse('[' + tmp + ']');
-			}
+			// ---------------------------------------------------------------
+			// var tmp = null;
+			// for (var i = 0; i < results[1].length; i++) {
+			// 	// quiz_options
+			// 	tmp = results[1][i].quiz_options;
+			// 	if (tmp)
+			// 	results[1][i].quiz_options = tmp.split(',');
+			// 	// quiz_option_ids
+			// 	tmp = results[1][i].quiz_option_ids;
+			// 	if (tmp)
+			// 	results[1][i].quiz_option_ids = JSON.parse('[' + tmp + ']');
+			// }
+			// ---------------------------------------------------------------
 
-			// console.log(results[1]);
+			var quiz_list = CourseService.makeQuizList(results[1]);
+			console.log(quiz_list);
 
 			// 퀴즈뷰 출력
 			res.render('quiz', {
@@ -142,7 +147,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 				host: req.get('origin'),
 				loggedIn: req.user,
 				header: course_list.title,
-				contents: results[1],
+				contents: quiz_list, //results[1],
 				next_url: next_url,            
 				training_user_id: training_user_id,
 				course_id: course_id,
