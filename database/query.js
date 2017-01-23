@@ -332,7 +332,7 @@ QUERY.COURSE_LIST = {
     '	   AND qg.`group_id` = ?; ',
 
   // 특정 세션의 그룹아이디로 퀴즈를 조회한다.
-  GetQuizDataByGroupId:
+  GetQuizDataByGroupId:  
     "SELECT q.`id` AS quiz_id " +
     "     , q.`type` " +
     "     , q.`quiz_type` AS quiz_type " +
