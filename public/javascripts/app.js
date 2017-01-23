@@ -9,6 +9,7 @@ requirejs.config({
     jqueryRating: '/vendor/plugins/star-rating-svg/star-rating-svg',
     jqueryTimer : '/vendor/plugins/jquery_timer/jquery.timer',
     plyr: '/vendor/plugins/plyr/src/js/plyr',
+    axios : 'https://unpkg.com/axios/dist/axios.min'
 	},
 	shim : {
 		'jqueryCookie' : {

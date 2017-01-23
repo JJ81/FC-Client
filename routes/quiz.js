@@ -13,7 +13,7 @@ var async = require('async');
 
 // 퀴즈 정답확인
 // JSON.parse 는 string 개체를 JSON 개체로, JSON.stringify 는 JSON 개체를 string 로 변환한다.
-router.post('/log/checkanswer', function (req, res) {
+router.post('/log/checkanswer', isAuthenticated, function (req, res) {
 
   var inputs = req.body.data;
   // console.log(inputs);

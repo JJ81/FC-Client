@@ -35,130 +35,129 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
       query = null;
 
   async.series([
-    function (callback) {
-      query = connection.query(QUERY.COURSE_LIST.SEL_INDEX, [training_user_id, course_list_id], function (err, data) {
-        course_list = data[0];
 
-        // console.log('course_list : ');
-        // console.log(course_list);
-        callback(err, data); // results[0]
-      });
-    },
-    function (callback) {
-      // console.log(query.sql);
+		// 강의정보 조회
+		// results[0]
+		function (callback) {
+			var query = connection.query(QUERY.COURSE_LIST.SEL_INDEX, [training_user_id, course_list_id], function (err, data) {
+				
+				console.log(query.sql);
 
-      switch (course_list.type) {
-        case 'VIDEO':
-          connection.query(QUERY.COURSE_LIST.SEL_VIDEO, [course_list.video_id], function (err, data) {
-            callback(err, data); // results[1]
-          });          
-          break;
+			course_list = data[0];
+			callback(err, data); 
+			});
+		},
+		// 세션 정보 조회
+		// results[1]
+		function (callback) {
+			switch (course_list.type) {
+			case 'VIDEO':
+				connection.query(QUERY.COURSE_LIST.SEL_VIDEO, [course_list.video_id], function (err, data) {
+				callback(err, data); 
+				});          
+				break;
 
-        default: // QUIZ / FINAL
-          connection.query(QUERY.COURSE_LIST.SEL_QUIZ, [course_list.quiz_group_id], function (err, data) {
-            callback(err, data); // results[1]
-          });
-          break;
-      }
-    },
-    function (callback) {
-      switch (course_list.type) {
-        case 'VIDEO':      
-          // 비디오 총 시청시간 조회
-          connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
-            req.user.user_id,
-            course_list.video_id        
-          ], function (err, data) {
-            callback(err, data); // results[2]
-          });
-          break;
-        
-        default:
-          callback(null, null);
-          break;
-      }
+			default: // QUIZ / FINAL
+				connection.query(QUERY.COURSE_LIST.SEL_QUIZ, [course_list.quiz_group_id], function (err, data) {
+				callback(err, data); // results[1]
+				});
+				break;
+			}
+		},
+		// 비디오 세션일 경우 비디오 총 시청시간 조회
+		// results[2]
+		function (callback) {
+			switch (course_list.type) {
+				case 'VIDEO':      
+				// 비디오 총 시청시간 조회
+				connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
+					req.user.user_id,
+					course_list.video_id        
+				], function (err, data) {
+					callback(err, data); // results[2]
+				});
+				break;
+				
+				default:
+				callback(null, null);
+				break;
+			}
+		}
+	], 
+	function (err, results) {
+		if (err) {
+			console.error(err);
+		} else {
 
-    }
-  ], function (err, results) {
-    if (err) {
-      //console.error(err);
-    } else {
+		// 다음으로 버튼 클릭시 이동할 페이지
+		var root_path = '/' + req.path.split("/")[1],
+			next_url = null;
+		
+		// 다음 URL 을 설정한다.
+		if (course_list.next_id)
+			next_url = '/' + 'session' + '/' + training_user_id + '/' + course_id + '/' + course_list.next_id;
+		else
+			next_url = '/' + 'evaluate' + '/' + training_user_id + '/' + course_id; 
+		
+		// 비디오뷰 출력
+		if (course_list.type === 'VIDEO') {			
+			res.render('video', {
+				current_path: 'video',
+				current_url: req.url,
+				title: global.PROJ_TITLE,
+				host: req.get('origin'),
+				loggedIn: req.user,
+				header: course_list.title,
+				content: results[1][0],
+				total_played_seconds: results[2][0].total_played_seconds,
+				next_url: next_url,            
+				training_user_id: training_user_id,
+				course_id: course_id,
+				course_list_id: course_list_id        
+			});
 
-      // 다음으로 버튼 클릭시 이동할 페이지
-      var root_path = '/' + req.path.split("/")[1],
-          next_url = null;
-      
-      // course_list => (query.js) QUERY.COURSE_LIST.SEL_INDEX
-      if (course_list.next_id)
-        next_url = '/' + 'session' + '/' + training_user_id + '/' + course_id + '/' + course_list.next_id;
-      else
-        next_url = '/' + 'evaluate' + '/' + training_user_id + '/' + course_id; 
+		}
+		else {
 
-      if (course_list.type === 'VIDEO') {
+			// 보기옵션명과, 보기옵션id 를 배열로 변환한다.
+			var tmp = null;
+			for (var i = 0; i < results[1].length; i++) {
+				// quiz_options
+				tmp = results[1][i].quiz_options;
+				if (tmp)
+				results[1][i].quiz_options = tmp.split(',');
+				// quiz_option_ids
+				tmp = results[1][i].quiz_option_ids;
+				if (tmp)
+				results[1][i].quiz_option_ids = JSON.parse('[' + tmp + ']');
+			}
 
-          // 비디오 총 시청시간을 조회한다.
-          // console.log('total_played_seconds : ' + results[2][0].total_played_seconds);
+			// console.log(results[1]);
 
-          // console.log(results[1][0]);
-
-          // 비디오뷰 출력
-          res.render('video', {
-            current_path: 'video',
-            current_url: req.url,
-            title: global.PROJ_TITLE,
-            host: req.get('origin'),
-            loggedIn: req.user,
-            header: course_list.title,
-            content: results[1][0],
-            total_played_seconds: results[2][0].total_played_seconds,
-            next_url: next_url,            
-            training_user_id: training_user_id,
-            course_id: course_id,
-            course_list_id: course_list_id        
-          });
-
-      }		        
-      else {
-
-          // 보기옵션명과, 보기옵션id 를 배열로 변환한다.
-          var tmp = null;
-          for (var i = 0; i < results[1].length; i++) {
-            // quiz_options
-            tmp = results[1][i].quiz_options;
-            if (tmp)
-              results[1][i].quiz_options = tmp.split(',');
-            // quiz_option_ids
-            tmp = results[1][i].quiz_option_ids;
-            if (tmp)
-              results[1][i].quiz_option_ids = JSON.parse('[' + tmp + ']');
-          }
-
-          console.log(results[1]);
-
-          // 퀴즈뷰 출력
-          res.render('quiz', {
-            current_path: 'quiz',
-            current_url: req.url,
-            title: global.PROJ_TITLE,
-            host: req.get('origin'),
-            loggedIn: req.user,
-            header: course_list.title,
-            contents: results[1],
-            next_url: next_url,            
-            training_user_id: training_user_id,
-            course_id: course_id,
-            course_list_id: course_list_id,
-            prev_yn: course_list.prev_yn
-          });
-      }
-    }
+			// 퀴즈뷰 출력
+			res.render('quiz', {
+				current_path: 'quiz',
+				current_url: req.url,
+				title: global.PROJ_TITLE,
+				host: req.get('origin'),
+				loggedIn: req.user,
+				header: course_list.title,
+				contents: results[1],
+				next_url: next_url,            
+				training_user_id: training_user_id,
+				course_id: course_id,
+				course_list_id: course_list_id,
+				prev_yn: course_list.prev_yn
+			});
+		}
+		}
   });    
   
 });
 
 // 세션 시작일시를 기록한다.
 // url: /api/v1/log/session/starttime 
-router.post('/log/starttime', function (req, res) {
+router.post('/log/starttime', isAuthenticated, function (req, res) {
 
   var inputs = {
     user_id: req.user.user_id,
@@ -166,40 +165,62 @@ router.post('/log/starttime', function (req, res) {
     course_id: parseInt(req.body.course_id),
     course_list_id: parseInt(req.body.course_list_id)
   };
+  var query = null;
 
-  var query = connection.query(QUERY.LOG_COURSE_LIST.INS_SESSION_PROGRESS, [
-      inputs.user_id, 
-      inputs.training_user_id,
-      inputs.course_id, 
-      inputs.course_list_id,
-      inputs.user_id, 
-      inputs.training_user_id,
-      inputs.course_list_id     
-    ], 
-    function (err, data) {
-      // //console.log(query.sql);
-      if (err) {
-        // 쿼리 실패
-        res.json({
-          success: false,
-          msg: err
-        });    
-      } else {     
-        // 쿼리 성공
-        res.json({
-          success: true
-        });
-      }
-    }
-  );
+	async.series([
+		// 로그를 조회한다.
+		function (callback) {
+			query = connection.query(QUERY.LOG_COURSE_LIST.SEL_SESSION_PROGRESS, [
+				inputs.user_id, 
+				inputs.training_user_id, 
+				inputs.course_list_id
+			], 
+			function (err, data) {
+				console.log(query.sql);
+				callback(err, data); // results[0]
+			});
+		},
+		function (callback) {
+			query = connection.query(QUERY.LOG_COURSE_LIST.INS_SESSION_PROGRESS, [
+				inputs.user_id, 
+				inputs.training_user_id,
+				inputs.course_id, 
+				inputs.course_list_id,
+				inputs.user_id, 
+				inputs.training_user_id,
+				inputs.course_list_id     
+			], 
+			function (err, data) {
+				console.log(query.sql);
+				callback(err, data);
+			});
+		}
+	], 
+	function (err, results) {
 
-  // //console.log(query);
+		var hadEnded = false; // 세션 종료 여부
+		if (results[0][0])
+			hadEnded = (results[0][0].end_dt !== null);
 
+		if (err) {
+			// 쿼리 실패
+			res.json({
+				success: false,
+				msg: err
+			});    
+		} else {     
+			// 쿼리 성공
+			res.json({
+				success: true,
+				hasEnded: hadEnded
+			});
+		}
+	});  
 });
 
 // 세션 시작일시를 기록한다.
 // url: /api/v1/log/session/endtime 
-router.post('/log/endtime', function (req, res) {
+router.post('/log/endtime', isAuthenticated, function (req, res) {
 
   var inputs = {
     user_id: req.user.user_id,
@@ -229,6 +250,37 @@ router.post('/log/endtime', function (req, res) {
     }
   );  
   
+});
+
+// 세션 로그를 삭제한다/
+router.delete('/log', isAuthenticated, function (req, res) {
+
+	var inputs = {
+		user_id: req.user.user_id,
+		training_user_id: req.query.training_user_id,
+		course_list_id: req.query.course_list_id
+	};
+
+  	connection.query(QUERY.LOG_COURSE_LIST.DEL_SESSION_PROGRESS, [
+		inputs.user_id, 
+		inputs.training_user_id, 
+		inputs.course_list_id
+	], 
+    function (err, data) {
+		if (err) {
+			// 쿼리 실패
+			res.json({
+				success: false,
+				msg: err
+			});    
+		} else {     
+			// 쿼리 성공
+			res.json({
+				success: true
+			});
+		}
+    }
+  );
 });
 
 module.exports = router;

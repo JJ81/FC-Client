@@ -26,7 +26,7 @@ router.get('/', isAuthenticated, function (req, res) {
 });
 
 // 비밀번호를 변경합니다.
-router.post('/reset-password', function (req, res) {
+router.post('/reset-password', isAuthenticated, function (req, res) {
 
   inputs = {
     user_id: req.user.user_id,
@@ -63,7 +63,7 @@ router.post('/reset-password', function (req, res) {
 });
 
 // 이메일을 변경합니다.
-router.post('/reset-email', function (req, res) {
+router.post('/reset-email', isAuthenticated, function (req, res) {
 
   inputs = {
     user_id: req.user.user_id,
@@ -88,7 +88,7 @@ router.post('/reset-email', function (req, res) {
 });
 
 // 핸드폰을 변경합니다.
-router.post('/reset-phone', function (req, res) {
+router.post('/reset-phone', isAuthenticated, function (req, res) {
 
   inputs = {
     user_id: req.user.user_id,

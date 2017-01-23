@@ -352,6 +352,14 @@ QUERY.COURSE_LIST = {
 
 QUERY.LOG_COURSE_LIST = {
 
+  // 특정의 종료시간(종료여부)을 조회한다. 
+  SEL_SESSION_PROGRESS:
+    'SELECT `end_dt` ' +
+    '  FROM `log_session_progress` ' +
+    ' WHERE `user_id` = ? ' +
+    '   AND `training_user_id` = ?' +
+    '   AND `course_list_id` = ?; ',
+
   // 세션 로그를 입력한다.
   // TODO
   // 여러건 입력이 가능한지?
@@ -367,6 +375,10 @@ QUERY.LOG_COURSE_LIST = {
     ' WHERE `user_id` = ? ' + 
     '   AND `training_user_id` = ? ' + 
     '   AND `course_list_id` = ?; ',
+  
+  // 세션 로그를 삭제한다.
+  DEL_SESSION_PROGRESS:
+    'DELETE FROM `log_session_progress` WHERE `user_id` = ? AND `training_user_id` = ? AND `course_list_id` = ?; ',    
 };
 
 // 로깅
@@ -402,6 +414,10 @@ QUERY.LOG_VIDEO = {
     'UPDATE `log_user_video` SET ' +
     '       `end_dt` = NOW() ' +
     ' WHERE `id` = ? ',
+
+  // 비디오 로그 삭제
+  DELETE_VIDEO_LOG:
+    'DELETE FROM `log_user_video` WHERE `id` = ?; ',
 };
 
 // 로깅

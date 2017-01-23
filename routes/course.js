@@ -78,7 +78,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 /**
  * 강의 시작
  */
-router.post('/log/start', function (req, res) {
+router.post('/log/start', isAuthenticated, function (req, res) {
 
   var inputs = {
     training_user_id: req.body.training_user_id,
@@ -156,7 +156,7 @@ router.post('/log/start', function (req, res) {
 /**
  * 강의 종료
  */
-router.post('/log/end', function (req, res) {
+router.post('/log/end', isAuthenticated, function (req, res) {
 
   var inputs = {
     training_user_id: req.body.training_user_id,
