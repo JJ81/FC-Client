@@ -13,13 +13,16 @@ requirejs([
 
     var $ = jQuery,
         btn_play = $('#btn_play_next'),
-        btn_check_answer = $('#btn_check_answers'),
+        btn_check_answer = $('#btn_check_answers'),        
+        quiz_inputs = $('.answer_quiz_input'),
+        quiz_options = $('.ico:not(.ico_play)'),        
+
         next_url = btn_play.attr('href'),
         training_user_id = btn_play.data('training-user-id'),
         course_id = btn_play.data('course-id'),
         course_list_id = btn_play.data('course-list-id'),
-        quiz_inputs = $('.answer_quiz_input'),
-        quiz_options = $('.ico:not(.ico_play)'),
+        course_list_type = btn_play.data('course-list-type'),
+        
         canValidate = false;
 
       // jquery load event
@@ -60,7 +63,12 @@ requirejs([
         $.ajax({   
           type: "POST",
           url: "/session/log/starttime",
-          data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }   
+          data: { 
+            training_user_id: training_user_id, 
+            course_id: course_id, 
+            course_list_id: course_list_id,
+            course_list_type: course_list_type,
+          }   
         }).done(function (res) { 
           if (!res.success) {
             console.error(res.msg);         
@@ -77,7 +85,12 @@ requirejs([
         $.ajax({   
           type: "POST",
           url: "/session/log/endtime",
-          data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }
+          data: { 
+            training_user_id: training_user_id, 
+            course_id: course_id,
+            course_list_id: course_list_id,
+            course_list_type: course_list_type
+          }
         }).done(function (res) { 
           if (!res.success) {
             console.error(res.msg);        
@@ -165,7 +178,11 @@ requirejs([
       $.ajax({   
         type: "POST",
         url: "/quiz/log/checkanswer",
-        data: { data: answers },
+        data: {
+          data: answers, 
+          training_user_id: training_user_id, 
+          course_list_id: course_list_id,   
+        },
       }).done(function (res) { 
         if (!res.success) {
           console.error(res.msg);  
@@ -277,7 +294,13 @@ requirejs([
       $.ajax({
         type: "POST",
         url: "/quiz/log/checkanswer",
-        data: {data: answers}
+        data: {
+          data: answers,
+          training_user_id: training_user_id, 
+          course_id: course_id, 
+          course_list_id: course_list_id,
+          course_list_type: course_list_type   
+        }
       })  
       .done(function (res) {
         if (!res.success) {

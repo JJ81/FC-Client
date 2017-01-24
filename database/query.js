@@ -134,7 +134,19 @@ QUERY.EDU = {
     'UPDATE `training_users` SET ' +
     '       `end_dt` = NOW() ' +
     ' WHERE `id` = ? ' +
-    '   AND `end_dt` IS NULL; '
+    '   AND `end_dt` IS NULL; ',
+
+  // edu_id, course_group_id 를 캐싱하기 위한 쿼리
+  // @params : training_user_id, 
+  SEL_COURSE_GROUP:
+    "SELECT te.`edu_id`, e.`course_group_id` " +
+    "  FROM `training_users` AS tu " +
+    " INNER JOIN `training_edu` AS te " +
+    "    ON tu.`training_edu_id` = te.`id` " +
+    " INNER JOIN `edu` AS e " +
+    "    ON te.`edu_id` = e.`id` " +
+    " WHERE tu.`id` = ? ",
+
 };
 
 QUERY.COURSE = {
@@ -400,7 +412,8 @@ QUERY.LOG_COURSE_LIST = {
   
   // 세션 로그를 삭제한다.
   DEL_SESSION_PROGRESS:
-    'DELETE FROM `log_session_progress` WHERE `user_id` = ? AND `training_user_id` = ? AND `course_list_id` = ?; ',    
+    'DELETE FROM `log_session_progress` WHERE `user_id` = ? AND `training_user_id` = ? AND `course_list_id` = ?; ',  
+          
 };
 
 // 로깅
@@ -448,11 +461,44 @@ QUERY.LOG_QUIZ = {
   // 퀴즈 로그 입력
   // 정답체크 시 계속 입력된다.
   INS_QUIZ:
-    'INSERT INTO `log_user_quiz` (`user_id`, `quiz_id`, `answer`, `correction`, `created_dt`) ' +
-    'SELECT ?, ?, ?, ?, NOW(); ',
+    'INSERT INTO `log_user_quiz` (`user_id`, `training_user_id`, `course_id`, `course_list_type`, `quiz_id`, `answer`, `correction`, `created_dt`) ' +
+    'VALUES (?, ?, ?, ?, ?, ?, ?, NOW()); ',
     // '  FROM dual ' +
     // ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_quiz` WHERE `user_id` = ? AND `quiz_id` = ?); ',
 
+};
+
+
+// 포인트 관련
+QUERY.POINT = {
+
+    // 사용자 포인트 로그 최초 입력
+  INS_POINT_LOG:
+    'INSERT INTO `log_user_point` (`user_id`, `training_user_id`, `evaluated_dt`) ' +
+    'VALUES (?, ?, NOW()) ' +
+    "ON DUPLICATE KEY UPDATE `evaluated_dt` = NOW(); ",
+  
+  // 특정 타입의 문항수를 가져온다.
+  // @params : course_id, type (course_list)
+  SEL_QUIZ_COUNT:
+    "SELECT count(*) AS quiz_count " +
+    "  FROM `quiz_group` AS qg " +
+    " WHERE EXISTS ( " +
+		"   SELECT 'X' " +
+		"     FROM `course_list` " +
+		"    WHERE `course_id` = ? " +
+    "      AND `type` = ? " +
+		"      AND `quiz_group_id` = qg.`group_id` " +
+	  " ); ",
+
+  // 특정 타입의 맞은 문항수를 가져온다.
+  // @params : training_user_id, course_id, course_list_type (course_list)
+  SEL_QUIZ_CORRECT_COUNT:
+    "SELECT count(*) AS quiz_count " +
+    "  FROM `log_user_quiz` AS luq " +
+    " WHERE luq.`training_user_id` = ? " +
+    "   AND luq.`course_list_type` = ? " +
+    "   AND luq.`correction` = 1 ",
 };
 
 module.exports = QUERY;

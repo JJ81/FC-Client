@@ -10,7 +10,7 @@ var isAuthenticated = function (req, res, next) {
 };
 require('../commons/helpers');
 var async = require('async');
-
+var QuizService = require('../service/QuizService');
 
 /**
  * 퀴즈 정답확인
@@ -20,9 +20,12 @@ var async = require('async');
 router.post('/log/checkanswer', isAuthenticated, function (req, res) {
 
   var _inputs = req.body.data;
+  var _training_user_id = req.body.training_user_id;
+  var _course_id = req.body.course_id;
+  var _course_list_type = req.body.course_list_type;
+  var _query = null;
 
-
-  console.log(_inputs);
+  // console.log(_inputs);
   // return res.json({
   //   success: true
   // });
@@ -50,13 +53,16 @@ router.post('/log/checkanswer', isAuthenticated, function (req, res) {
         quiz = _inputs[quiz_start_index];
         
         // 퀴즈별로 로그를 입력한다.
-        var query = connection.query(QUERY.LOG_QUIZ.INS_QUIZ, [
+        _query = connection.query(QUERY.LOG_QUIZ.INS_QUIZ, [
             req.user.user_id,
+            _training_user_id,
+            _course_id,
+            _course_list_type,
             quiz.quiz_id,
             quiz.answer, // 사용자입력단안
             quiz.iscorrect // 정답여부
           ],
-          function (err, data) {
+          function (err, data) {              
             quiz_start_index++;
             callback(err, data);
           });
@@ -83,10 +89,22 @@ router.post('/log/checkanswer', isAuthenticated, function (req, res) {
               });
             }
 
-            // 커밋 성공
-            return res.json({
-              success: true
-            });
+            // 포인트 로그 입력
+            QuizService.setPointResult(connection, { 
+                user_id: req.user.user_id,  
+                training_user_id: _training_user_id,
+                course_id: _course_id,
+                course_list_type: _course_list_type
+              },
+              function (err, data) {
+                console.log(data);
+
+                return res.json({
+                  success: true
+                });
+              }
+            );
+
           });
         }
       }

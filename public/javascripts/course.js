@@ -32,7 +32,7 @@ requirejs([
 
       $('.desc').text(full_desc.val());
       $('.btn_more').hide();
-    });        
+    });
 
     // 학습하기
     btn_play.on('click', function (event) {

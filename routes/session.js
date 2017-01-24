@@ -41,11 +41,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 		// results[0]
 		function (callback) {
 			var query = connection.query(QUERY.COURSE_LIST.SEL_INDEX, [training_user_id, course_list_id], function (err, data) {
-				
-				console.log(query.sql);
-
-			course_list = data[0];
-			callback(err, data); 
+        course_list = data[0];
+        callback(err, data); 
 			});
 		},
 		// 세션 (비디오/퀴즈/파이널테스트) 정보 조회
@@ -115,7 +112,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 				next_url: next_url,            
 				training_user_id: training_user_id,
 				course_id: course_id,
-				course_list_id: course_list_id        
+				course_list_id: course_list_id
 			});
 
 		}
@@ -152,7 +149,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 				training_user_id: training_user_id,
 				course_id: course_id,
 				course_list_id: course_list_id,
-				prev_yn: course_list.prev_yn
+				prev_yn: course_list.prev_yn,
+        course_list_type: course_list.type
 			});
 		}
 		}
@@ -227,17 +225,18 @@ router.post('/log/starttime', isAuthenticated, function (req, res) {
 // url: /api/v1/log/session/endtime 
 router.post('/log/endtime', isAuthenticated, function (req, res) {
 
-  var inputs = {
+  var _inputs = {
     user_id: req.user.user_id,
     training_user_id: parseInt(req.body.training_user_id),
     course_id: parseInt(req.body.course_id),
-    course_list_id: parseInt(req.body.course_list_id)
+    course_list_id: parseInt(req.body.course_list_id),
+    course_list_type: req.body.course_list_type
   };
 
   connection.query(QUERY.LOG_COURSE_LIST.UPD_SESSION_PROGRESS, [
-      inputs.user_id, 
-      inputs.training_user_id, 
-      inputs.course_list_id
+      _inputs.user_id, 
+      _inputs.training_user_id, 
+      _inputs.course_list_id
     ], 
     function (err, data) {
       if (err) {

@@ -49,7 +49,8 @@ requirejs(
 
 				timer_logging_interval = res.interval;		  
 				timer = $.timer(1000 * timer_logging_interval, playTimeLogger, true);
-
+        timer.stop();
+        
 				// 비디오 종료 후 학습이력 초기화까지 대기하는 시간 
 				timer_waiting_seconds = res.waiting_seconds;
 			});
@@ -99,7 +100,7 @@ requirejs(
 
 		// plyr [play] event
 		video.addEventListener('play', function(event) {
-			
+      
 			// 세션시작로그
 			sessionProgressStartLogger();
 
