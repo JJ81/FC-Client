@@ -27,7 +27,7 @@ QuizService.setPointResult = function (_connection, _data, _callback) {
         });
       },
       // 포인트 로그테이블에 저장한다.
-      function (arg1, callback) {         
+      function (arg1, callback) {
         
         if (_data.course_list_type === 'QUIZ')
           _query = QuizService.connection.query(QUERY.POINT.UPD_QUIZ_CORRECTION, [arg1, _data.training_user_id], function (err, result) {

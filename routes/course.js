@@ -47,14 +47,14 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 			},         
 		], function (err, results) {
 			if (err) {
-				//console.error(err);
+				console.error(err);
 			} else {
 				//console.info(results);
 
         // 교육과정id 와 강의그룹id 를 세션에 저장한다.
         req.user.edu_id = results[2][0].edu_id;
         req.user.course_group_id = results[2][0].course_group_id;
-        console.log(req.user);
+        // console.log(req.user.edu);
 
         // 학습하기 버튼 클릭 시 시작 세션 id를 구한다.
         // 기본은 id 가 가장 작은 세션이다.
@@ -99,6 +99,8 @@ router.post('/log/start', isAuthenticated, function (req, res) {
     user_id: req.user.user_id,
   };
   var _query = null;
+
+  console.log(_inputs);
 
   connection.beginTransaction(function(err) {
 
@@ -151,17 +153,6 @@ router.post('/log/start', isAuthenticated, function (req, res) {
         } else {
           callback(null, null);
         }
-      },      
-      // 사용자 포인트 로그 최초 입력
-      function (callback) {        
-        _query = connection.query(QUERY.POINT.INS_POINT_LOG, [
-            _inputs.user_id,
-            _inputs.training_user_id
-          ], 
-          function (err, data) {
-            console.log(_query.sql);
-            callback(err, data);
-          });
       },      
     ], function (err, results) {
       if (err) {
@@ -287,19 +278,9 @@ router.post('/log/end', isAuthenticated, function (req, res) {
             });
           }
 
-          // 포인트 로그 기록
-          if (course_end_yn) {
-            CourseService.setPointResult(connection, { user: req.user, training_user_id: inputs.training_user_id }, function (err, data) {
-              res.json({
-                success: true
-              });
-            });
-          } 
-          else {
-            res.json({
-              success: true
-            });
-          }
+          res.json({
+            success: true
+          });
 
         });
       }

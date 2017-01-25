@@ -11,6 +11,7 @@ var isAuthenticated = function (req, res, next) {
 require('../commons/helpers');
 var async = require('async');
 var CourseService = require('../service/CourseService');
+var PointService = require('../service/PointService');
 
 /**
  * 세션 학습시작
@@ -225,8 +226,10 @@ router.post('/log/starttime', isAuthenticated, function (req, res) {
 	});  
 });
 
-// 세션 시작일시를 기록한다.
-// url: /api/v1/log/session/endtime 
+/**
+ * 세션 시작일시를 기록한다.
+ * 포인트를 갱신한다. V
+ */ 
 router.post('/log/endtime', isAuthenticated, function (req, res) {
 
   var _inputs = {
@@ -251,9 +254,14 @@ router.post('/log/endtime', isAuthenticated, function (req, res) {
         });    
       } else {     
         // 쿼리 성공
-        res.json({
-          success: true
-        });
+        PointService.save(connection, 
+            { user: req.user, training_user_id: _inputs.training_user_id }, 
+            function (err, data) {
+              res.json({
+                success: true
+              });
+            }
+          );
       }
     }
   );  
