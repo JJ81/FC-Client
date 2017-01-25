@@ -250,12 +250,33 @@ QUERY.COURSE = {
 		'         	   AND `end_dt` IS NULL ' +
 		'        ); ',
 
+  // 모든 강의 반복여부
+  SEL_COURSE_REPEAT_YN:
+    ' SELECT cg.`id`  ' +
+    '   FROM `course_group` AS cg ' +
+    '  WHERE `group_id` = ? ' +
+    '    AND EXISTS ( ' +
+		'	          SELECT \'X\' ' + 
+		'	            FROM `log_course_progress` ' +
+		'	           WHERE `training_user_id` = ? ' +
+    '              AND `course_id` = cg.`course_id` ' +
+		'         	   AND `repeat_count` = 0 ' +
+		'        ); ',
+
   // 사용자별 강의 진행정보를 입력
   INS_COURSE_PROGRESS:
     'INSERT INTO `log_course_progress` (`user_id`, `training_user_id`, `course_id`) ' +
     'SELECT ?, ?, ? ' +
     '  FROM dual ' +
     ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_course_progress` WHERE `training_user_id` = ? AND `course_id` = ?); ',
+
+  // 강의 반복횟수
+  UPD_COURSE_PROGRESS_REPEAT:
+    'UPDATE `log_course_progress` SET ' +
+    '       `repeat_count` = `repeat_count` + 1 ' +
+    ' WHERE `training_user_id` = ? ' + 
+    '   AND `course_id` = ? ' +
+    '   AND `end_dt` IS NOT NULL; ',
   
   // 강의 종료일시 기록
   UPD_COURSE_PROGRESS:
@@ -545,7 +566,11 @@ QUERY.POINT = {
   
   // 교육 시청시간 (비디오 시청시간 ÷ 비디오 재생시간) 갱신
   UPD_VIDEO_RESULTS:
-    "UPDATE `log_user_point` SET reeltime = ? WHERE `training_user_id` = ?; ",    
+    "UPDATE `log_user_point` SET reeltime = ? WHERE `training_user_id` = ?; ",   
+
+  // 강의 반복율 갱신
+  UPD_COURSE_REPEAT:
+    "UPDATE `log_user_point` SET repetition = ? WHERE `training_user_id` = ?; ",     
 
 };
 

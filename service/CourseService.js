@@ -132,14 +132,28 @@ CourseService.setPointResult = function (_connection, _data, _callback) {
             if (err) console.log(err);
             callback(err, result[0].rate);
           });
-      },      
-      // 포인트 로그테이블에 교육시청 이수율을 조회한다.
+      },
+      // 포인트 로그테이블에 교육시청 이수율을 갱신한다.
       function (arg1, callback) {
           _query = CourseService.connection.query(QUERY.POINT.UPD_VIDEO_RESULTS, [arg1, _data.training_user_id], function (err, result) {
             if (err) console.log(err);
             callback(err, null);
           });
-      },          
+      }, 
+      // 전체 강의 반복여부를 조회한다.
+      function (arg1, callback) {
+          _query = CourseService.connection.query(QUERY.COURSE.SEL_COURSE_REPEAT_YN, [_data.user.course_group_id, _data.training_user_id], function (err, result) {
+            if (err) console.log(err);
+            callback(err, result[0] ? 0 : 1 );
+          });
+      },
+      // 포인트 로그테이블에 강의 반복률을 갱신한다.
+      function (arg1, callback) {
+          _query = CourseService.connection.query(QUERY.POINT.UPD_COURSE_REPEAT, [arg1, _data.training_user_id], function (err, result) {
+            if (err) console.log(err);
+            callback(err, null);
+          });
+      },       
     ],
     function (err, result) {
       _callback(err, result);

@@ -95,8 +95,9 @@ router.post('/log/start', isAuthenticated, function (req, res) {
   var _inputs = {
     training_user_id: req.body.training_user_id,
     course_id: req.body.course_id,
-    user_id: req.user.user_id
-  };      
+    isrepeat: req.body.isrepeat,
+    user_id: req.user.user_id,
+  };
   var _query = null;
 
   connection.beginTransaction(function(err) {
@@ -121,8 +122,8 @@ router.post('/log/start', isAuthenticated, function (req, res) {
             callback(err, data);
           });
       },
-      function (callback) {
-        // 사용자별 강의 진행정보를 입력
+      // 사용자별 강의 진행정보를 입력
+      function (callback) {        
         connection.query(QUERY.COURSE.INS_COURSE_PROGRESS, [
             _inputs.user_id, 
             _inputs.training_user_id, 
@@ -135,6 +136,22 @@ router.post('/log/start', isAuthenticated, function (req, res) {
           }
         );
       },
+      // 사용자별 강의 반복횟수 갱신
+      function (callback) {   
+        if (_inputs.isrepeat) {
+          _query = connection.query(QUERY.COURSE.UPD_COURSE_PROGRESS_REPEAT, [
+              _inputs.training_user_id, 
+              _inputs.course_id,
+            ], 
+            function (err, data) {
+              console.log(_query.sql);
+              callback(err, data); 
+            }
+          );
+        } else {
+          callback(null, null);
+        }
+      },      
       // 사용자 포인트 로그 최초 입력
       function (callback) {        
         _query = connection.query(QUERY.POINT.INS_POINT_LOG, [

@@ -15,7 +15,7 @@
 					<span class="progress_bg">
 					<span class="progress" style="width: {{course.completed_rate}}%"></span>
 					</span>
-					<span class="achievement">{{course.completed_rate}}% {{#if course.course_end_dt}}(완료일시 : {{ stime course.course_end_dt}}){{/if}}</span>
+					<span class="achievement">{{course.completed_rate}}% {{#if course.course_end_dt}}({{ stime course.course_end_dt}} 완료){{/if}}</span>
 			</span>
 			</span>
 	</li>
@@ -85,12 +85,12 @@
     <div class="btn_play">
     	<span class="ico ico_play"></span>
     {{#if (isEquals course.completed_rate 0)}}
-    	<span class="txt">학습하기</span>
+    	<span class="txt start">학습하기</span>
 		{{else}}
 			{{#if (isEquals course.completed_rate 100)}}
-			<span class="txt">반복하기</span>
+			<span class="txt repeat">반복하기</span>
 			{{else}}
-			<span class="txt">이어하기</span>	
+			<span class="txt continue">이어하기</span>	
 			{{/if}}
 		{{/if}}
     </div>

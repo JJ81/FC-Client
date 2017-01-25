@@ -8,7 +8,7 @@ module.exports = function () {
 		// DB 연결을 맺는다
 		init: function () {
 			return mysql.createConnection({
-				host    : config.host,
+				host : config.host,
 				port : config.port,
 				user : config.user,
 				password : config.password,
