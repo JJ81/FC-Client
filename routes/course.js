@@ -10,6 +10,7 @@ var isAuthenticated = function (req, res, next) {
 };
 require('../commons/helpers');
 var async = require('async');
+var CourseService = require('../service/CourseService');
 
 /**
  * 강의 정보
@@ -180,6 +181,10 @@ router.post('/log/start', isAuthenticated, function (req, res) {
 
 /**
  * 강의 종료
+ * 1. 강의 종료일시 기록
+ * 2. 강의 종료여부 조회
+ * 3. 교육 종료여부 기록
+ * 4. 교육이수여부, 교육과정 이수속도를 포인트 결과에 반영
  */
 router.post('/log/end', isAuthenticated, function (req, res) {
 
@@ -242,7 +247,7 @@ router.post('/log/end', isAuthenticated, function (req, res) {
         } else {
           callback(null, null);
         }
-      }    
+      }
     ], function (err, results) {
       if (err) {
 
@@ -255,7 +260,7 @@ router.post('/log/end', isAuthenticated, function (req, res) {
         });
       } else {
         connection.commit(function(err) {
-          // 커밋 오류 발생
+          // 커밋 오류
           if (err) {
             return connection.rollback(function() {
               res.json({
@@ -265,10 +270,20 @@ router.post('/log/end', isAuthenticated, function (req, res) {
             });
           }
 
-          // 커밋 성공
-          res.json({
-            success: true
-          });
+          // 포인트 로그 기록
+          if (course_end_yn) {
+            CourseService.setPointResult(connection, { user: req.user, training_user_id: inputs.training_user_id }, function (err, data) {
+              res.json({
+                success: true
+              });
+            });
+          } 
+          else {
+            res.json({
+              success: true
+            });
+          }
+
         });
       }
     });  

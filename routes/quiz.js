@@ -91,13 +91,13 @@ router.post('/log/checkanswer', isAuthenticated, function (req, res) {
 
             // 포인트 로그 입력
             QuizService.setPointResult(connection, { 
-                user_id: req.user.user_id,  
+                user: req.user,  
                 training_user_id: _training_user_id,
                 course_id: _course_id,
                 course_list_type: _course_list_type
               },
               function (err, data) {
-                console.log(data);
+                // console.log(data);
 
                 return res.json({
                   success: true

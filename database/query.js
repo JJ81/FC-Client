@@ -422,19 +422,22 @@ QUERY.LOG_VIDEO = {
   // 비디오 로그 입력
   // play_dt 가 바뀌는 경우에만 입력한다.
   INS_VIDEO:
-    'INSERT INTO `log_user_video` (`user_id`, `video_id`, `start_dt`, `play_dt`) ' +
-    'SELECT ?, ?, NOW(), CURDATE() ' +
+    'INSERT INTO `log_user_video` (`user_id`, `training_user_id`, `video_id`, `start_dt`, `play_dt`) ' +
+    'SELECT ?, ?, ?, NOW(), CURDATE() ' +
     '  FROM dual ' +
-    ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_video` WHERE `user_id` = ? AND `video_id` = ? AND play_dt = CURDATE()); ',
+    ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_video` WHERE `training_user_id` = ? AND `video_id` = ? AND play_dt = CURDATE()); ',
 
   // 동일 비디오의 마지막 로그 아이디를 구한다.
+  // AND `play_dt` = CURDATE() 조건은 제거하였다. 다음 날까지 걸쳐듣는 경우 이전 로그타임과 나누어며, 
+  // 이 경우 endtime 뿐 아니라, playtime 도 나누어야 하므로, 현재와 같이 변경한다.
   SEL_MAXID:
-    'SELECT MAX(`id`) AS id FROM `log_user_video` WHERE `user_id` = ? AND `video_id` = ? AND `play_dt` = CURDATE()',
+    'SELECT MAX(`id`) AS id FROM `log_user_video` WHERE `user_id` = ? AND `video_id` = ?',
   
   // 재생시간 갱신
   UPD_VIDEO_PLAYTIME:
     'UPDATE `log_user_video` SET ' +
     '       `play_seconds` = `play_seconds` + ? ' +
+    '     , `duration` = ? ' +
     ' WHERE `id` = ?; ',
 
   // 재생시간 획득
@@ -442,6 +445,7 @@ QUERY.LOG_VIDEO = {
     'SELECT SUM(`play_seconds`) AS total_played_seconds ' +
     '  FROM `log_user_video` ' +
     ' WHERE `user_id` = ? ' +
+    '   AND `training_user_id` = ? ' +
     '   AND `video_id` = ?; ', 
   
   // 종료일시 갱신
@@ -478,18 +482,15 @@ QUERY.POINT = {
     'VALUES (?, ?, NOW()) ' +
     "ON DUPLICATE KEY UPDATE `evaluated_dt` = NOW(); ",
   
-  // 특정 타입의 문항수를 가져온다.
-  // @params : course_id, type (course_list)
+  // 특정 교육과정의 타입별(QUIZ/FINAL) 문항수를 가져온다.
+  // @params : course_group_id, type (course_list)
   SEL_QUIZ_COUNT:
-    "SELECT count(*) AS quiz_count " +
-    "  FROM `quiz_group` AS qg " +
-    " WHERE EXISTS ( " +
-		"   SELECT 'X' " +
-		"     FROM `course_list` " +
-		"    WHERE `course_id` = ? " +
-    "      AND `type` = ? " +
-		"      AND `quiz_group_id` = qg.`group_id` " +
-	  " ); ",
+    "SELECT COUNT(*) AS quiz_count " +
+    "  FROM `course_list` AS cl " +
+    " INNER JOIN `quiz_group` AS qg " +
+    "    ON cl.`quiz_group_id` = qg.`group_id` " +
+    " WHERE EXISTS (SELECT 'X' FROM `course_group` WHERE `course_id` = cl.`course_id` AND `group_id` = ?) " +
+    "   AND cl.`type` = ? ",
 
   // 특정 타입의 맞은 문항수를 가져온다.
   // @params : training_user_id, course_id, course_list_type (course_list)
@@ -498,7 +499,54 @@ QUERY.POINT = {
     "  FROM `log_user_quiz` AS luq " +
     " WHERE luq.`training_user_id` = ? " +
     "   AND luq.`course_list_type` = ? " +
-    "   AND luq.`correction` = 1 ",
+    "   AND luq.`correction` = 1 " +
+    "   AND luq.`id` = (SELECT MIN(`id`) FROM `log_user_quiz` WHERE `training_user_id` = luq.`training_user_id` AND `quiz_id` = luq.`quiz_id`) ",
+  
+  // 특정 교육과정의 퀴즈 맞은 비율을 기록한다.
+  UPD_QUIZ_CORRECTION:
+    "UPDATE `log_user_point` SET `quiz_correction` = ?, evaluated_dt = NOW() WHERE `training_user_id` = ? ",
+
+  // 특정 교육과정의 파이널 테스트 맞은 비율을 기록한다.
+  UPD_FINAL_CORRECTION:
+    "UPDATE `log_user_point` SET `final_correction` = ?, evaluated_dt = NOW() WHERE `training_user_id` = ? ",    
+  
+  // 교육과정의 기간을 구한다.
+  SEL_EDU_PERIOD:
+    "SELECT DATEDIFF(`end_dt`, `start_dt`) AS period " +
+    "  FROM `edu`; ",
+  
+  // 사용자가 이수한 기간을 구한다.
+  SEL_USER_PERIOD:
+    "SELECT DATEDIFF(`end_dt`, `start_dt`) AS period " +
+    "  FROM `training_users` " +
+    " WHERE `id` = ?; ",
+  
+  // 교육과정 이수, 교육과정 이수 속도를 기록
+  UPD_EDU_RESULTS:
+    "UPDATE `log_user_point` SET complete = 1, speed = ? WHERE `training_user_id` = ?; ",
+  
+  // 교육 시청시간 (비디오 시청시간 ÷ 비디오 재생시간) 조회
+  SEL_VIDEO_RESULTS:
+    "SELECT TRUNCATE(AVG(CASE WHEN r.rate > 1 THEN 1 ELSE r.rate END), 2) AS rate " +
+    "  FROM ( " +
+    "		SELECT luv.`video_id` " +
+    "			 , IFNULL(MAX(luv.`duration`) / SUM(luv.`play_seconds`), 0) AS rate " +
+    "		  FROM `log_user_video` AS luv " +
+    "		 WHERE EXISTS ( " +
+    "				SELECT 'X' " +
+    "				  FROM `course_list` AS cl " +
+    "				 WHERE EXISTS (SELECT 'X' FROM `course_group` WHERE `course_id` = cl.`course_id` AND `group_id` = ?) " +
+    "				   AND cl.`type` = 'VIDEO' " +
+    "				   AND cl.`video_id` = luv.video_id " +
+    "			   ) " +
+    "		   AND luv.`training_user_id` = ? " +   
+    "		 GROUP BY luv.`video_id` " +
+    "		) AS r; ",
+  
+  // 교육 시청시간 (비디오 시청시간 ÷ 비디오 재생시간) 갱신
+  UPD_VIDEO_RESULTS:
+    "UPDATE `log_user_point` SET reeltime = ? WHERE `training_user_id` = ?; ",    
+
 };
 
 module.exports = QUERY;

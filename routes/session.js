@@ -68,10 +68,12 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 			switch (course_list.type) {
 				case 'VIDEO':      
 				// 비디오 총 시청시간 조회
-				connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
+				query = connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
 					req.user.user_id,
+          training_user_id,
 					course_list.video_id        
 				], function (err, data) {
+          console.log(query.sql);
 					callback(err, data); // results[2]
 				});
 				break;
@@ -134,7 +136,9 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 			// ---------------------------------------------------------------
 
 			var quiz_list = CourseService.makeQuizList(results[1]);
-			console.log(quiz_list);
+			// console.log(quiz_list);
+
+      console.log(req.user);
 
 			// 퀴즈뷰 출력
 			res.render('quiz', {

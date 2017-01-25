@@ -63,7 +63,10 @@ global.PROJ_TITLE = "Orangenamu, Mobile ";
 global.AppRoot = process.env.PWD;
 
 app.use(cookieSession({
-  keys: ['FC_Mobile']
+  	keys: ['FC_Mobile'],
+	cookie: {
+    	maxAge: 1000 * 60 * 60 // 유효기간 1시간
+  	}  
 }));
 
 app.use(flash());

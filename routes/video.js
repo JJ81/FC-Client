@@ -21,19 +21,21 @@ var async = require('async');
 router.get('/settings', isAuthenticated, function (req, res) {
   return res.json({
     success: true,
-    interval: 5,
+    interval: 5, // TODO: 서비스 오픈 전에 적절한 시간으로 변경할 것.
     waiting_seconds : 31 // 대기시간 5초 + 1초 delay
   });
 });
 
 // url: /api/v1/log/video/playtime 
-// 비디오 재생시간(play_seconds, 재생중 매 1분마다) 기록
+// 비디오 재생시간(play_seconds, 재생중 매 5초 마다) 기록
 router.post('/log/playtime', isAuthenticated, function (req, res) {
     
   var inputs = {
         user_id: req.user.user_id,
-        video_id: parseInt(req.body.video_id),
-        played_seconds: parseInt(req.body.timer_played_seconds)
+        training_user_id: req.body.training_user_id,
+        video_id: req.body.video_id,
+        played_seconds: req.body.timer_played_seconds,
+        video_duration: req.body.video_duration,
       },
       log_id = null, // log_user_video 테이블의 id
       total_played_seconds = null; // 총 재생시간
@@ -54,8 +56,9 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
         // 오늘일자의 로그가 없을 경우 생성 
         var query = connection.query(QUERY.LOG_VIDEO.INS_VIDEO, [
             inputs.user_id,
+            inputs.training_user_id,
             inputs.video_id,
-            inputs.user_id,
+            inputs.training_user_id,
             inputs.video_id
           ], 
           function (err, data) {
@@ -79,6 +82,7 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
         // 재생시간을 수정한다.
         var query = connection.query(QUERY.LOG_VIDEO.UPD_VIDEO_PLAYTIME, [
             inputs.played_seconds, 
+            inputs.video_duration,
             log_id
           ], 
           function (err, data) {
@@ -91,6 +95,7 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
         // 재생시간을 조회한다.
         var query = connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
             inputs.user_id,
+            inputs.training_user_id,
             inputs.video_id        
           ], function (err, data) {
             //console.log(query.sql);
@@ -145,8 +150,10 @@ router.post('/log/endtime', isAuthenticated, function (req, res) {
   
   var inputs = {
         user_id: req.user.user_id,
-        video_id: req.body.video_id
-      }, 
+        video_id: req.body.video_id,
+        video_duration: req.body.video_duration,
+        // training_user_id: req.body.training_user_id,
+      },
       log_id = null; // log_user_video 테이블의 id
 
   connection.beginTransaction(function(err) {
@@ -161,19 +168,19 @@ router.post('/log/endtime', isAuthenticated, function (req, res) {
 
     // async.series 쿼리 시작
     async.series([
-      function (callback) {
-        // 오늘일자의 로그가 없을 경우 생성 
-        connection.query(QUERY.LOG_VIDEO.INS_VIDEO, [
-            inputs.user_id,
-            inputs.video_id,
-            inputs.user_id,
-            inputs.video_id
-          ], 
-          function (err, data) {
-            callback(err, data);
-          }
-        );
-      },
+      // function (callback) {
+      //   // 오늘일자의 로그가 없을 경우 생성 
+      //   connection.query(QUERY.LOG_VIDEO.INS_VIDEO, [
+      //       inputs.user_id,
+      //       inputs.video_id,
+      //       inputs.user_id,
+      //       inputs.video_id
+      //     ], 
+      //     function (err, data) {
+      //       callback(err, data);
+      //     }
+      //   );
+      // },
       function (callback) {
         // log id를 구한다.
         var query = connection.query(QUERY.LOG_VIDEO.SEL_MAXID, [
@@ -232,6 +239,7 @@ router.post('/log/endtime', isAuthenticated, function (req, res) {
 
 /**
  * 로그를 삭제한다.
+ * 비디오 시청 완료 후, 정해신 시간 내 다음 스텝으로 넘어가지 않을 경우 초기화
  */
 router.delete('/log', isAuthenticated, function (req, res) {
 

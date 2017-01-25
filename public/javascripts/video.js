@@ -58,31 +58,31 @@ requirejs(
 
 		// 세션 비디오 로그를 삭제한다.
 		function deleteVideoLog () {
-            return axios.delete('/video/log', {
-                params: {
-                    video_id: video_id,
-                }
-            })
-            .then(function (response) {
-            })
-            .catch(function (error) {
-                console.log(error);
-            });  			
+        return axios.delete('/video/log', {
+          params: {
+            video_id: video_id,
+          }
+        })
+        .then(function (response) {
+        })
+        .catch(function (error) {
+          console.log(error);
+        });  			
 		}
 
 		// 세션 로그를 삭제한다.
 		function deleteSessionLog () {
-            return axios.delete('/session/log', {
-                params: {
-                    training_user_id: training_user_id,
-					course_list_id: course_list_id,
-                }
-            })
-            .then(function (response) {
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        return axios.delete('/session/log', {
+          params: {
+            training_user_id: training_user_id,
+            course_list_id: course_list_id,
+          }
+        })
+        .then(function (response) {
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 		}		
 
 		// plyr [ready] event
@@ -152,12 +152,8 @@ requirejs(
 				timer2.stop();
 				alert('비디오를 재시청 해주시기 바랍니다.');
 
-
 				axios.all([ deleteVideoLog(), deleteSessionLog() ])
 				.then(axios.spread(function (res1, res2) {
-					console.log(res1);
-					console.log(res2);
-
 					location.reload();
 				}));
 			}		  
@@ -171,7 +167,12 @@ requirejs(
 			$.ajax({   
 				type: "POST",
 				url: "/video/log/playtime",   
-				data: { video_id: video_id, timer_played_seconds: timer_played_seconds }   
+				data: { 
+          training_user_id: training_user_id, 
+          video_id: video_id,
+          timer_played_seconds: timer_played_seconds, 
+          video_duration: video_duration
+        }   
 			}).done(function (res) { 
 			if (!res.success) {
 				console.error(res.msg);
@@ -216,9 +217,9 @@ requirejs(
 		function sessionProgressEndLogger () {
 
 			$.ajax({   
-			type: "POST",
-			url: "/session/log/endtime",
-			data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }
+        type: "POST",
+        url: "/session/log/endtime",
+        data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }
 			}).done(function (res) { 
 			if (!res.success) {
 				console.error(res.msg);
@@ -237,9 +238,11 @@ requirejs(
 		function endTimeLogger () {
 
 			$.ajax({   
-			type: "POST",
-			url: "/video/log/endtime",   
-			data: { video_id: video_id }   
+        type: "POST",
+        url: "/video/log/endtime",   
+        data: { 
+          video_id: video_id
+        }
 			}).done(function (res) { 
 			if (!res.success) {
 				console.error(res.msg);

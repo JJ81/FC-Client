@@ -304,7 +304,7 @@ requirejs([
       })  
       .done(function (res) {
         if (!res.success) {
-          console.err(res.msg);
+          console.error(res.msg);
         } 
         else {
           // 정답체크 완료 시 정답확인: 비활성화, 다음 버튼: 활성화
