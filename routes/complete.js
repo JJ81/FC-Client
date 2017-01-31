@@ -70,6 +70,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
       
       // 퀴즈뷰 출력
       res.render('complete', {
+        group_path: 'contents',
         current_path: 'complete',
         current_url: req.url,
         root_url: req.user.root_path,

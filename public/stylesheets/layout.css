@@ -520,7 +520,15 @@
 	top: 5px;
 	left: 10px;
 	width: 30px;
-	height: 30px;
+	height: 30px;  
+}
+
+.exit_link{
+	position: absolute;
+	top: 5px;
+	width: 30px;
+	height: 30px;  
+  right: 0px;
 }
 
 #navigation{
@@ -562,6 +570,11 @@
 	top: 9px;
 }
 
+.ico_exit{
+	position: relative;
+	top: 5px;
+}
+
 .logo_section{
 	border-bottom: 1px solid #1e2832;
 	padding: 10px 10px 10px 100px;
@@ -579,5 +592,5 @@
 .logo-txt{
 	color :#fff;
 	position: relative;
-	top: 30px;
+	top: 2px;
 }

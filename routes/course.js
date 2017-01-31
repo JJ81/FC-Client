@@ -49,7 +49,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 			if (err) {
 				console.error(err);
 			} else {
-				//console.info(results);
+				console.info(results);
 
         // 교육과정id 와 강의그룹id 를 세션에 저장한다.
         req.user.edu_id = results[2][0].edu_id;

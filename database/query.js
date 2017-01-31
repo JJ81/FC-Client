@@ -9,7 +9,7 @@ QUERY.AUTH = {
 
 	// 사용자 정보
   SEL_INFO: 
-	  'SELECT `id`, `name`, `email`, `password` ' +  
+	  'SELECT `id`, `name`, `email`, `password`, `fc_id` ' +  
 	  '  FROM `users` ' +
 		' WHERE `phone` = ?; ',
 
@@ -498,6 +498,35 @@ QUERY.LOG_QUIZ = {
 
 // 포인트 관련
 QUERY.POINT = {
+
+  // 포인트 조회
+	SEL_POINT_WEIGHT :
+		"SELECT pw.`point_complete` " +
+    "     , pw.`point_quiz` " +
+    "     , pw.`point_final` " +
+    "     , pw.`point_reeltime` " +
+    "     , pw.`point_speed` " +
+    "     , pw.`point_repetition` " +
+		"  FROM `point_weight` AS pw " +
+		"  LEFT JOIN `admin` AS a " +
+		"    ON a.`id` = pw.`setter_id` " +
+		" WHERE a.`fc_id` = ? " +
+		" ORDER BY pw.`created_dt` DESC " +
+		" LIMIT 1; ",
+
+  // 포인트 현황
+  SEL_USER_POINT:
+    "SELECT SUM(lup.`complete` * ? + " +
+    "           lup.`quiz_correction` * ? + " +
+    "           lup.`final_correction` * ? + " +
+    "           lup.`reeltime` * ? + " +
+    "           lup.`speed` * ? + " +
+    "           lup.`repetition` * ?) AS point_total " +
+    "  FROM `log_user_point` AS lup " +
+    " INNER JOIN `users` AS u " + 
+    "    ON lup.`user_id` = u.`id` " +
+    "   AND u.`fc_id` = ? " +
+    "   AND u.`id` = ?; ",
 
   // 사용자 포인트 로그 입력
   INS_POINT_LOG:

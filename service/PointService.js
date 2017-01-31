@@ -3,6 +3,54 @@ var async = require('async');
 var PointService = {};
 
 /**
+ * 포인트를 조회한다.
+ */
+PointService.userpoint = function ( _connection, _data, _callback ) {
+
+  var user_id = _data.user_id,
+      fc_id = _data.fc_id,
+	    connection = _connection,
+	    logger = null,
+      point_weight = null;
+
+  async.series([
+    // 포인트 설정값 조회
+    function (callback) {
+      logger = connection.query(QUERY.POINT.SEL_POINT_WEIGHT, [fc_id], function (err, data) {
+        console.log(logger.sql);
+        point_weight = data[0];
+        callback(err, data);
+      });
+    },
+    // 사용자 포인트 조회
+    function (callback) {
+      logger = connection.query(QUERY.POINT.SEL_USER_POINT, 
+        [
+          point_weight.point_complete,
+          point_weight.point_quiz,
+          point_weight.point_final,
+          point_weight.point_reeltime,
+          point_weight.point_speed,
+          point_weight.point_repetition,          
+          fc_id, 
+          user_id
+        ], 
+        function (err, data) {
+          console.log(logger.sql);
+          callback(err, data);
+        }
+      );
+    }
+  ], function (err, results) {
+    if (err) {
+      console.error(err);
+    } else {
+      _callback(null, { point_total: results[1][0].point_total });
+    }
+  });
+};
+
+/**
  * 포인트 로그를 쌓는다.
  * 
  */

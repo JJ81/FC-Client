@@ -104,6 +104,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 		// 비디오뷰 출력
 		if (course_list.type === 'VIDEO') {			
 			res.render('video', {
+        group_path: 'contents',
 				current_path: 'video',
 				current_url: req.url,
 				title: global.PROJ_TITLE,
@@ -143,6 +144,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 
 			// 퀴즈뷰 출력
 			res.render('quiz', {
+        group_path: 'contents',
 				current_path: 'quiz',
 				current_url: req.url,
 				title: global.PROJ_TITLE,

@@ -14,6 +14,7 @@ requirejs(
         var $ = jQuery,
             sidenav = $('#navigation'),
             sidenav_toggle = $('.nav_link'),
+            exit_to_course = $('.exit_link'), // 강의보기 페이지로 이동
             sidenav_screen = $('#bg_screen');
         
         // 사이트탭
@@ -29,6 +30,5 @@ requirejs(
             sidenav.toggleClass('blind');
             sidenav_screen.toggleClass('blind');            
         });
-
     }
 );
