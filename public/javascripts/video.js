@@ -23,9 +23,10 @@ requirejs(
           };
 
           player = new Vimeo('videoplayer', options);
-          // player.setVolume(0);
+          player.setVolume(3);
+
           player.on('play', function() {
-              console.log('played the video!');
+              
           });
 
         }); // $(function
