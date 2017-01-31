@@ -59,7 +59,7 @@ hbs.registerPartials(__dirname + '/views/modal');
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-global.PROJ_TITLE = "오렌지나무시스템 ";
+global.PROJ_TITLE = "OrangeNamu ";
 global.AppRoot = process.env.PWD;
 
 app.use(cookieSession({
