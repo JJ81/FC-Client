@@ -20,7 +20,6 @@ requirejs(
 
           var options = {
             loop: true,
-            responsive: false
           };
 
           player = new Vimeo('videoplayer', options);
@@ -28,19 +27,9 @@ requirejs(
           player.on('play', function() {
               console.log('played the video!');
           });
-        });
 
-        // player.on('loaded', function() {
-        //   var frame = player_container.querySelector('iframe')
-        //   if (frame !== null) {
-        //     frame.style.width = '100%';
-        //     frame.style.height = '100%';
-        //   }
-        // });
-
-        player.ready().then(function() {
-            console.info("the player is ready");
-        });
-
-    }
+        }); // $(function
+    } 
+    
+    
 );
