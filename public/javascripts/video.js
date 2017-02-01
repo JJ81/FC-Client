@@ -15,11 +15,12 @@ requirejs(
         
         var player = null,
             player_container = $('#videoplayer'),
-			timer_logging_interval = 0, // log every 5 seconds
+			timer_logging_interval = player_container.data('interval'), // log every 5 seconds
 			timer_log = null,
 			timer_wait = null, // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머 
-			timer_log_played_seconds = 0,
-			timer_waiting_seconds = 0, // 다음버튼을 노출하는데 까지 대기하는 시간         
+			timer_log_played_seconds = 0, // 시청시간(초)
+			timer_waiting_seconds = player_container.data('wait-seconds'), // 다음버튼을 노출하는데 까지 대기하는 시간  
+      passive_rate = player_container.data('passive-rate'), // 다음 버튼을 노출하는 시점
 
 			btn_play = $('.btn_play'),
 			next_url = btn_play.parent().attr('href'),
@@ -85,23 +86,13 @@ requirejs(
          */
         function setPlayer () {
 
-			if (video_duration) {
-				axios.get("/video/settings")
-					.then(function (res) {
-						timer_logging_interval = res.data.interval;
-						timer_log = $.timer(1000 * timer_logging_interval, videoPlayTimeLogger, true);
-						timer_log.stop();
- 
-						// 비디오 종료 후 학습이력 초기화까지 대기하는 시간 
-						timer_waiting_seconds = res.data.waiting_seconds;						
-						checkVideoDuration();
-					})
-					.catch(function (error) {
-						console.error(error);
-					});
-			} else {
-				console.error("재생시간을 확인할 수 없습니다.");
-			}
+          if (video_duration) {
+            timer_log = $.timer(1000 * timer_logging_interval, videoPlayTimeLogger, true);
+            timer_log.stop();						
+            checkVideoDuration();
+          } else {
+            console.error("재생시간을 확인할 수 없습니다.");
+          }
 
         }
 
@@ -121,7 +112,7 @@ requirejs(
 		 */		
 		function showPlayBtn (total_played_seconds) {
 
-			if (Math.floor(video_duration * 0.8) <= total_played_seconds) {
+			if (Math.floor(video_duration * (passive_rate / 100)) <= total_played_seconds) {
 				btn_play.removeClass('blind');
 			}
 
@@ -226,17 +217,21 @@ requirejs(
 			$.ajax({   
 				type: "POST",
 				url: "/session/log/starttime",
-				data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }   
+				data: { 
+          training_user_id: training_user_id, 
+          course_id: course_id, 
+          course_list_id: course_list_id 
+        }   
 			}).done(function (res) { 
-			if (!res.success) {
-				// console.error(res.msg);
-				// 오류 발생 시 타이머와 비디오 재생을 멈춘다.
-				timer_log.stop();
-				video.plyr.stop();            
-			} else {
-				session_has_ended = res.hasEnded; // 세션 종료여부
-				// console.info('세션 시작시간 기록');
-			} 
+        if (!res.success) {
+          console.error(res.msg);
+          // 오류 발생 시 타이머와 비디오 재생을 멈춘다.
+          timer_log.stop();
+          player.stop();            
+        } else {
+          session_has_ended = res.hasEnded; // 세션 종료여부
+          // console.info('세션 시작시간 기록');
+        } 
 			});
 
 		}		
@@ -259,7 +254,7 @@ requirejs(
 					console.error(res.msg);
 					// 오류 발생 시 타이머와 비디오 재생을 멈춘다.
 					timer_log.stop();
-					video.plyr.stop();                
+					player.stop();                
 				} else {
 					// console.info('세션 종료시간 기록');
 					location.href = next_url;
@@ -380,8 +375,11 @@ requirejs(
 			// 비디오 시청 종료일시 기록
 			videoEndTimeLogger();
 			// 세션 종료 시 대기 타이머 시작
-			if (!session_has_ended)
-				timer_wait = $.timer(1000 * 1, waitingTimeLogger, true);				
+			if (!session_has_ended) {
+        setTimeout(function () {
+          timer_wait = $.timer(1000 * 1, waitingTimeLogger, true);    
+        }, 3000);        
+      }
 
 		});
     } 

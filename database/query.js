@@ -190,6 +190,7 @@ QUERY.COURSE = {
     '  FROM `course_list` AS cl ' +
     '  LEFT JOIN `log_session_progress` AS up ' +
     '    ON cl.id = up.course_list_id ' +
+    '   AND up.user_id = ? ' +
     '   AND up.training_user_id = ? ' +
     '   AND up.end_dt IS NOT NULL ' +
     ' WHERE cl.`course_id` = ? ' +

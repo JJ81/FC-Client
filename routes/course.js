@@ -34,8 +34,8 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 				});
 			},
 			function (callback) {
-				var query = connection.query(QUERY.COURSE.SEL_SESSION_LIST, [training_user_id, course_id], function (err, data) {
-          //////console.log(query.sql);
+				var query = connection.query(QUERY.COURSE.SEL_SESSION_LIST, [req.user.user_id, training_user_id, course_id], function (err, data) {
+          console.log(query.sql);
 					callback(err, data); // results[1]
 				});
 			},

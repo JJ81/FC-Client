@@ -104,12 +104,13 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 			next_url = '/' + 'evaluate' + '/' + training_user_id + '/' + course_id; 
 		}
 
-    var currenttime = 0;
-    if (results[3] !== null)
-      currenttime = results[3][0].currenttime;
-
 		// 비디오뷰 출력
-		if (course_list.type === 'VIDEO') {			
+		if (course_list.type === 'VIDEO') {
+
+      var currenttime = 0;
+      if (results[3][0] != null)
+        currenttime = results[3][0].currenttime;
+
 			res.render('video', {
         group_path: 'contents',
 				current_path: 'video',
@@ -125,6 +126,11 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 				training_user_id: training_user_id,
 				course_id: course_id,
 				course_list_id: course_list_id,
+        setting: {
+          interval: 5, // playtime 로깅 간격
+          waiting_seconds : 30, // 비디오 종료 후 다음 버튼이 노출되는 시간
+          passive_rate: 80 // 다음 버튼이 활성화되는 시청시간 (%)
+        }
 			});
 
 		}

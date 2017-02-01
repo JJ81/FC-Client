@@ -30,5 +30,13 @@ requirejs(
             sidenav.toggleClass('blind');
             sidenav_screen.toggleClass('blind');            
         });
+
+        // 강의페이지로 나가기
+        exit_to_course.bind('click', function (e) {
+
+          if (!confirm("강의페이지로 이동하시겠습니까?"))
+            e.preventDefault();
+          
+        });
     }
 );
