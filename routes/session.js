@@ -105,7 +105,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 		}
 
     var currenttime = 0;
-    if (results[3].length > 0)
+    if (results[3] !== null)
       currenttime = results[3][0].currenttime;
 
 		// 비디오뷰 출력
