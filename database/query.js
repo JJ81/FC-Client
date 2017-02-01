@@ -461,6 +461,7 @@ QUERY.LOG_VIDEO = {
     'UPDATE `log_user_video` SET ' +
     '       `play_seconds` = `play_seconds` + ? ' +
     '     , `duration` = ? ' +
+    '     , `currenttime` = ? ' +
     ' WHERE `id` = ?; ',
 
   // 재생시간 획득
@@ -470,6 +471,16 @@ QUERY.LOG_VIDEO = {
     ' WHERE `user_id` = ? ' +
     '   AND `training_user_id` = ? ' +
     '   AND `video_id` = ?; ', 
+
+  // 마지막 재생일시 획득
+  SEL_LAST_VIDEO_CURRENT_TIME:
+    'SELECT `currenttime` ' +
+    '  FROM `log_user_video` ' +
+    ' WHERE `user_id` = ? ' +
+    '   AND `training_user_id` = ? ' +
+    '   AND `video_id` = ? ' +
+    ' ORDER BY `play_dt` DESC ' +
+    ' LIMIT 1; ',     
   
   // 종료일시 갱신
   UPD_VIDEO_ENDTIME:

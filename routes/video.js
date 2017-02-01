@@ -34,8 +34,9 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
         user_id: req.user.user_id,
         training_user_id: req.body.training_user_id,
         video_id: req.body.video_id,
-        played_seconds: req.body.timer_played_seconds,
+        played_seconds: req.body.played_seconds,
         video_duration: req.body.video_duration,
+        currenttime: req.body.currenttime,
       },
       log_id = null, // log_user_video 테이블의 id
       total_played_seconds = null; // 총 재생시간
@@ -75,6 +76,7 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
           ], function (err, data) {
             //console.log(query.sql);
             log_id = data[0].id;
+            // console.log(log_id);
             callback(err, data);
           });
       },
@@ -83,10 +85,11 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
         var query = connection.query(QUERY.LOG_VIDEO.UPD_VIDEO_PLAYTIME, [
             inputs.played_seconds, 
             inputs.video_duration,
+            inputs.currenttime,
             log_id
           ], 
           function (err, data) {
-            //console.log(query.sql);
+            // console.log(query.sql);
             callback(err, data);
           }
         );

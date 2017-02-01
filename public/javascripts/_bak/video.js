@@ -17,9 +17,9 @@ requirejs(
     function ($, axios, plyr) {
       var timer_logging_interval = 0, // log every 5 seconds
           timer = null,
-		  timer2 = null, // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머 
+		      timer2 = null, // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머 
           timer_played_seconds = 0,
-		  timer_waiting_seconds = 0, // 다음버튼을 노출하는데 까지 대기하는 시간
+		      timer_waiting_seconds = 0, // 다음버튼을 노출하는데 까지 대기하는 시간
           player_options = {
             autoplay: false,
             debug: false
@@ -36,8 +36,8 @@ requirejs(
           course_id = btn_play.data('course-id'),
           course_list_id = btn_play.data('course-list-id'),
           video_duration = null, // 비디오 러닝타임
-		  wait_message = $('.wait-message'),  
-		  session_has_ended = false;
+          wait_message = $('.wait-message'),  
+          session_has_ended = false;
 
 		$(function () {
 			getVideoSettings();
@@ -47,7 +47,7 @@ requirejs(
 		function getVideoSettings() {
 			$.get("/video/settings", function(res) {
 
-				timer_logging_interval = res.interval;		  
+				timer_logging_interval = res.interval;
 				timer = $.timer(1000 * timer_logging_interval, playTimeLogger, true);
         timer.stop();
         

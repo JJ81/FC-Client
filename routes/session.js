@@ -18,17 +18,6 @@ var PointService = require('../service/PointService');
  */
 router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, function (req, res) {
 
-  // TODO
-  // 2. 비디오인지, 퀴즈인지, 테스트인지 구분할 수 있어야 한다. V
-  // 3. 비디오일 경우 plyr 연결 -> 비메오 이슈 해결해야함. X
-  // 5. 정답체크는 서버에서 한 후 결과를 내려줘야 한다.(?), 클라에서 우선 진행해도 무방
-  // 6. 다음 세션id 를 가져와야 한다. V
-  // 7. 평가이력이 존재할 경우 완료페이지로 바로 이동해야 한다. V 
-  // 8. 비디오 로깅시간 서버에서 내려줄 것, 정해진 시간 이전에 로깅하는지도 체크할 것 V
-
-  // BUG
-  // 1. 반복하기 시 첫번째 세션이후 다음버튼을 클릭하면, 평가페이지로 이동
-
   var training_user_id = req.params.training_user_id,
       course_id = req.params.course_id, 
       course_list_id = req.params.course_list_id,
@@ -43,6 +32,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 		function (callback) {
 			var query = connection.query(QUERY.COURSE_LIST.SEL_INDEX, [training_user_id, course_list_id], function (err, data) {
         course_list = data[0];
+        console.log(course_list);
         callback(err, data); 
 			});
 		},
@@ -50,40 +40,53 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 		// results[1]
 		function (callback) {
 			switch (course_list.type) {
-			case 'VIDEO':
-				connection.query(QUERY.COURSE_LIST.SEL_VIDEO, [course_list.video_id], function (err, data) {
-					callback(err, data); 
-				});          
-				break;
+        case 'VIDEO':
+          connection.query(QUERY.COURSE_LIST.SEL_VIDEO, [course_list.video_id], function (err, data) {
+            callback(err, data); 
+          });          
+          break;
 
-			default: // QUIZ / FINAL
-				connection.query(QUERY.COURSE_LIST.GetQuizDataByGroupId, [ course_list.quiz_group_id ], function (err, data) {
-					callback(err, data); // results[1]
-				});
-				break;
+        default: // QUIZ / FINAL
+          connection.query(QUERY.COURSE_LIST.GetQuizDataByGroupId, [ course_list.quiz_group_id ], function (err, data) {
+            callback(err, data); // results[1]
+          });
+          break;
 			}
 		},
 		// (비디오 세션일 경우에만 해당) 비디오 총 시청시간 조회
 		// results[2]
 		function (callback) {
-			switch (course_list.type) {
-				case 'VIDEO':      
-				// 비디오 총 시청시간 조회
+
+      if (course_list.type === 'VIDEO') {
 				query = connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
 					req.user.user_id,
           training_user_id,
 					course_list.video_id        
 				], function (err, data) {
-          console.log(query.sql);
-					callback(err, data); // results[2]
+					callback(err, data); 
 				});
-				break;
-				
-				default:
-				callback(null, null);
-				break;
-			}
-		}
+      } else {
+        callback(null, null);
+      }
+
+		},
+    // 비디오 마지막 재생시점을 가져온다.
+    // results[3]
+		function (callback) {
+			if (course_list.type === 'VIDEO') {
+				query = connection.query(QUERY.LOG_VIDEO.SEL_LAST_VIDEO_CURRENT_TIME, [
+					req.user.user_id,
+          training_user_id,
+					course_list.video_id        
+				], function (err, data) {
+          // console.log(data);
+					callback(err, data);
+				});
+      }
+      else {
+        callback(null, null);
+      }
+		}    
 	], 
 	function (err, results) {
 		if (err) {
@@ -101,6 +104,10 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 			next_url = '/' + 'evaluate' + '/' + training_user_id + '/' + course_id; 
 		}
 
+    var currenttime = 0;
+    if (results[3].length > 0)
+      currenttime = results[3][0].currenttime;
+
 		// 비디오뷰 출력
 		if (course_list.type === 'VIDEO') {			
 			res.render('video', {
@@ -113,10 +120,11 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 				header: course_list.title,
 				content: results[1][0],
 				total_played_seconds: results[2][0].total_played_seconds,
+        currenttime: currenttime,
 				next_url: next_url,            
 				training_user_id: training_user_id,
 				course_id: course_id,
-				course_list_id: course_list_id
+				course_list_id: course_list_id,
 			});
 
 		}
@@ -140,7 +148,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
 			var quiz_list = CourseService.makeQuizList(results[1]);
 			// console.log(quiz_list);
 
-      console.log(req.user);
+      // console.log(req.user);
 
 			// 퀴즈뷰 출력
 			res.render('quiz', {
@@ -186,7 +194,7 @@ router.post('/log/starttime', isAuthenticated, function (req, res) {
 				inputs.course_list_id
 			], 
 			function (err, data) {
-				console.log(query.sql);
+				// console.log(query.sql);
 				callback(err, data); // results[0]
 			});
 		},
@@ -201,7 +209,7 @@ router.post('/log/starttime', isAuthenticated, function (req, res) {
 				inputs.course_list_id     
 			], 
 			function (err, data) {
-				console.log(query.sql);
+				// console.log(query.sql);
 				callback(err, data);
 			});
 		}
