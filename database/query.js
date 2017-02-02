@@ -542,10 +542,10 @@ QUERY.POINT = {
 
   // 사용자 포인트 로그 입력
   INS_POINT_LOG:
-    'INSERT INTO `log_user_point` (`user_id`, `training_user_id`) ' +
+    'INSERT IGNORE `log_user_point` (`user_id`, `training_user_id`) ' +
     'SELECT ?, ? ' +
-    '  FROM `log_user_point` AS lup ' +
-    ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_point` WHERE training_user_id = ?); ',
+    '  FROM `log_user_point` AS lup ',
+    // ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_point` WHERE training_user_id = ?); ',
 
   // 사용자 포인트 로그 최초 갱신
   UPD_POINT_LOG:

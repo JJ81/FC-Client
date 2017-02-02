@@ -9,7 +9,7 @@ requirejs(
 		'jquery',
 	    'axios',
 	    'Vimeo',    
-      	'jqueryTimer',
+      'jqueryTimer',
     ],
     function ($, axios, Vimeo) {
         
@@ -54,7 +54,7 @@ requirejs(
 				loop: false,
 			};	
 			player = new Vimeo('videoplayer', options);
-          	player.setVolume(0.5); // 볼륨설정
+      player.setVolume(0.5); // 볼륨설정
 
 			player.ready().then(function() {
 				console.info("Player is ready.");

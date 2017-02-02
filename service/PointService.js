@@ -84,6 +84,10 @@ PointService.save = function ( _connection, _data, _callback ) {
 		// 강의 반복 학습율		
 		repetition: { value: null },
 	};
+  
+  console.log('----------------------------');
+  console.log('포인트 적립 시작');
+  console.log('----------------------------');
 
 	async.series(
 		[
@@ -101,9 +105,10 @@ PointService.save = function ( _connection, _data, _callback ) {
 			},
 			/* 포인트 로그 입력 */
 			function (callback) {
-				connection.query(QUERY.POINT.INS_POINT_LOG, 
+				logger = connection.query(QUERY.POINT.INS_POINT_LOG, 
 					[ user_id, training_user_id, training_user_id ], 
 					function (err, result) {
+            console.log(logger.sql);
 						callback(err, null);
 					}
 				);

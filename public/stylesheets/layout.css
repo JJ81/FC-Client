@@ -374,6 +374,10 @@
 	color :#000;
 }
 
+.tit > small {
+  color: #929292;
+}
+
 .evaluation_section .divider{
 	display: block;
 	border: none;
