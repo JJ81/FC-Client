@@ -345,7 +345,7 @@
 }
 
 .btn_play{
-	position: fixed;
+	position: absolute;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -536,7 +536,7 @@
 }
 
 #navigation{
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
 	width: 250px;
@@ -561,7 +561,7 @@
 .bg_screen{
 	width: 100%;
 	height: 100%;
-	position: fixed;
+	position: absolute;
 	top: 0;
 	left: 0;
 	background :#191919;
@@ -616,6 +616,19 @@
   transform: translate(-50%, -50%);
   width: 60%;
   height: auto
+  }
+}
+
+@media (min-width:1281px) { 
+  /* hi-res laptops and desktops */
+  body {
+    width: 480px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);    
   }
 }
 

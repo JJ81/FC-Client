@@ -140,8 +140,8 @@ QUERY.EDU = {
   // @params : training_user_id, 
   SEL_COURSE_GROUP:
     "SELECT te.`edu_id`, e.`course_group_id`, e.`name` " +
-    "     , DATE_FORMAT(e.`start_dt`, '%Y.%m.%d') AS start_dt " +
-    "     , DATE_FORMAT(e.`end_dt`, '%Y.%m.%d') AS end_dt " +
+    "     , DATE_FORMAT(tu.`start_dt`, '%Y.%m.%d') AS start_dt " +
+    "     , DATE_FORMAT(tu.`end_dt`, '%Y.%m.%d') AS end_dt " +
     "  FROM `training_users` AS tu " +
     " INNER JOIN `training_edu` AS te " +
     "    ON tu.`training_edu_id` = te.`id` " +

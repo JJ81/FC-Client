@@ -133,8 +133,8 @@ PointService.save = function ( _connection, _data, _callback ) {
 					connection.query(QUERY.POINT.SEL_USER_PERIOD, 
 						[ edu_id, training_user_id ], 
 						function (err, result) {
-							logs.speed.edu_period = result[0].edu_period;
-							logs.speed.user_period = result[0].user_period;
+							logs.speed.edu_period = result[0].edu_period === 0 ? 1 : result[0].edu_period;
+							logs.speed.user_period = result[0].user_period === 0 ? 1 : result[0].user_period;
 							logs.speed.value =  
 								1 - (result[0].user_period / result[0].edu_period).toFixed(2);
 							callback(err, null);
@@ -208,7 +208,7 @@ PointService.save = function ( _connection, _data, _callback ) {
 						logs.speed.value,
 						logs.repetition.value,
 						JSON.stringify(logs),
-						training_user_id						
+						training_user_id
 					],
 					function (err, result) {
 						callback(err, null);
