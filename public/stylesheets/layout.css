@@ -642,6 +642,10 @@
     color :#fff;
     cursor: pointer;
   }
+
+.btn-orange{
+	background: #f46533;
+}  
 }
 
 .text-red {
