@@ -10,7 +10,8 @@
 			<span class="list_item no_img_list">            
 			{{/if}}
 			<span class="info">
-					<span class="tit ellipsis">{{course.course_name}}</span>
+					<!--<span class="tit ellipsis">{{course.course_name}}</span>-->
+          <span class="tit"><small>{{ edu_name }}</small> | {{course.course_name}}</span>
 					<span class="author">{{course.teacher_name}}</span>
 					<span class="progress_bg">
 					<span class="progress" style="width: {{course.completed_rate}}%"></span>

@@ -139,7 +139,7 @@ QUERY.EDU = {
   // edu_id, course_group_id 를 캐싱하기 위한 쿼리
   // @params : training_user_id, 
   SEL_COURSE_GROUP:
-    "SELECT te.`edu_id`, e.`course_group_id`, e.`name` " +
+    "SELECT te.`edu_id`, e.`course_group_id`, e.`name` AS edu_name " +
     "     , DATE_FORMAT(tu.`start_dt`, '%Y.%m.%d') AS start_dt " +
     "     , DATE_FORMAT(tu.`end_dt`, '%Y.%m.%d') AS end_dt " +
     "  FROM `training_users` AS tu " +

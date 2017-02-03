@@ -81,8 +81,9 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
           course_list: results[1],
           course_list_id: min_course_list_id,
           training_user_id: training_user_id,
-          back_url: req.user.root_path
-				});									
+          back_url: req.user.root_path,
+          edu_name: results[2][0].edu_name,
+				});
 			}
 		});
 });
