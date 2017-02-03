@@ -106,7 +106,7 @@ PointService.save = function ( _connection, _data, _callback ) {
 			/* 포인트 로그 입력 */
 			function (callback) {
 				logger = connection.query(QUERY.POINT.INS_POINT_LOG, 
-					[ user_id, training_user_id, training_user_id ], 
+					[ user_id, training_user_id, edu_id ], 
 					function (err, result) {
             console.log(logger.sql);
 						callback(err, null);
