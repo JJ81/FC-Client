@@ -17,7 +17,7 @@ PointService.userpoint = function ( _connection, _data, _callback ) {
     // 포인트 설정값 조회
     function (callback) {
       logger = connection.query(QUERY.POINT.SEL_POINT_WEIGHT, [fc_id], function (err, data) {
-        console.log(logger.sql);
+        // console.log(logger.sql);
         point_weight = data[0];
         callback(err, data);
       });
@@ -26,17 +26,18 @@ PointService.userpoint = function ( _connection, _data, _callback ) {
     function (callback) {
       logger = connection.query(QUERY.POINT.SEL_USER_POINT, 
         [
-          point_weight.point_complete,
-          point_weight.point_quiz,
-          point_weight.point_final,
-          point_weight.point_reeltime,
-          point_weight.point_speed,
-          point_weight.point_repetition,          
+          // point_weight.point_complete,
+          // point_weight.point_quiz,
+          // point_weight.point_final,
+          // point_weight.point_reeltime,
+          // point_weight.point_speed,
+          // point_weight.point_repetition,   
+          fc_id,       
           fc_id, 
           user_id
         ], 
         function (err, data) {
-          console.log(logger.sql);
+          // console.log(logger.sql);
           callback(err, data);
         }
       );
@@ -96,7 +97,7 @@ PointService.save = function ( _connection, _data, _callback ) {
 				connection.query(QUERY.EDU.SEL_COURSE_GROUP, 
 					[ training_user_id ], 
 					function (err, result) {
-						logs.edu_name = result[0].name;
+						logs.edu_name = result[0].edu_name;
 						logs.edu_start_dt = result[0].start_dt;
 						logs.edu_end_dt = result[0].end_dt;
 						callback(err, null);
@@ -170,7 +171,7 @@ PointService.save = function ( _connection, _data, _callback ) {
 								(result[0].user_quiz_count / result[0].total_quiz_count).toFixed(2);
 							callback(err, null);
 						}
-					);							
+					);
 			},		
 			// 포인트 로그테이블에 교육시청 이수율을 가져온다.	
 			function (callback) {	
@@ -182,6 +183,8 @@ PointService.save = function ( _connection, _data, _callback ) {
 							logs.reeltime.played_seconds = result[0].played_seconds;
 							logs.reeltime.value = 
 								(result[0].played_seconds / result[0].duration).toFixed(2);
+              logs.reeltime.value = logs.reeltime.value > 1 ? 1 : logs.reeltime.value; // 1보다 클 경우 1로 한정한다.
+
 							callback(err, null);
 						}
 					);

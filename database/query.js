@@ -140,8 +140,8 @@ QUERY.EDU = {
   // @params : training_user_id, 
   SEL_COURSE_GROUP:
     "SELECT te.`edu_id`, e.`course_group_id`, e.`name` AS edu_name " +
-    "     , DATE_FORMAT(tu.`start_dt`, '%Y.%m.%d') AS start_dt " +
-    "     , DATE_FORMAT(tu.`end_dt`, '%Y.%m.%d') AS end_dt " +
+    "     , IFNULL(DATE_FORMAT(tu.`start_dt`, '%Y.%m.%d'), '') AS start_dt " +
+    "     , IFNULL(DATE_FORMAT(tu.`end_dt`, '%Y.%m.%d'), '') AS end_dt " +
     "  FROM `training_users` AS tu " +
     " INNER JOIN `training_edu` AS te " +
     "    ON tu.`training_edu_id` = te.`id` " +
@@ -528,13 +528,16 @@ QUERY.POINT = {
 
   // 포인트 현황
   SEL_USER_POINT:
-    "SELECT SUM(lup.`complete` * ? + " +
-    "           lup.`quiz_correction` * ? + " +
-    "           lup.`final_correction` * ? + " +
-    "           lup.`reeltime` * ? + " +
-    "           lup.`speed` * ? + " +
-    "           lup.`repetition` * ?) AS point_total " +
+    "SELECT SUM(lup.`complete` * epw.`point_complete` + " +
+    "           lup.`quiz_correction` * epw.`point_quiz` + " +
+    "           lup.`final_correction` * epw.`point_final` + " +
+    "           lup.`reeltime` * epw.`point_reeltime` + " +
+    "           lup.`speed` * epw.`point_speed` + " +
+    "           lup.`repetition` * epw.`point_repetition`) AS point_total " +
     "  FROM `log_user_point` AS lup " +
+    "  LEFT JOIN `edu_point_weight` AS epw " +
+    "    ON lup.`edu_id` = epw.`edu_id` " +
+    "   AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) " +    
     " INNER JOIN `users` AS u " + 
     "    ON lup.`user_id` = u.`id` " +
     "   AND u.`fc_id` = ? " +
