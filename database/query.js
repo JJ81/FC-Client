@@ -100,6 +100,7 @@ QUERY.EDU = {
 		' 			  WHERE cl.`course_id` = @course_id ' +
 		'				) AS completed_rate ' +
     '     , (SELECT `end_dt` FROM `log_course_progress` WHERE `training_user_id` = @training_user_id AND `course_id` = @course_id) AS course_end_dt ' +
+    '     , e.name AS edu_name ' +
 		'  FROM `edu` AS e ' +
  		' INNER JOIN ( ' +
 		' 	    SELECT te.`edu_id`, tu.id AS training_user_id ' +
