@@ -57,6 +57,8 @@ passport.use(new LocalStrategy({
                   'email' : data[0].email,
                   'point' : data.point_total
                 };
+
+            // 교육생 포인트를 사이드탭에 표시하기 위함.
             PointService.userpoint(connection, { user_id: data[0].id, fc_id: data[0].fc_id }, function (err, data) {
               user_info.point = data.point_total;
               return done(null, user_info);
@@ -73,10 +75,22 @@ passport.use(new LocalStrategy({
 
 // 로그인 화면
 router.get('/login', function (req, res) {
+
+    var _host_name = req.headers.host,
+        _logo_name = null,
+        _logo_image_name = null;
+
+    _logo_name = _host_name.split('.')[1];    
+    _logo_name = _logo_name === undefined ? 'orangenamu' : _logo_name;
+    _logo_image_name = _logo_name + '.png';
+    global.PROJ_TITLE = _logo_name;
+    
   if (req.user == null) {
     res.render('login', {
       current_path: 'login',
-      title: PROJ_TITLE
+      title: PROJ_TITLE,
+      logo : _logo_name,
+      logo_image: _logo_image_name
     });
   } else {
     res.redirect('/education/current');
