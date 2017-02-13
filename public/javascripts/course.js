@@ -23,14 +23,14 @@ requirejs([
 
     var $ = jQuery,
         btn_more = $('.btn_more'),
-        full_desc = $('input#full_desc'), // 전체 설명
+        full_desc = $('#full_desc'), // 전체 설명
         btn_play = $('#btn_play_next'); // 학습시작버튼
 
     // 더보기 클릭
     btn_more.bind('click', function (e) {
       e.preventDefault();
 
-      $('.desc').text(full_desc.val());
+      $('.desc').html(full_desc.html());
       $('.btn_more').hide();
     });
 

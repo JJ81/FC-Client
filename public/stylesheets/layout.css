@@ -243,6 +243,7 @@
 	font-size: 14px;
 	color :#727272;
 	margin-top: 10px;
+  margin-bottom: 10px;
 	line-height: 20px;
 }
 
@@ -257,6 +258,29 @@
 	text-align: center;
 }
 
+.course_info ul {
+  margin-left: 2em;
+}
+
+.course_info ul li {
+  display: list-item;
+  list-style-type: initial;
+}
+
+.course_info ol {
+  margin-left: 2em;
+}
+
+.course_info ol li {
+  display: list-item;
+  list-style-type: decimal;
+}
+
+.course_info a {
+  outline: none;
+  text-decoration: none;
+  color: #72afd2;
+}
 
 .divider{
 	width: 100%;

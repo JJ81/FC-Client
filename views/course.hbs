@@ -2,25 +2,26 @@
 
 <div class="list_section">
 	<ol>
-	<li class="item_wrap">
-			{{#if course.thumbnail}}
-			<span class="list_item">
-			<img src="/uploads/{{course.thumbnail}}" alt="" width="100" class="img_list" />			
-			{{else}}
-			<span class="list_item no_img_list">            
-			{{/if}}
-			<span class="info">
-					<!--<span class="tit ellipsis">{{course.course_name}}</span>-->
-          <span class="tit"><small>{{ edu_name }}</small> | {{course.course_name}}</span>
-					<span class="author">{{course.teacher_name}}</span>
-					<span class="progress_bg">
-					<span class="progress" style="width: {{course.completed_rate}}%"></span>
-					</span>
-					<span class="achievement">{{course.completed_rate}}% {{#if course.course_end_dt}}({{ stime course.course_end_dt}} 완료){{/if}}</span>
-			</span>
-			</span>
-	</li>
-	</ol>
+    <li class="item_wrap">
+        {{#if course.thumbnail}}
+        <span class="list_item">
+          <img src="/uploads/{{course.thumbnail}}" alt="" width="100" class="img_list" />			
+          {{else}}
+          <span class="list_item no_img_list">            
+          {{/if}}
+            <span class="info">
+                <!--<span class="tit ellipsis">{{course.course_name}}</span>-->
+                <span class="tit"><small>{{ edu_name }}</small> | {{course.course_name}}</span>
+                <span class="author">{{course.teacher_name}}</span>
+                <span class="progress_bg">
+                  <span class="progress" style="width: {{course.completed_rate}}%"></span>
+                </span>
+                <span class="achievement">{{course.completed_rate}}% {{#if course.course_end_dt}}({{ stime course.course_end_dt}} 완료){{/if}}</span>
+            </span>
+          </span>
+        </span>
+    </li>
+  </ol>
 </div>
 
 <hr />
@@ -33,13 +34,14 @@
 <!-- 설명 -->
 <div class="course_info">
     <h3 class="tit">강의설명</h3>
-		<input type="hidden" id="full_desc" value="{{course.desc}}" />
-    <div class="desc"> 
-    {{truncate course.desc 120}}
-    </div>
-		{{#ifCond course.desc.length '>' 120}}
+		<span id="full_desc" style="display: none;">{{{course.desc}}}</span>
+    <div class="desc">
+    <!--{{{ course.desc }}}-->
+    {{truncate course.desc 120}}    
+    {{#ifCond course.desc.length '>' 120}}
     <a href="#" class="btn_more">더보기</a>
     {{/ifCond}}
+  </div>
 </div>
 
 <div class="divider"></div>
