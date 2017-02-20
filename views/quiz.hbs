@@ -1,35 +1,36 @@
-
-{{> page_header}}
-
-  <form action="#" method="POST">
+{{> header}}
     
-    <section id="quiz_section">
-      {{#each contents}}
-        <div class="quiz_select">
-          <strong class="question">{{question}}</strong>
-          {{#if option_id}}
-          <ol class="selection option" data-quiz-id="{{id}}">
-          {{#each quiz_options}}
-            <li data-option-id="{{lookup ../quiz_option_ids @index}}">
-              <a href="#" class="link">
-                <i class="ico ico_unchecked"></i>
-                <span class="answer">{{this}}</span>                
-              </a>
-            </li>
-          {{/each}}
-          </ol>
-          <div id="alert_{{id}}" class="result_quiz blind"></div>
-          {{else}}
-          <div class="not-select">
-            <input type="text" name="input_{{id}}" class="answer_quiz_input brd-round option" data-quiz-id="{{id}}"autocomplete="off" />
-          </div>         
-          <div id="alert_{{id}}" class="result_quiz blind"></div> 
-          {{/if}}
-        </div>
-      {{/each}}      
-    </section>  
-    
-  </form>
+<section id="quiz_section">
+  {{#each contents}}
+    <div class="quiz_select" 
+          data-quiz-type="{{quiz_type}}" 
+          data-quiz-id="{{quiz_id}}" 
+          data-quiz-answer="{{answer}}"
+          data-iscorrect="0"
+          data-answered=""
+    >
+      <strong class="question">{{order}}. {{question}}</strong>
+      {{#ifCond (isEquals quiz_type 'B') '||' (isEquals quiz_type 'C') }}
+      <ol class="selection option">
+      {{#each options}}
+        <li data-option-id="{{id}}" data-iscorrect="{{iscorrect}}">
+          <a href="#" class="link">
+            <i class="ico ico_unchecked"></i>
+            <span class="answer">{{option}}</span>     
+          </a>
+        </li>
+      {{/each}}
+      </ol>
+      <div id="alert" class="result_quiz blind">{{answer}}</div>
+      {{else}}
+      <div class="not-select">
+        <input type="text" name="input_{{quiz_id}}" class="answer_quiz_input brd-round option" autocomplete="off" />
+      </div>
+      <div id="alert" class="result_quiz blind"></div>
+      {{/ifCond}}
+    </div>
+  {{/each}}
+</section>
 
   <br /><br /><br />
 
@@ -45,7 +46,8 @@
   <a href="{{next_url}}" id="btn_play_next" class="blind"
       data-training-user-id="{{training_user_id}}"
       data-course-id="{{course_id}}"
-      data-course-list-id="{{course_list_id}}"  
+      data-course-list-id="{{course_list_id}}"
+      data-course-list-type="{{course_list_type}}"
   >
     <div class="btn_play btn-orange">
       <span class="ico ico_play"></span>

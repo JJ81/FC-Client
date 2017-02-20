@@ -2,13 +2,34 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     
-    <link rel="stylesheet" href='/stylesheets/layout.css' />
-    <link rel="stylesheet" href='/stylesheets/reset.css' />
+    <link rel="stylesheet" href="/stylesheets/layout.css" />
+    <link rel="stylesheet" href="/stylesheets/reset.css" />
     <link rel="stylesheet" href="/vendor/plugins/plyr/dist/plyr.css" />
     <link rel="stylesheet" href="/vendor/plugins/star-rating-svg/star-rating-svg.css" />
-    <link rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />    
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="http://slownews.kr/wp-content/uploads/2012/03/favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-icon-180x180.png">
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/images/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 
     <title>{{title}}</title>
 </head>
@@ -19,7 +40,7 @@
       {{{body}}}
   {{else}}        
       {{> left_nav}}
-      {{{body}}}    
+      {{{body}}}
   {{/if}}
 
   <script src="{{host}}/vendor/plugins/requirejs/require.2.3.2.js"></script>  
@@ -28,14 +49,14 @@
   {{#if (isEquals current_path 'login')}}
   <script src="./javascripts/login.js"></script>
   {{else}}
-      
+
     {{!-- /edulist --}}
-    {{#if (isEquals current_path 'education')}}          
+    {{#ifCond current_path '!==' 'login'}}          
     <script src="{{host}}/javascripts/left_nav.js"></script>            
-    {{/if}}
+    {{/ifCond}}
     
     {{!-- /edulist/[course_id] --}}
-    {{#if (isEquals current_path 'course') }} 
+    {{#if (isEquals current_path 'course') }}
     <script src="{{host}}/javascripts/course.js"></script>
     {{/if}}
 

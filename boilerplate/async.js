@@ -90,4 +90,52 @@ connection.beginTransaction(function(err) {
       });
     }
   });  
-});    
+});
+
+// 서비스에서 트렌젝션 사용 예
+UserService.createUserByExcel = function (_connection, _data, _callback) {
+
+    var _count = 0;
+
+    connection.beginTransaction(function(err) {
+
+        // 트렌젝션 오류 발생
+        if (err) _callback(err, null);
+
+        async.whilst(
+            function() { return _count < _data.length; },
+            function(callback) {
+                _connection.query(QUERY.EDU.InsertIntoLogGroupUser, 
+                    [ _data[_count] ],
+                    function (err, data) {
+                        callback(err, null);  
+                    }
+                );
+                _count++;
+            },
+            function (err, data) {
+                if (err) {
+                    console.error(err);
+                    return _connection.rollback(function() {
+                        _callback(err, null);
+                        return;
+                    });     
+                } else {
+                    _connection.commit(function(err) {
+                        if (err) {
+                            return _connection.rollback(function() {
+                                _callback(err, null);
+                                return;
+                            });
+                        } else {
+                            console.log('commit success!');
+                            _callback(null, null);
+                        }                                    
+                    });                    
+                }
+            }
+
+        );           
+
+    });    
+};

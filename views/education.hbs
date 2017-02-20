@@ -12,12 +12,12 @@
 				<a href="/course/{{training_user_id}}/{{course_id}}" class="list_item no_img_list">
 				{{/if}}
 					<span class="info">
-            <span class="tit">{{course_name}}</span>
-						<span class="author">{{teacher_name }}</span>
+            <span class="tit"><small>{{ edu_name }}</small> | {{course_name}}</span>
+						<span class="author">{{teacher_name }}</span>  
 						<span class="progress_bg">
 							<span class="progress" style="width: {{completed_rate}}%"></span>
 						</span>
-						<span class="achievement">{{completed_rate}}% {{#if course_end_dt}}(완료일시 : {{ stime course_end_dt}}){{/if}}</span>
+						<span class="achievement">{{completed_rate}}% {{#if course_end_dt}}({{ stime course_end_dt}} 완료){{/if}}</span>
 						<span class="author">{{start_dt}} ~ {{end_dt}}</span>
 					</span>
 				</a>

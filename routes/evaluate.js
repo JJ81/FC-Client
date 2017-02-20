@@ -35,6 +35,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
       } else {
         // 강의평가뷰 출력
         res.render('evaluate', {
+          group_path: 'contents',
           current_path: 'evaluate',
           current_url: req.url,
           title: global.PROJ_TITLE,
@@ -51,7 +52,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 });
 
 // 강의/강사평가
-router.post('/log', function (req, res) {
+router.post('/log', isAuthenticated, function (req, res) {
 
   var inputs = {
     user_id: req.user.user_id,

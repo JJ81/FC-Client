@@ -13,6 +13,14 @@ require('../commons/helpers');
 // 이달의/지난 교육과정
 router.get(['/current', '/passed'], isAuthenticated, function(req, res){
 
+  var _host_name = req.headers.host,
+      _logo_name = null,
+      _logo_image_name = null;
+
+    _logo_name = _host_name.split('.')[1];    
+    _logo_name = _logo_name === undefined ? 'orangenamu' : _logo_name;
+    _logo_image_name = _logo_name + '.png';        
+
   // 이달/지난 교육의 경로를 세션에 저장한다.
   req.user.root_path = req.originalUrl;
 
@@ -73,6 +81,8 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
 				current_path: 'education',
         current_url: req.url,
 				title: global.PROJ_TITLE,
+        logo : _logo_name,
+        logo_image: _logo_image_name,        
 				req: req.get('origin'),
 				loggedIn: req.user,        
 				header: header,

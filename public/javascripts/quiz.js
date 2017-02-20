@@ -13,13 +13,16 @@ requirejs([
 
     var $ = jQuery,
         btn_play = $('#btn_play_next'),
-        btn_check_answer = $('#btn_check_answers'),
+        btn_check_answer = $('#btn_check_answers'),        
+        quiz_inputs = $('.answer_quiz_input'),
+        quiz_options = $('.ico:not(.ico_play)'),        
+
         next_url = btn_play.attr('href'),
         training_user_id = btn_play.data('training-user-id'),
         course_id = btn_play.data('course-id'),
         course_list_id = btn_play.data('course-list-id'),
-        quiz_inputs = $('.answer_quiz_input'),
-        quiz_options = $('.ico:not(.ico_play)'),
+        course_list_type = btn_play.data('course-list-type'),
+        
         canValidate = false;
 
       // jquery load event
@@ -60,12 +63,17 @@ requirejs([
         $.ajax({   
           type: "POST",
           url: "/session/log/starttime",
-          data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }   
+          data: { 
+            training_user_id: training_user_id, 
+            course_id: course_id, 
+            course_list_id: course_list_id,
+            course_list_type: course_list_type,
+          }   
         }).done(function (res) { 
           if (!res.success) {
             console.error(res.msg);         
           } else {
-            console.info('세션 시작시간 기록');
+            // console.info('세션 시작시간 기록');
           } 
         });
 
@@ -77,12 +85,17 @@ requirejs([
         $.ajax({   
           type: "POST",
           url: "/session/log/endtime",
-          data: { training_user_id: training_user_id, course_id: course_id, course_list_id: course_list_id }
+          data: { 
+            training_user_id: training_user_id, 
+            course_id: course_id,
+            course_list_id: course_list_id,
+            course_list_type: course_list_type
+          }
         }).done(function (res) { 
           if (!res.success) {
             console.error(res.msg);        
           } else {
-            console.info('세션 종료시간 기록');
+            // console.info('세션 종료시간 기록');
             location.href = next_url;
           } 
         });
@@ -99,12 +112,12 @@ requirejs([
       $( ".option" ).each(function (index) {
         if ($(this).hasClass('answer_quiz_input')) {
           if ($(this).val() === '') {   
-            isOk = false;         
+            isOk = false;     
             return false;
           }       
         } else {
           if ($(this).children().children('a').children('.ico_checked').length === 0) {
-            isOk = false;         
+            isOk = false;
             return false;
           }
         }
@@ -121,8 +134,11 @@ requirejs([
       checkQuizAnswer();
     });
 
-    // 정답을 체크한다.
-    function checkQuizAnswer () {
+    /**
+     * 정답을 체크한다.
+     * (deprecated)   
+     */
+    function checkQuizAnswer_deprecated () {
 
       var answers = []; // 전송할 데이터
 
@@ -162,7 +178,11 @@ requirejs([
       $.ajax({   
         type: "POST",
         url: "/quiz/log/checkanswer",
-        data: { data: answers },
+        data: {
+          data: answers, 
+          training_user_id: training_user_id, 
+          course_list_id: course_list_id,   
+        },
       }).done(function (res) { 
         if (!res.success) {
           console.error(res.msg);  
@@ -198,7 +218,102 @@ requirejs([
         } 
       });      
 
-    }         
+    }
+
+    /**
+     * 정답을 체크한다.
+     */
+    function checkQuizAnswer () {
+
+      var quizzes = $(".quiz_select");
+      var answers = [];
+
+      for (var index = 0; index < quizzes.length; index++) {
+
+        var quiz = $(quizzes[index]),
+            quiz_type = quiz.data("quiz-type"),     // 퀴즈 타입(A/B/C)
+            quiz_id = quiz.data("quiz-id"),         // 퀴즈 id
+            quiz_answer = quiz.data("quiz-answer"),  // 퀴즈 정답      
+            answer = {
+              quiz_id: quiz_id,
+              quiz_type: quiz_type,
+              iscorrect: false,
+              answer: null
+            };
+
+        // 단답형
+        if (quiz_type === "A") {
+          quiz.attr('data-answered', quiz.children(".not-select").children('.answer_quiz_input').val().trim());
+          quiz.attr('data-iscorrect', (quiz.attr('data-answered') == quiz_answer ? 1 : 0));
+        }
+        // 선택형/다답형
+        else 
+        {
+          var arr = quiz.children('ol.selection').children('li');
+          var answered = [];
+          
+          quiz.attr("data-iscorrect", 1);
+
+          for (var i = 0; i < arr.length; i++) {
+            if ($(arr[i]).children("a").children(".ico_checked").length > 0)
+              answered.push($(arr[i]).children("a").children(".answer").text());
+
+            var left = $(arr[i]).attr("data-iscorrect"),
+                right = ($(arr[i]).children("a").children(".ico_checked").length > 0);
+            
+            if (left != right)
+              quiz.attr("data-iscorrect", 0);
+
+            // if ($(arr[i]).attr("data-iscorrect") != 1)
+            //   if ($(arr[i]).children("a").children(".ico_checked").length !== 0)
+            //     quiz.attr("data-iscorrect", 0);
+
+            quiz.attr("data-answered", answered.join(","));
+          }
+        }
+        
+        quiz.children(".result_quiz").removeClass("correct");
+        if (quiz.attr('data-iscorrect') != 1) {          
+          quiz.children(".result_quiz").removeClass("blind")
+            .html("! 정답은 " + quiz_answer + " 입니다.");
+        }
+        else {
+          quiz.children(".result_quiz").removeClass("blind")
+            .addClass("correct")
+            .html("정답입니다.");
+        }
+
+        // 사용자 입력답안을 push 한다.
+        answer.iscorrect = quiz.attr('data-iscorrect');
+        answer.answer = quiz.attr("data-answered");
+        answers.push(answer);
+
+    }
+
+      // 사용자 입력 답안, 정답여부 등을 기록
+      $.ajax({
+        type: "POST",
+        url: "/quiz/log/checkanswer",
+        data: {
+          data: answers,
+          training_user_id: training_user_id, 
+          course_id: course_id, 
+          course_list_id: course_list_id,
+          course_list_type: course_list_type   
+        }
+      })  
+      .done(function (res) {
+        if (!res.success) {
+          console.error(res.msg);
+        } 
+        else {
+          // 정답체크 완료 시 정답확인: 비활성화, 다음 버튼: 활성화
+          btn_check_answer.addClass('blind');
+          btn_play.removeClass('blind'); 
+        }        
+      });      
+
+    }    
 
     // 다음으로
     btn_play.on('click', function (event) {

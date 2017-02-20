@@ -23,16 +23,16 @@ requirejs([
 
     var $ = jQuery,
         btn_more = $('.btn_more'),
-        full_desc = $('input#full_desc'), // 전체 설명
+        full_desc = $('#full_desc'), // 전체 설명
         btn_play = $('#btn_play_next'); // 학습시작버튼
 
     // 더보기 클릭
     btn_more.bind('click', function (e) {
       e.preventDefault();
 
-      $('.desc').text(full_desc.val());
+      $('.desc').html(full_desc.html());
       $('.btn_more').hide();
-    });        
+    });
 
     // 학습하기
     btn_play.on('click', function (event) {
@@ -40,13 +40,14 @@ requirejs([
 
       var next_url = $(this).attr('href'),
           training_user_id = $(this).data('training-user-id'),
-          course_id = $(this).data('course-id');      
+          course_id = $(this).data('course-id'),
+          isrepeat = $(this).children('.btn_play').children('span').hasClass('repeat');      
       
       // 강의 시작로그를 기록한다.
       $.ajax({   
         type: "POST",
         url: "/course/log/start",
-        data: { training_user_id: training_user_id, course_id: course_id }   
+        data: { training_user_id: training_user_id, course_id: course_id, isrepeat: isrepeat }   
       }).done(function (res) {   
         //console.log(res.msg);
         location.href = next_url;

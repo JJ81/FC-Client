@@ -9,7 +9,7 @@ QUERY.AUTH = {
 
 	// 사용자 정보
   SEL_INFO: 
-	  'SELECT `id`, `name`, `email`, `password` ' +  
+	  'SELECT `id`, `name`, `email`, `password`, `fc_id` ' +  
 	  '  FROM `users` ' +
 		' WHERE `phone` = ?; ',
 
@@ -100,6 +100,7 @@ QUERY.EDU = {
 		' 			  WHERE cl.`course_id` = @course_id ' +
 		'				) AS completed_rate ' +
     '     , (SELECT `end_dt` FROM `log_course_progress` WHERE `training_user_id` = @training_user_id AND `course_id` = @course_id) AS course_end_dt ' +
+    '     , e.name AS edu_name ' +
 		'  FROM `edu` AS e ' +
  		' INNER JOIN ( ' +
 		' 	    SELECT te.`edu_id`, tu.id AS training_user_id ' +
@@ -134,7 +135,21 @@ QUERY.EDU = {
     'UPDATE `training_users` SET ' +
     '       `end_dt` = NOW() ' +
     ' WHERE `id` = ? ' +
-    '   AND `end_dt` IS NULL; '
+    '   AND `end_dt` IS NULL; ',
+
+  // edu_id, course_group_id 를 캐싱하기 위한 쿼리
+  // @params : training_user_id, 
+  SEL_COURSE_GROUP:
+    "SELECT te.`edu_id`, e.`course_group_id`, e.`name` AS edu_name " +
+    "     , IFNULL(DATE_FORMAT(tu.`start_dt`, '%Y.%m.%d'), '') AS start_dt " +
+    "     , IFNULL(DATE_FORMAT(tu.`end_dt`, '%Y.%m.%d'), '') AS end_dt " +
+    "  FROM `training_users` AS tu " +
+    " INNER JOIN `training_edu` AS te " +
+    "    ON tu.`training_edu_id` = te.`id` " +
+    " INNER JOIN `edu` AS e " +
+    "    ON te.`edu_id` = e.`id` " +
+    " WHERE tu.`id` = ? ",
+
 };
 
 QUERY.COURSE = {
@@ -176,6 +191,7 @@ QUERY.COURSE = {
     '  FROM `course_list` AS cl ' +
     '  LEFT JOIN `log_session_progress` AS up ' +
     '    ON cl.id = up.course_list_id ' +
+    '   AND up.user_id = ? ' +
     '   AND up.training_user_id = ? ' +
     '   AND up.end_dt IS NOT NULL ' +
     ' WHERE cl.`course_id` = ? ' +
@@ -238,12 +254,33 @@ QUERY.COURSE = {
 		'         	   AND `end_dt` IS NULL ' +
 		'        ); ',
 
+  // 모든 강의 반복여부
+  SEL_COURSE_REPEAT_YN:
+    ' SELECT cg.`id`  ' +
+    '   FROM `course_group` AS cg ' +
+    '  WHERE `group_id` = ? ' +
+    '    AND EXISTS ( ' +
+		'	          SELECT \'X\' ' + 
+		'	            FROM `log_course_progress` ' +
+		'	           WHERE `training_user_id` = ? ' +
+    '              AND `course_id` = cg.`course_id` ' +
+		'         	   AND `repeat_count` = 0 ' +
+		'        ); ',
+
   // 사용자별 강의 진행정보를 입력
   INS_COURSE_PROGRESS:
     'INSERT INTO `log_course_progress` (`user_id`, `training_user_id`, `course_id`) ' +
     'SELECT ?, ?, ? ' +
     '  FROM dual ' +
     ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_course_progress` WHERE `training_user_id` = ? AND `course_id` = ?); ',
+
+  // 강의 반복횟수
+  UPD_COURSE_PROGRESS_REPEAT:
+    'UPDATE `log_course_progress` SET ' +
+    '       `repeat_count` = `repeat_count` + 1 ' +
+    ' WHERE `training_user_id` = ? ' + 
+    '   AND `course_id` = ? ' +
+    '   AND `end_dt` IS NOT NULL; ',
   
   // 강의 종료일시 기록
   UPD_COURSE_PROGRESS:
@@ -330,6 +367,28 @@ QUERY.COURSE_LIST = {
     '  INNER JOIN `quiz_group` AS qg ' +
     '     ON q.`id` = qg.`quiz_id` ' +
     '	   AND qg.`group_id` = ?; ',
+
+  // 특정 세션의 그룹아이디로 퀴즈를 조회한다.
+  GetQuizDataByGroupId:  
+    "SELECT q.`id` AS quiz_id " +
+    "     , q.`type` " +
+    "     , q.`quiz_type` AS quiz_type " +
+    "     , q.`question` " +
+    "     , q.`answer_desc` " +
+    "     , q.`answer_desc` " +
+    "     , qg.`order` AS quiz_order " +
+    "     , q.`option_id` as `option_group_id` " +
+    "     , qo.`id` as `option_id` " +    
+    "     , qo.`option` " +
+    "     , qo.`order` AS option_order " +     
+    "     , qo.`iscorrect`  " +
+    "  FROM `quiz_group` AS qg " +
+    " INNER JOIN `quiz` AS q " +
+    "    ON qg.`quiz_id` = q.`id` " +
+    "  LEFT JOIN `quiz_option` AS qo " +
+    "    ON qo.`opt_id` = q.`option_id` " +
+    " WHERE qg.`group_id` = ? " +
+    " ORDER BY qg.`order`, qo.`order` ",
   
   // 정답체크 시 퀴즈에 대한 정보를 가져온다.
   // 클라이언트에서 정답체크 시 이후에 제거해야한다.
@@ -352,6 +411,14 @@ QUERY.COURSE_LIST = {
 
 QUERY.LOG_COURSE_LIST = {
 
+  // 특정의 종료시간(종료여부)을 조회한다. 
+  SEL_SESSION_PROGRESS:
+    'SELECT `end_dt` ' +
+    '  FROM `log_session_progress` ' +
+    ' WHERE `user_id` = ? ' +
+    '   AND `training_user_id` = ?' +
+    '   AND `course_list_id` = ?; ',
+
   // 세션 로그를 입력한다.
   // TODO
   // 여러건 입력이 가능한지?
@@ -367,6 +434,11 @@ QUERY.LOG_COURSE_LIST = {
     ' WHERE `user_id` = ? ' + 
     '   AND `training_user_id` = ? ' + 
     '   AND `course_list_id` = ?; ',
+  
+  // 세션 로그를 삭제한다.
+  DEL_SESSION_PROGRESS:
+    'DELETE FROM `log_session_progress` WHERE `user_id` = ? AND `training_user_id` = ? AND `course_list_id` = ?; ',  
+          
 };
 
 // 로깅
@@ -375,19 +447,23 @@ QUERY.LOG_VIDEO = {
   // 비디오 로그 입력
   // play_dt 가 바뀌는 경우에만 입력한다.
   INS_VIDEO:
-    'INSERT INTO `log_user_video` (`user_id`, `video_id`, `start_dt`, `play_dt`) ' +
-    'SELECT ?, ?, NOW(), CURDATE() ' +
+    'INSERT INTO `log_user_video` (`user_id`, `training_user_id`, `video_id`, `start_dt`, `play_dt`) ' +
+    'SELECT ?, ?, ?, NOW(), CURDATE() ' +
     '  FROM dual ' +
-    ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_video` WHERE `user_id` = ? AND `video_id` = ? AND play_dt = CURDATE()); ',
+    ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_video` WHERE `training_user_id` = ? AND `video_id` = ? AND play_dt = CURDATE()); ',
 
   // 동일 비디오의 마지막 로그 아이디를 구한다.
+  // AND `play_dt` = CURDATE() 조건은 제거하였다. 다음 날까지 걸쳐듣는 경우 이전 로그타임과 나누어며, 
+  // 이 경우 endtime 뿐 아니라, playtime 도 나누어야 하므로, 현재와 같이 변경한다.
   SEL_MAXID:
-    'SELECT MAX(`id`) AS id FROM `log_user_video` WHERE `user_id` = ? AND `video_id` = ? AND `play_dt` = CURDATE()',
+    'SELECT MAX(`id`) AS id FROM `log_user_video` WHERE `user_id` = ? AND `video_id` = ?',
   
   // 재생시간 갱신
   UPD_VIDEO_PLAYTIME:
     'UPDATE `log_user_video` SET ' +
     '       `play_seconds` = `play_seconds` + ? ' +
+    '     , `duration` = ? ' +
+    '     , `currenttime` = ? ' +
     ' WHERE `id` = ?; ',
 
   // 재생시간 획득
@@ -395,13 +471,28 @@ QUERY.LOG_VIDEO = {
     'SELECT SUM(`play_seconds`) AS total_played_seconds ' +
     '  FROM `log_user_video` ' +
     ' WHERE `user_id` = ? ' +
+    '   AND `training_user_id` = ? ' +
     '   AND `video_id` = ?; ', 
+
+  // 마지막 재생일시 획득
+  SEL_LAST_VIDEO_CURRENT_TIME:
+    'SELECT `currenttime` ' +
+    '  FROM `log_user_video` ' +
+    ' WHERE `user_id` = ? ' +
+    '   AND `training_user_id` = ? ' +
+    '   AND `video_id` = ? ' +
+    ' ORDER BY `play_dt` DESC ' +
+    ' LIMIT 1; ',     
   
   // 종료일시 갱신
   UPD_VIDEO_ENDTIME:
     'UPDATE `log_user_video` SET ' +
     '       `end_dt` = NOW() ' +
     ' WHERE `id` = ? ',
+
+  // 비디오 로그 삭제
+  DELETE_VIDEO_LOG:
+    'DELETE FROM `log_user_video` WHERE `id` = ?; ',
 };
 
 // 로깅
@@ -410,10 +501,158 @@ QUERY.LOG_QUIZ = {
   // 퀴즈 로그 입력
   // 정답체크 시 계속 입력된다.
   INS_QUIZ:
-    'INSERT INTO `log_user_quiz` (`user_id`, `quiz_id`, `answer`, `correction`, `created_dt`) ' +
-    'SELECT ?, ?, ?, ?, NOW(); ',
+    'INSERT INTO `log_user_quiz` (`user_id`, `training_user_id`, `course_id`, `course_list_type`, `quiz_id`, `answer`, `correction`, `created_dt`) ' +
+    'VALUES (?, ?, ?, ?, ?, ?, ?, NOW()); ',
     // '  FROM dual ' +
     // ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_quiz` WHERE `user_id` = ? AND `quiz_id` = ?); ',
+
+};
+
+
+// 포인트 관련
+QUERY.POINT = {
+
+  // 포인트 조회
+	SEL_POINT_WEIGHT :
+		"SELECT pw.`point_complete` " +
+    "     , pw.`point_quiz` " +
+    "     , pw.`point_final` " +
+    "     , pw.`point_reeltime` " +
+    "     , pw.`point_speed` " +
+    "     , pw.`point_repetition` " +
+		"  FROM `point_weight` AS pw " +
+		"  LEFT JOIN `admin` AS a " +
+		"    ON a.`id` = pw.`setter_id` " +
+		" WHERE a.`fc_id` = ? " +
+		" ORDER BY pw.`created_dt` DESC " +
+		" LIMIT 1; ",
+
+  // 포인트 현황
+  SEL_USER_POINT:
+    "SELECT SUM(lup.`complete` * epw.`point_complete` + " +
+    "           lup.`quiz_correction` * epw.`point_quiz` + " +
+    "           lup.`final_correction` * epw.`point_final` + " +
+    "           lup.`reeltime` * epw.`point_reeltime` + " +
+    "           lup.`speed` * epw.`point_speed` + " +
+    "           lup.`repetition` * epw.`point_repetition`) AS point_total " +
+    "  FROM `log_user_point` AS lup " +
+    "  LEFT JOIN `edu_point_weight` AS epw " +
+    "    ON lup.`edu_id` = epw.`edu_id` " +
+    "   AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) " +    
+    " INNER JOIN `users` AS u " + 
+    "    ON lup.`user_id` = u.`id` " +
+    "   AND u.`fc_id` = ? " +
+    "   AND u.`id` = ?; ",
+
+  // 사용자 포인트 로그 입력
+  INS_POINT_LOG:
+    'INSERT IGNORE `log_user_point` (`user_id`, `training_user_id`, `edu_id`) ' +
+    'SELECT ?, ?, ? ',
+    // '  FROM `log_user_point` AS lup ',
+    // ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_point` WHERE training_user_id = ?); ',
+
+  // 사용자 포인트 로그 최초 갱신
+  UPD_POINT_LOG:
+    'UPDATE `log_user_point` SET ' +
+    '       complete = ? ' +
+    '     , quiz_correction = ? ' +
+    '     , final_correction = ? ' +
+    '     , reeltime = ? ' +
+    '     , speed = ? ' +
+    '     , repetition = ? ' +
+    '     , logs = ? ' +
+    '     , updated_dt = NOW() ' +
+    ' WHERE training_user_id = ?; ',    
+  
+  // 특정 교육과정의 전체 강의수와 이수한 강의수를 가져온다.
+  SEL_COURSE_PROGRESS:
+    "SELECT COUNT(cg.`course_id`) AS total " +
+    "     , SUM(CASE WHEN lcp.end_dt IS NULL THEN 0 ELSE 1 END) AS done " +
+    "  FROM `course_group` AS cg " +
+    "  LEFT JOIN `log_course_progress` AS lcp " +
+    "    ON cg.`course_id` = lcp.`course_id` " +
+    "   AND lcp.`training_user_id` = ? " +
+    " WHERE cg.`group_id` = ? ",
+  
+  // 특정 교육과정의 타입별(QUIZ/FINAL) 문항수를 가져온다.
+  // @params : course_group_id, type (course_list)
+  SEL_QUIZ_COUNT:
+    "SELECT COUNT(*) AS quiz_count " +
+    "  FROM `course_list` AS cl " +
+    " INNER JOIN `quiz_group` AS qg " +
+    "    ON cl.`quiz_group_id` = qg.`group_id` " +
+    " WHERE EXISTS (SELECT 'X' FROM `course_group` WHERE `course_id` = cl.`course_id` AND `group_id` = ?) " +
+    "   AND cl.`type` = ? ",
+
+  // 특정 타입의 맞은 문항수를 가져온다.
+  // @params : training_user_id, course_id, course_list_type (course_list)
+  SEL_QUIZ_CORRECT_COUNT:
+    "SELECT COUNT(*) AS total_quiz_count " + 
+    "     , IFNULL(( " +
+    "        SELECT count(*) AS quiz_count " + 
+    "          FROM `log_user_quiz` AS luq  " +
+    "         WHERE luq.`training_user_id` = ? " + 
+    "           AND luq.`course_list_type` = cl.`type` " +
+    "           AND luq.`correction` = 1 " +
+    "           AND luq.`id` = (SELECT MIN(`id`) FROM `log_user_quiz` WHERE `training_user_id` = luq.`training_user_id` AND `quiz_id` = luq.`quiz_id`) " +     
+    "       ), 0) AS user_quiz_count " +
+    "  FROM `course_list` AS cl  " +
+    " INNER JOIN `quiz_group` AS qg " +
+    "    ON cl.`quiz_group_id` = qg.`group_id` " +
+    " WHERE EXISTS (SELECT 'X' FROM `course_group` WHERE `course_id` = cl.`course_id` AND `group_id` = ?) " +
+    "   AND cl.`type` = ?; ",
+  
+  // 특정 교육과정의 퀴즈 맞은 비율을 기록한다.
+  UPD_QUIZ_CORRECTION:
+    "UPDATE `log_user_point` SET `quiz_correction` = ?, evaluated_dt = NOW() WHERE `training_user_id` = ? ",
+
+  // 특정 교육과정의 파이널 테스트 맞은 비율을 기록한다.
+  UPD_FINAL_CORRECTION:
+    "UPDATE `log_user_point` SET `final_correction` = ?, evaluated_dt = NOW() WHERE `training_user_id` = ? ",    
+  
+  // 교육과정의 기간을 구한다.
+  SEL_EDU_PERIOD:
+    "SELECT DATEDIFF(`end_dt`, `start_dt`) AS period " +
+    "  FROM `edu`; ",
+  
+  // 사용자가 이수한 기간을 구한다.
+  SEL_USER_PERIOD:
+    "SELECT DATEDIFF(`end_dt`, `start_dt`) AS user_period " +
+    "     , (SELECT DATEDIFF(`end_dt`, `start_dt`) FROM `edu` WHERE `id` = ?) AS edu_period " +
+    "  FROM `training_users` " +
+    " WHERE `id` = ?; ",
+  
+  // 교육과정 이수, 교육과정 이수 속도를 기록
+  UPD_EDU_RESULTS:
+    "UPDATE `log_user_point` SET complete = 1, speed = ? WHERE `training_user_id` = ?; ",
+  
+  // 교육 시청시간 (비디오 시청시간 ÷ 비디오 재생시간) 조회
+  SEL_VIDEO_RESULTS:
+    // "SELECT TRUNCATE(AVG(CASE WHEN r.rate > 1 THEN 1 ELSE r.rate END), 2) AS rate " +
+    "SELECT SUM(r.`duration`) AS duration, SUM(r.`played_seconds`) AS played_seconds " +
+    "  FROM ( " +
+    "		     SELECT luv.`video_id` " +
+    "			        , IFNULL(MAX(luv.`duration`), 0) AS duration " + 
+    "             , SUM(luv.`play_seconds`) AS played_seconds " +
+    "		       FROM `log_user_video` AS luv " +
+    "		      WHERE EXISTS ( " +
+    "				          SELECT 'X' " +
+    "				            FROM `course_list` AS cl " +
+    "				           WHERE EXISTS (SELECT 'X' FROM `course_group` WHERE `course_id` = cl.`course_id` AND `group_id` = ?) " +
+    "				             AND cl.`type` = 'VIDEO' " +
+    "				             AND cl.`video_id` = luv.video_id " +
+    "			          ) " +
+    "		        AND luv.`training_user_id` = ? " +   
+    "		      GROUP BY luv.`video_id` " +
+    "		    ) AS r; ",
+  
+  // 교육 시청시간 (비디오 시청시간 ÷ 비디오 재생시간) 갱신
+  UPD_VIDEO_RESULTS:
+    "UPDATE `log_user_point` SET reeltime = ? WHERE `training_user_id` = ?; ",   
+
+  // 강의 반복율 갱신
+  UPD_COURSE_REPEAT:
+    "UPDATE `log_user_point` SET repetition = ? WHERE `training_user_id` = ?; ",     
 
 };
 

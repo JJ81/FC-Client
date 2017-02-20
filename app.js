@@ -59,11 +59,14 @@ hbs.registerPartials(__dirname + '/views/modal');
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-global.PROJ_TITLE = "Orangenamu, Mobile ";
+global.PROJ_TITLE = "OrangeNamu ";
 global.AppRoot = process.env.PWD;
 
 app.use(cookieSession({
-  keys: ['FC_Mobile']
+  	keys: ['FC_Mobile'],
+    cookie: {
+      maxAge: 1000 * 60 * 60 // 유효기간 1시간
+    }  
 }));
 
 app.use(flash());

@@ -1,7 +1,7 @@
 var hbs = require('hbs');
 // var moment = require('moment');
 var currencyFormatter = require('currency-formatter');
-var dateFormat = require('dateFormat');
+var dateformat = require('dateformat');
 
 hbs.registerHelper('isEquals', function (a, b) {
 	return (a === b);
@@ -29,11 +29,11 @@ hbs.registerHelper('checkMinus', function (num) {
 });
 
 hbs.registerHelper('time', function (date) {
-	return dateFormat(date, "yyyy-mm-dd");
+	return dateformat(date, "yyyy-mm-dd");
 });
 
 hbs.registerHelper('stime', function (date) {
-    return dateFormat(date, "yyyy-mm-dd HH:MM");
+    return dateformat(date, "yyyy-mm-dd HH:MM");
 });
 
 hbs.registerHelper('comparison', function(value , max){

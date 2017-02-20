@@ -10,6 +10,7 @@ var isAuthenticated = function (req, res, next) {
 };
 require('../commons/helpers');
 var async = require('async');
+var CourseService = require('../service/CourseService');
 
 /**
  * 강의 정보
@@ -25,7 +26,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
       course_id = req.params.course_id,
       min_course_list_id = null; // 학습을 시작/반복/이어할 세션 id
 		
-		async.series([
+		async.series([   
 			function (callback) {				
 				var query = connection.query(QUERY.COURSE.SEL_INDEX, [training_user_id, training_user_id, course_id], function (err, data) {
 					////console.log(query.sql);
@@ -33,16 +34,27 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 				});
 			},
 			function (callback) {
-				var query = connection.query(QUERY.COURSE.SEL_SESSION_LIST, [training_user_id, course_id], function (err, data) {
-          //////console.log(query.sql);
+				var query = connection.query(QUERY.COURSE.SEL_SESSION_LIST, [req.user.user_id, training_user_id, course_id], function (err, data) {
+          console.log(query.sql);
 					callback(err, data); // results[1]
 				});
-			}
+			},
+      // edu_id, course_group_id 조회 (세션에 저장해둔다.)
+			function (callback) {				
+				var query = connection.query(QUERY.EDU.SEL_COURSE_GROUP, [training_user_id], function (err, data) {
+          callback(err, data); // results[2]
+				});
+			},         
 		], function (err, results) {
 			if (err) {
-				//console.error(err);
+				console.error(err);
 			} else {
-				//console.info(results);
+				console.info(results);
+
+        // 교육과정id 와 강의그룹id 를 세션에 저장한다.
+        req.user.edu_id = results[2][0].edu_id;
+        req.user.course_group_id = results[2][0].course_group_id;
+        // console.log(req.user.edu);
 
         // 학습하기 버튼 클릭 시 시작 세션 id를 구한다.
         // 기본은 id 가 가장 작은 세션이다.
@@ -69,8 +81,9 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
           course_list: results[1],
           course_list_id: min_course_list_id,
           training_user_id: training_user_id,
-          back_url: req.user.root_path
-				});									
+          back_url: req.user.root_path,
+          edu_name: results[2][0].edu_name,
+				});
 			}
 		});
 });
@@ -78,12 +91,17 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 /**
  * 강의 시작
  */
-router.post('/log/start', function (req, res) {
+router.post('/log/start', isAuthenticated, function (req, res) {
 
-  var inputs = {
+  var _inputs = {
     training_user_id: req.body.training_user_id,
-    course_id: req.body.course_id
-  };      
+    course_id: req.body.course_id,
+    isrepeat: req.body.isrepeat,
+    user_id: req.user.user_id,
+  };
+  var _query = null;
+
+  console.log(_inputs);
 
   connection.beginTransaction(function(err) {
 
@@ -97,29 +115,46 @@ router.post('/log/start', function (req, res) {
 
     // async.series 쿼리 시작
     async.series([
-      function (callback) {
-        // 첫 번째 쿼리
+
+      // 최초 학습시작 시 training_users 의 시작일시(start_dt)를 기록
+      function (callback) {        
         connection.query(QUERY.EDU.UPD_TRAINING_USER_START_DT, [
-            inputs.training_user_id
+            _inputs.training_user_id
           ], 
           function (err, data) {
             callback(err, data);
           });
       },
-      function (callback) {
-        // 두 번째 쿼리
+      // 사용자별 강의 진행정보를 입력
+      function (callback) {        
         connection.query(QUERY.COURSE.INS_COURSE_PROGRESS, [
-            req.user.user_id, 
-            inputs.training_user_id, 
-            inputs.course_id,
-            inputs.training_user_id, 
-            inputs.course_id      
+            _inputs.user_id, 
+            _inputs.training_user_id, 
+            _inputs.course_id,
+            _inputs.training_user_id, 
+            _inputs.course_id      
           ], 
           function (err, data) {
             callback(err, data); 
           }
         );
-      }
+      },
+      // 사용자별 강의 반복횟수 갱신
+      function (callback) {   
+        if (_inputs.isrepeat) {
+          _query = connection.query(QUERY.COURSE.UPD_COURSE_PROGRESS_REPEAT, [
+              _inputs.training_user_id, 
+              _inputs.course_id,
+            ], 
+            function (err, data) {
+              console.log(_query.sql);
+              callback(err, data); 
+            }
+          );
+        } else {
+          callback(null, null);
+        }
+      },      
     ], function (err, results) {
       if (err) {
 
@@ -155,8 +190,12 @@ router.post('/log/start', function (req, res) {
 
 /**
  * 강의 종료
+ * 1. 강의 종료일시 기록
+ * 2. 강의 종료여부 조회
+ * 3. 교육 종료여부 기록
+ * 4. 교육이수여부, 교육과정 이수속도를 포인트 결과에 반영
  */
-router.post('/log/end', function (req, res) {
+router.post('/log/end', isAuthenticated, function (req, res) {
 
   var inputs = {
     training_user_id: req.body.training_user_id,
@@ -217,7 +256,7 @@ router.post('/log/end', function (req, res) {
         } else {
           callback(null, null);
         }
-      }    
+      }
     ], function (err, results) {
       if (err) {
 
@@ -230,7 +269,7 @@ router.post('/log/end', function (req, res) {
         });
       } else {
         connection.commit(function(err) {
-          // 커밋 오류 발생
+          // 커밋 오류
           if (err) {
             return connection.rollback(function() {
               res.json({
@@ -240,10 +279,10 @@ router.post('/log/end', function (req, res) {
             });
           }
 
-          // 커밋 성공
           res.json({
             success: true
           });
+
         });
       }
     });  
