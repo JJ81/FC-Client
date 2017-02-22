@@ -37,7 +37,7 @@
 		<span id="full_desc" style="display: none;">{{{course.desc}}}</span>
     <div class="desc">
     <!--{{{ course.desc }}}-->
-    {{truncate course.desc 120}}    
+    {{{truncate course.desc 120}}}
     {{#ifCond course.desc.length '>' 120}}
     <a href="#" class="btn_more">더보기</a>
     {{/ifCond}}

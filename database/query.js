@@ -68,13 +68,13 @@ QUERY.EDU = {
     '     		 AND te.active = 1 ' +
 		'        WHERE u.`id` = ? ' +
 	  '       ) AS ut ' +
-    '    ON e.`id` = ut.`edu_id` ' +    
+    '    ON e.`id` = ut.`edu_id` ' +
 		' INNER JOIN `course_group` AS cg ' +
-		'    ON e.`course_group_id` = cg.`group_id` ' + 
+		'    ON e.`course_group_id` = cg.`group_id` ' +
 		' INNER JOIN `course` AS c ' +
 		'    ON cg.`course_id` = c.`id` ' +
 		' INNER JOIN `teacher` AS t ' +
-		'    ON c.`teacher_id` = t.`id` ' +    
+		'    ON c.`teacher_id` = t.`id` ' +
 		' WHERE NOW() BETWEEN e.`start_dt` AND e.`end_dt` ' +
     ' ORDER BY completed_rate, e.id, cg.`order`; ',
   

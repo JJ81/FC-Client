@@ -17,9 +17,9 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
       _logo_name = null,
       _logo_image_name = null;
 
-    _logo_name = _host_name.split('.')[1];    
+    _logo_name = _host_name.split('.')[1];
     _logo_name = _logo_name === undefined ? 'orangenamu' : _logo_name;
-    _logo_image_name = _logo_name + '.png';        
+    _logo_image_name = _logo_name + '.png';
 
   // 이달/지난 교육의 경로를 세션에 저장한다.
   req.user.root_path = req.originalUrl;
@@ -29,7 +29,7 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
       // 완료/미완료 order (정렬순서) 가장 낮은 강의의 id
       next_course_id = null,
       // 완료/미완료 order (정렬순서) 가장 낮은 사용자 강의의 id
-      next_training_user_id = null,      
+      next_training_user_id = null,
       // 완료한 강의의 수
       count_course_done = 0;
 
@@ -48,8 +48,8 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
         success: false,
         msg: err
       });
-		} else {     
-      ////console.log(query.sql);
+		} else {
+      // console.log(query.sql);
 			// console.log(data);
       courses = data;
 
