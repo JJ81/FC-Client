@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    
+
     <link rel="stylesheet" href="/stylesheets/layout.css" />
     <link rel="stylesheet" href="/stylesheets/reset.css" />
     <link rel="stylesheet" href="/vendor/plugins/plyr/dist/plyr.css" />
     <link rel="stylesheet" href="/vendor/plugins/star-rating-svg/star-rating-svg.css" />
-    <link rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />    
+    <link rel="stylesheet" href="/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />
 
     <!-- favicon -->
     <link rel="shortcut icon" href="http://slownews.kr/wp-content/uploads/2012/03/favicon.ico">
@@ -35,26 +35,26 @@
 </head>
 
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" class="body_bg_01">
-   
+
   {{#if (isEquals current_path 'login')}}
       {{{body}}}
-  {{else}}        
+  {{else}}
       {{> left_nav}}
       {{{body}}}
   {{/if}}
 
-  <script src="{{host}}/vendor/plugins/requirejs/require.2.3.2.js"></script>  
-  <script src="{{host}}/javascripts/app.js"></script>  
+  <script src="{{host}}/vendor/plugins/requirejs/require.2.3.2.js"></script>
+  <script src="{{host}}/javascripts/app.js"></script>
 
   {{#if (isEquals current_path 'login')}}
   <script src="./javascripts/login.js"></script>
   {{else}}
 
     {{!-- /edulist --}}
-    {{#ifCond current_path '!==' 'login'}}          
-    <script src="{{host}}/javascripts/left_nav.js"></script>            
+    {{#ifCond current_path '!==' 'login'}}
+    <script src="{{host}}/javascripts/left_nav.js"></script>
     {{/ifCond}}
-    
+
     {{!-- /edulist/[course_id] --}}
     {{#if (isEquals current_path 'course') }}
     <script src="{{host}}/javascripts/course.js"></script>
@@ -67,7 +67,7 @@
 
     {{#if (isEquals current_path 'video')}}
     <script src="{{host}}/javascripts/video.js"></script>
-    {{/if}}    
+    {{/if}}
 
     {{#if (isEquals current_path 'evaluate')}}
     <script src="{{host}}/javascripts/evaluate.js"></script>
@@ -75,11 +75,11 @@
 
     {{#if (isEquals current_path 'complete')}}
     <script src="{{host}}/javascripts/complete.js"></script>
-    {{/if}}    
+    {{/if}}
 
     {{#if (isEquals current_path 'profile')}}
     <script src="{{host}}/javascripts/profile.js"></script>
-    {{/if}}        
+    {{/if}}
 
   {{/if}}
 
