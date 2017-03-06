@@ -15,8 +15,7 @@ var CourseService = require('../service/CourseService');
 /**
  * 강의 정보
  */
-router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res) {		
-    
+router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res) {
   //TODO
   // 1. 마지막 course_list_id 를 조회한다.
   //    아무진행도 하지 않은 경우 course_list 의 첫번째 id 를 가져온다.
@@ -25,9 +24,9 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 	var training_user_id = req.params.training_user_id,
       course_id = req.params.course_id,
       min_course_list_id = null; // 학습을 시작/반복/이어할 세션 id
-		
-		async.series([   
-			function (callback) {				
+
+		async.series([
+			function (callback) {
 				var query = connection.query(QUERY.COURSE.SEL_INDEX, [training_user_id, training_user_id, course_id], function (err, data) {
 					////console.log(query.sql);
           callback(err, data[0]); // results[0]
@@ -40,11 +39,11 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 				});
 			},
       // edu_id, course_group_id 조회 (세션에 저장해둔다.)
-			function (callback) {				
+			function (callback) {
 				var query = connection.query(QUERY.EDU.SEL_COURSE_GROUP, [training_user_id], function (err, data) {
           callback(err, data); // results[2]
 				});
-			},         
+			},
 		], function (err, results) {
 			if (err) {
 				console.error(err);
@@ -58,7 +57,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
 
         // 학습하기 버튼 클릭 시 시작 세션 id를 구한다.
         // 기본은 id 가 가장 작은 세션이다.
-        // 그 다음은 완료하지 않은 세션 중 id 가 가장 작은 세션이다. 
+        // 그 다음은 완료하지 않은 세션 중 id 가 가장 작은 세션이다.
         if (results[1].length !== 0) {
           min_course_list_id = results[1][0].id;
           for (var i = 0; i < results[1].length; i++) {
@@ -67,7 +66,7 @@ router.get('/:training_user_id/:course_id', isAuthenticated, function (req, res)
               break;
             }
           }
-        }						
+        }
 
 				// 강의뷰 출력
 				res.render('course', {

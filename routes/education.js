@@ -56,13 +56,13 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
       if (courses.length > 0) {
         // 학습하기 버튼 클릭 시 시작 세션 id를 구한다.
         // 기본은 id 가 가장 작은 세션이다.
-        // 그 다음은 완료하지 않은 세션 중 id 가 가장 작은 세션이다. 
+        // 그 다음은 완료하지 않은 세션 중 id 가 가장 작은 세션이다.
         next_training_user_id = courses[0].training_user_id;
         next_course_id = courses[0].course_id;
-        
+
         for (i = 0; i < courses.length; i++) {
           if (courses[i].completed_rate !== 100) {
-            next_training_user_id = courses[i].training_user_id; 
+            next_training_user_id = courses[i].training_user_id;
             next_course_id = courses[i].course_id;
             break;
           }
@@ -82,9 +82,9 @@ router.get(['/current', '/passed'], isAuthenticated, function(req, res){
         current_url: req.url,
 				title: global.PROJ_TITLE,
         logo : _logo_name,
-        logo_image: _logo_image_name,        
+        logo_image: _logo_image_name,
 				req: req.get('origin'),
-				loggedIn: req.user,        
+				loggedIn: req.user,
 				header: header,
 				courses: data,
         next_training_user_id: next_training_user_id,
