@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-/*routes*/
+/* routes */
 var routes = require('./routes/index'); // all about login
 var education = require('./routes/education'); // 교육
 var course = require('./routes/course'); // 강의
@@ -17,56 +17,55 @@ var complete = require('./routes/complete'); // 완료
 var profile = require('./routes/profile'); // 정보수정
 var api = require('./routes/api');
 
-/*routes*/
+/* routes */
 var app = express();
 var hbs = require('hbs');
 var passport = require('passport');
 var flash = require('connect-flash');
 var cookieSession = require('cookie-session');
 
-//CORS All Accesss allowed
+// CORS All Accesss allowed
 app.use(function (req, res, next) {
- res.setHeader('Access-Control-Allow-Origin', '*');
- res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
- res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
 
- next();
+  next();
 });
 
 app.all('/*', function (req, res, next) {
  // CORS headers
- res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
- res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Origin', '*'); // restrict it to the required domain
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
  // Set custom headers for CORS
- res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
- if (req.method == 'OPTIONS') {
-   res.status(200).end();
- } else {
-   res.locals ={
-     loggedIn : req.user
-   };
-   
-   next();
- }
+  res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+  } else {
+    res.locals = {
+      loggedIn: req.user
+    };
+    next();
+  }
 });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-hbs.registerPartials(__dirname + '/views/partials');
-hbs.registerPartials(__dirname + '/views/modal');
+hbs.registerPartials(path.join(__dirname, '/views/partials'));
+hbs.registerPartials(path.join(__dirname, '/views/modal'));
 
 // uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'dist', 'images', 'favicon', 'favicon.ico')));
 
-global.PROJ_TITLE = "OrangeNamu ";
+global.PROJ_TITLE = 'OrangeNamu ';
 global.AppRoot = process.env.PWD;
 
 app.use(cookieSession({
-  	keys: ['FC_Mobile'],
-    cookie: {
-      maxAge: 1000 * 60 * 60 // 유효기간 1시간
-    }  
+  keys: ['FC_Mobile'],
+  cookie: {
+    maxAge: 1000 * 60 * 60 // 유효기간 1시간
+  }
 }));
 
 app.use(flash());
@@ -79,6 +78,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
+app.use('/static', express.static(path.join(__dirname, '/dist')));
 
 app.use('/', routes);
 app.use('/education', education);
@@ -92,7 +92,7 @@ app.use('/profile', profile);
 app.use('/api/v1', api);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -103,7 +103,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -114,13 +114,12 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
     error: {}
   });
 });
-
 
 module.exports = app;
