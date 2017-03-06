@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var helmet = require('helmet');
 
 /* routes */
 var routes = require('./routes/index'); // all about login
@@ -23,6 +24,12 @@ var hbs = require('hbs');
 var passport = require('passport');
 var flash = require('connect-flash');
 var cookieSession = require('cookie-session');
+
+app.use(helmet.xssFilter());
+app.use(helmet.noCache());
+app.use(helmet.noSniff());
+app.use(helmet.frameguard());
+app.use(helmet.hidePoweredBy());
 
 // CORS All Accesss allowed
 app.use(function (req, res, next) {

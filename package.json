@@ -17,6 +17,7 @@
     "express": "~4.13.1",
     "express-csv": "^0.6.0",
     "hbs": "~3.1.0",
+    "helmet": "3.4.1",
     "jquery-validation": "^1.16.0",
     "jquery.cookie": "^1.4.1",
     "morgan": "~1.6.1",
