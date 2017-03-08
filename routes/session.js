@@ -32,17 +32,17 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
   var query = null;
 
   async.series([
-		// 강의정보 조회
-		// results[0]
+    // 강의정보 조회
+    // results[0]
     function (callback) {
-      var query = connection.query(QUERY.COURSE_LIST.SEL_INDEX, [training_user_id, course_list_id], function (err, data) {
+      connection.query(QUERY.COURSE_LIST.SEL_INDEX, [training_user_id, course_list_id], function (err, data) {
         course_list = data[0];
         console.log(course_list);
         callback(err, data);
       });
     },
-		// 세션 (비디오/퀴즈/파이널테스트) 정보 조회
-		// results[1]
+    // 세션 (비디오/퀴즈/파이널테스트) 정보 조회
+    // results[1]
     function (callback) {
       switch (course_list.type) {
       case 'VIDEO':
@@ -58,8 +58,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
         break;
       }
     },
-		// (비디오 세션일 경우에만 해당) 비디오 총 시청시간 조회
-		// results[2]
+    // (비디오 세션일 경우에만 해당) 비디오 총 시청시간 조회
+    // results[2]
     function (callback) {
       if (course_list.type === 'VIDEO') {
         query = connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
@@ -90,73 +90,73 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, fun
       }
     }
   ],
-	function (err, results) {
-  if (err) {
-    console.error(err);
-  } else {
-		// 다음으로 버튼 클릭시 이동할 페이지
-    var root_path = '/' + req.path.split('/')[1],
-      next_url = null;
-
-		// 다음 URL 을 설정한다.
-    if (course_list.next_id) {
-      next_url = '/' + 'session' + '/' + training_user_id + '/' + course_id + '/' + course_list.next_id;
+  function (err, results) {
+    if (err) {
+      console.error(err);
     } else {
-      next_url = '/' + 'evaluate' + '/' + training_user_id + '/' + course_id;
-    }
+      // 다음으로 버튼 클릭시 이동할 페이지
+      var root_path = '/' + req.path.split('/')[1],
+        next_url = null;
 
-		// 비디오뷰 출력
-    if (course_list.type === 'VIDEO') {
-      var currenttime = 0;
-      if (results[3][0] != null) { currenttime = results[3][0].currenttime; }
+      // 다음 URL 을 설정한다.
+      if (course_list.next_id) {
+        next_url = '/' + 'session' + '/' + training_user_id + '/' + course_id + '/' + course_list.next_id;
+      } else {
+        next_url = '/' + 'evaluate' + '/' + training_user_id + '/' + course_id;
+      }
 
-      res.render('video', {
-        group_path: 'contents',
-        current_path: 'video',
-        current_url: req.url,
-        title: global.PROJ_TITLE,
-        logo: logoName,
-        logo_image: logoImageName,
-        host: req.get('origin'),
-        loggedIn: req.user,
-        header: course_list.title,
-        content: results[1][0],
-        total_played_seconds: results[2][0].total_played_seconds,
-        currenttime: currenttime,
-        next_url: next_url,
-        training_user_id: training_user_id,
-        course_id: course_id,
-        course_list_id: course_list_id,
-        setting: {
-          interval: 5, // playtime 로깅 간격
-          waiting_seconds: 30, // 비디오 종료 후 다음 버튼이 노출되는 시간
-          passive_rate: 80 // 다음 버튼이 활성화되는 시청시간 (%)
-        }
-      });
-    } else {
-      var quiz_list = CourseService.makeQuizList(results[1]);
-      // 퀴즈뷰 출력
-      res.render('quiz', {
-        group_path: 'contents',
-        current_path: 'quiz',
-        current_url: req.url,
-        title: global.PROJ_TITLE,
-        logo: logoName,
-        logo_image: logoImageName,
-        host: req.get('origin'),
-        loggedIn: req.user,
-        header: course_list.title,
-        contents: quiz_list, // results[1],
-        next_url: next_url,
-        training_user_id: training_user_id,
-        course_id: course_id,
-        course_list_id: course_list_id,
-        prev_yn: course_list.prev_yn,
-        course_list_type: course_list.type
-      });
+      // 비디오뷰 출력
+      if (course_list.type === 'VIDEO') {
+        var currenttime = 0;
+        if (results[3][0] != null) { currenttime = results[3][0].currenttime; }
+
+        res.render('video', {
+          group_path: 'contents',
+          current_path: 'video',
+          current_url: req.url,
+          title: global.PROJ_TITLE,
+          logo: logoName,
+          logo_image: logoImageName,
+          host: req.get('origin'),
+          loggedIn: req.user,
+          header: course_list.title,
+          content: results[1][0],
+          total_played_seconds: results[2][0].total_played_seconds,
+          currenttime: currenttime,
+          next_url: next_url,
+          training_user_id: training_user_id,
+          course_id: course_id,
+          course_list_id: course_list_id,
+          setting: {
+            interval: 5, // playtime 로깅 간격
+            waiting_seconds: 30, // 비디오 종료 후 다음 버튼이 노출되는 시간
+            passive_rate: 80 // 다음 버튼이 활성화되는 시청시간 (%)
+          }
+        });
+      } else {
+        var quiz_list = CourseService.makeQuizList(results[1]);
+        // 퀴즈뷰 출력
+        res.render('quiz', {
+          group_path: 'contents',
+          current_path: 'quiz',
+          current_url: req.url,
+          title: global.PROJ_TITLE,
+          logo: logoName,
+          logo_image: logoImageName,
+          host: req.get('origin'),
+          loggedIn: req.user,
+          header: course_list.title,
+          contents: quiz_list, // results[1],
+          next_url: next_url,
+          training_user_id: training_user_id,
+          course_id: course_id,
+          course_list_id: course_list_id,
+          prev_yn: course_list.prev_yn,
+          course_list_type: course_list.type
+        });
+      }
     }
-  }
-});
+  });
 });
 
 // 세션 시작일시를 기록한다.

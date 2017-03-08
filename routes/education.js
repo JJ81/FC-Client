@@ -83,8 +83,8 @@ router.get(['/current', '/passed'], isAuthenticated, function (req, res) {
         loggedIn: req.user,
         header: header,
         courses: data,
-        nextTrainingUserId: nextTrainingUserId,
-        nextCourseId: nextCourseId,
+        next_training_user_id: nextTrainingUserId,
+        next_course_id: nextCourseId,
         courseDoneCount: courseDoneCount
       });
     }

@@ -38,9 +38,9 @@ passport.use(new LocalStrategy({
 }, function (req, phone, password, done) {
   connection.query(QUERY.AUTH.SEL_INFO, [phone], function (err, data) {
     if (err) {
-        return done(null, false);
-      } else {
-        if (data.length === 1) {
+      return done(null, false);
+    } else {
+      if (data.length === 1) {
           if (!bcrypt.compareSync(password, data[0].password)) {
             console.log('password is not matched.');
             return done(null, false);
@@ -66,16 +66,16 @@ passport.use(new LocalStrategy({
         } else {
           return done(null, false);
         }
-      }
+    }
   });
 }
 ));
 
 // 로그인 화면
 router.get('/login', function (req, res) {
-  var _host_name = req.headers.host,
-    _logo_name = null,
-    _logo_image_name = null;
+  var _host_name = req.headers.host;
+  var _logo_name = null;
+  var _logo_image_name = null;
 
   _logo_name = _host_name.split('.')[1];
   _logo_name = _logo_name === undefined ? 'orangenamu' : _logo_name;

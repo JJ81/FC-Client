@@ -13,7 +13,7 @@
 				{{/if}}
 					<span class="info">
             <span class="tit"><small>{{ edu_name }}</small> | {{course_name}}</span>
-						<span class="author">{{teacher_name }}</span>  
+						<span class="author">{{teacher_name }}</span>
 						<span class="progress_bg">
 							<span class="progress" style="width: {{completed_rate}}%"></span>
 						</span>
@@ -36,7 +36,6 @@
 <a href="/course/{{next_training_user_id}}/{{next_course_id}}" style="text-decoration: none;">
 	<div class="btn_play">
 		<span class="ico ico_play"></span>
-    
   {{#if (isEquals count_course_done 0)}}
     <span class="txt">학습하기</span>
   {{else}}
