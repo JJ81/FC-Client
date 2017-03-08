@@ -5,36 +5,42 @@ var mysql_dbc = require('../commons/db_conn')();
 var connection = mysql_dbc.init();
 var QUERY = require('../database/query');
 var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated())
-    return next();
+  if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 };
 require('../commons/helpers');
 var bcrypt = require('bcrypt');
 
-router.get('/', isAuthenticated, function (req, res) {		
+router.get('/', isAuthenticated, function (req, res) {
+  var hostName = req.headers.host;
+  var logoName = null;
+  var logoImageName = null;
+
+  logoName = hostName.split('.')[1];
+  logoName = logoName === undefined ? 'orangenamu' : logoName;
+  logoImageName = logoName + '.png';
 
   res.render('profile', {
     current_path: 'profile',
     current_url: req.url,
+    logo: logoName,
+    logo_image: logoImageName,
     title: global.PROJ_TITLE,
     host: req.get('origin'),
     loggedIn: req.user,
-    header: '정보수정',
-  });	
-
+    header: '정보수정'
+  });
 });
 
 // 비밀번호를 변경합니다.
 router.post('/reset-password', isAuthenticated, function (req, res) {
-
-  inputs = {
+  var inputs = {
     user_id: req.user.user_id,
     pwd: req.body.pass,
     pwd_confirm: req.body.re_pass
   };
 
-  if (inputs.pwd != inputs.pwd_confirm) {
+  if (inputs.pwd !== inputs.pwd_confirm) {
     res.json({
       success: false,
       msg: '비밀번호가 일치하지 않습니다.'
@@ -64,8 +70,7 @@ router.post('/reset-password', isAuthenticated, function (req, res) {
 
 // 이메일을 변경합니다.
 router.post('/reset-email', isAuthenticated, function (req, res) {
-
-  inputs = {
+  var inputs = {
     user_id: req.user.user_id,
     email: req.body.email
   };
@@ -78,7 +83,7 @@ router.post('/reset-email', isAuthenticated, function (req, res) {
           success: false,
           msg: '중복되는 이메일이 존재합니다.'
         });
-      } 
+      }
     } else {
       res.json({
         success: true
@@ -89,8 +94,7 @@ router.post('/reset-email', isAuthenticated, function (req, res) {
 
 // 핸드폰을 변경합니다.
 router.post('/reset-phone', isAuthenticated, function (req, res) {
-
-  inputs = {
+  var inputs = {
     user_id: req.user.user_id,
     phone: req.body.phone
   };
@@ -103,7 +107,7 @@ router.post('/reset-phone', isAuthenticated, function (req, res) {
           success: false,
           msg: '중복되는 핸드폰 번호가 존재합니다.'
         });
-      } 
+      }
     } else {
       res.json({
         success: true

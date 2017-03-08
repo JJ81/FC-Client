@@ -14,8 +14,8 @@
 }
 
 .ellipsis{
-	text-overflow: ellipsis; 
-	white-space: nowrap; 
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	overflow: hidden;
 }
 
@@ -96,7 +96,7 @@
 }
 
 .error_alarm{
-	margin-top: 10px;	
+	margin-top: 10px;
 }
 
 .form_control_id{
@@ -548,14 +548,22 @@
 	top: 5px;
 	left: 10px;
 	width: 30px;
-	height: 30px;  
+	height: 30px;
 }
 
 .exit_link{
 	position: absolute;
 	top: 5px;
 	width: 30px;
-	height: 30px;  
+	height: 30px;
+  right: 0px;
+}
+
+.back_link{
+	position: absolute;
+	top: 5px;
+	width: 30px;
+	height: 30px;
   right: 0px;
 }
 
@@ -615,7 +623,7 @@
 	position: absolute;
 	top: 10px;
 	left: 10px;
-}	
+}
 
 .logo-txt{
 	color :#fff;
@@ -643,7 +651,7 @@
   }
 }
 
-@media (min-width:1281px) { 
+@media (min-width:1281px) {
   /* hi-res laptops and desktops */
   body {
     position: absolute;
@@ -669,7 +677,7 @@
 
 .btn-orange{
 	background: #f46533;
-}  
+}
 }
 
 .text-red {
