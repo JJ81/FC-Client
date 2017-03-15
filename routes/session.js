@@ -168,12 +168,10 @@ router.post('/log/starttime', isAuthenticated, function (req, res) {
     course_id: parseInt(req.body.course_id),
     course_list_id: parseInt(req.body.course_list_id)
   };
-  var query = null;
-
   async.series([
     // 로그를 조회한다.
     function (callback) {
-      query = connection.query(QUERY.LOG_COURSE_LIST.SEL_SESSION_PROGRESS, [
+      connection.query(QUERY.LOG_COURSE_LIST.SEL_SESSION_PROGRESS, [
         inputs.user_id,
         inputs.training_user_id,
         inputs.course_list_id
@@ -183,7 +181,7 @@ router.post('/log/starttime', isAuthenticated, function (req, res) {
     });
     },
     function (callback) {
-      query = connection.query(QUERY.LOG_COURSE_LIST.INS_SESSION_PROGRESS, [
+      connection.query(QUERY.LOG_COURSE_LIST.INS_SESSION_PROGRESS, [
         inputs.user_id,
         inputs.training_user_id,
         inputs.course_id,

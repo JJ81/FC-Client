@@ -20,59 +20,59 @@ CourseService.makeQuizList = function (quiz_list) {
       var quizdata = {};
 
       switch (quiz.quiz_type) {
-        case 'A': // 단답형
-          quizdata = {
-            type: quiz.type,
-            quiz_id: quiz.quiz_id,
-            quiz_type: quiz.quiz_type,
-            question: quiz.question,
-            answer: quiz.answer_desc,
-            order: quiz.quiz_order
-          };
-          break;
+      case 'A': // 단답형
+        quizdata = {
+          type: quiz.type,
+          quiz_id: quiz.quiz_id,
+          quiz_type: quiz.quiz_type,
+          question: quiz.question,
+          answer: quiz.answer_desc,
+          order: quiz.quiz_order
+        };
+        break;
 
-        case 'B': // 선택형
-        case 'C': // 다답형
-          quizdata = {
-            type: quiz.type,
-            quiz_id: quiz.quiz_id,
-            quiz_type: quiz.quiz_type,
-            question: quiz.question,
-            answer: [],
-            order: quiz.quiz_order,
-            option_group_id: quiz.option_group_id,
-            options: []
-          };
+      case 'B': // 선택형
+      case 'C': // 다답형
+        quizdata = {
+          type: quiz.type,
+          quiz_id: quiz.quiz_id,
+          quiz_type: quiz.quiz_type,
+          question: quiz.question,
+          answer: [],
+          order: quiz.quiz_order,
+          option_group_id: quiz.option_group_id,
+          options: []
+        };
 
-          var optiondata = quiz_list.filter(function (data) {
-            return data.quiz_id == quiz.quiz_id && data.option !== null;
-          });
+        var optiondata = quiz_list.filter(function (data) {
+          return data.quiz_id == quiz.quiz_id && data.option !== null;
+        });
 
-          if (optiondata) {
-            for (var index = 0; index < optiondata.length; index++) {
-                var option = optiondata[index];
+        if (optiondata) {
+          for (var index = 0; index < optiondata.length; index++) {
+              var option = optiondata[index];
 
-                if (option.iscorrect) {
-                  quizdata.answer.push(option.option);
-                }
-
-                quizdata.options.push({
-                  id: option.option_id,
-                  opt_id: option.option_group_id,
-                  option: option.option,
-                  iscorrect: option.iscorrect,
-                  order: option.option_order
-                });
+              if (option.iscorrect) {
+                quizdata.answer.push(option.option);
               }
 
-            quizdata.answer = quizdata.answer.join(', ');
-          }
+              quizdata.options.push({
+                id: option.option_id,
+                opt_id: option.option_group_id,
+                option: option.option,
+                iscorrect: option.iscorrect,
+                order: option.option_order
+              });
+            }
 
-          break;
-
-        default:
-          break;
+          quizdata.answer = quizdata.answer.join(', ');
         }
+
+        break;
+
+      default:
+        break;
+      }
 
           // 마지막 quiz_id 를 임시 저장한다.
       quiz_id = quiz.quiz_id;
