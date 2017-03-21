@@ -48,23 +48,26 @@ QUERY.EDU = {
     '     , ( ' +
     '        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
     '          FROM `course_list` AS cl ' +
-    '  	     LEFT JOIN `log_session_progress` AS up ' +
-    '  				 ON cl.id = up.course_list_id ' +
-    ' 			    AND up.`training_user_id` = @training_user_id ' +
-    ' 			    AND up.`end_dt` IS NOT NULL ' +
-    ' 			  WHERE cl.`course_id` = @course_id ' +
-    '  		) AS completed_rate ' +
+    '          LEFT JOIN `log_session_progress` AS up ' +
+    '            ON cl.id = up.course_list_id ' +
+    '           AND up.`training_user_id` = @training_user_id ' +
+    '           AND up.`end_dt` IS NOT NULL ' +
+    '         WHERE cl.`course_id` = @course_id ' +
+    '       ) AS completed_rate ' +
     '     , (SELECT `end_dt` FROM `log_course_progress` WHERE `training_user_id` = @training_user_id AND `course_id` = @course_id) AS course_end_dt ' +
     '     , e.name AS edu_name ' +
     '  FROM `edu` AS e ' +
     ' INNER JOIN ( ' +
-    ' 	    SELECT te.`edu_id`, tu.id AS training_user_id ' +
+    '       SELECT te.`edu_id`, tu.id AS training_user_id ' +
+    '            , lae.`start_dt`, lae.`end_dt` ' +
     '         FROM `users` AS u ' +
     '        INNER JOIN `training_users` AS tu ' +
     '           ON u.`id` = tu.`user_id` ' +
     '        INNER JOIN `training_edu` AS te ' +
     '           ON tu.`training_edu_id` = te.`id` ' +
-    '     		 AND te.active = 1 ' +
+    '        INNER JOIN `log_assign_edu` AS lae ' +
+    '           ON lae.`training_edu_id` = te.`id` ' +
+    '          AND te.active = 1 ' +
     '        WHERE u.`id` = ? ' +
     '       ) AS ut ' +
     '    ON e.`id` = ut.`edu_id` ' +
@@ -74,13 +77,14 @@ QUERY.EDU = {
     '    ON cg.`course_id` = c.`id` ' +
     ' INNER JOIN `teacher` AS t ' +
     '    ON c.`teacher_id` = t.`id` ' +
-    ' WHERE NOW() BETWEEN e.`start_dt` AND e.`end_dt` ' +
+    ' WHERE NOW() BETWEEN ut.`start_dt` AND ut.`end_dt` ' +
+    // ' WHERE NOW() BETWEEN e.`start_dt` AND e.`end_dt` ' +
     ' ORDER BY completed_rate, e.id, cg.`order`; ',
 
   // 지난 교육과정
   SEL_PASSED:
-    'SELECT DATE_FORMAT(e.`start_dt`, \'%Y-%m-%d\') AS `start_dt` ' +
-    '     , DATE_FORMAT(e.`end_dt`, \'%Y-%m-%d\') AS `end_dt` ' +
+    'SELECT DATE_FORMAT(ut.`start_dt`, \'%Y-%m-%d\') AS `start_dt` ' +
+    '     , DATE_FORMAT(ut.`end_dt`, \'%Y-%m-%d\') AS `end_dt` ' +
     '     , cg.`group_id` AS course_group_id ' +
     '     , cg.`order` AS course_group_order ' +
     '     , @course_id := c.`id` AS course_id ' +
@@ -103,11 +107,14 @@ QUERY.EDU = {
     '  FROM `edu` AS e ' +
     ' INNER JOIN ( ' +
     ' 	    SELECT te.`edu_id`, tu.id AS training_user_id ' +
+    '            , lae.`start_dt`, lae.`end_dt` ' +
     '         FROM `users` AS u ' +
     '        INNER JOIN `training_users` AS tu ' +
     '           ON u.`id` = tu.`user_id` ' +
     '        INNER JOIN `training_edu` AS te ' +
     '           ON tu.`training_edu_id` = te.`id` ' +
+    '        INNER JOIN `log_assign_edu` AS lae ' +
+    '           ON lae.`training_edu_id` = te.`id` ' +
     '     		 AND te.active = 1 ' +
     '        WHERE u.`id` = ? ' +
     '       ) AS ut ' +
@@ -118,7 +125,8 @@ QUERY.EDU = {
     '    ON cg.`course_id` = c.`id` ' +
     ' INNER JOIN `teacher` AS t ' +
     '    ON c.`teacher_id` = t.`id` ' +
-    ' WHERE NOW() > e.`end_dt` ' +
+    ' WHERE NOW() > ut.`end_dt` ' +
+    // ' WHERE NOW() > e.`end_dt` ' +
     ' ORDER BY completed_rate, e.id, cg.`order`; ',
 
   // 최초 학습시작 시 training_users 의 시작일시(start_dt)를 기록하여야 한다.

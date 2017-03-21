@@ -106,6 +106,6 @@ gulp.task('watch', () => {
   }
 });
 
-gulp.task('default', ['clean', 'js', 'vendor', 'copy-font', 'copy-css', 'css', 'html', 'images'], () => {
+gulp.task('default', ['clean', 'js', 'vendor', 'copy-font', 'copy-css', 'css', 'html', 'images', 'watch'], () => {
   gutil.log('Gulp task completed.');
 });

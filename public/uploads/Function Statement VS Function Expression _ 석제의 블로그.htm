@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Function Statement VS Function Expression | 석제의 블로그</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="javascript,udemy" />
+    
+    <meta name="description" content="JavaScript 에만 있는 Function 의 특징이 있다.바로 ‘1급 XX’ 라는 수식어가 붙는다는 것이다.
+1급 시민 (First Class Citizen)1급 객체 (First Class Object)1급 함수 (First Class Function)
+1급 시민
+변수(Variable), 인자(Parameter), 반환값(Return Value)으로">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Function Statement VS Function Expression">
+<meta property="og:url" content="http://parkseokje.github.io/2017/03/15/function-expression/index.html">
+<meta property="og:site_name" content="석제의 블로그">
+<meta property="og:description" content="JavaScript 에만 있는 Function 의 특징이 있다.바로 ‘1급 XX’ 라는 수식어가 붙는다는 것이다.
+1급 시민 (First Class Citizen)1급 객체 (First Class Object)1급 함수 (First Class Function)
+1급 시민
+변수(Variable), 인자(Parameter), 반환값(Return Value)으로">
+<meta property="og:image" content="http://parkseokje.github.io/images/javascript.png">
+<meta property="og:updated_time" content="2017-03-15T10:38:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Function Statement VS Function Expression">
+<meta name="twitter:description" content="JavaScript 에만 있는 Function 의 특징이 있다.바로 ‘1급 XX’ 라는 수식어가 붙는다는 것이다.
+1급 시민 (First Class Citizen)1급 객체 (First Class Object)1급 함수 (First Class Function)
+1급 시민
+변수(Variable), 인자(Parameter), 반환값(Return Value)으로">
+<meta name="twitter:image" content="http://parkseokje.github.io/images/javascript.png">
+    
+    <link rel="canonical" href="http://parkseokje.github.io/2017/03/15/function-expression/"/>
+    
+        <link rel="alternate" href="/atom.xml" title="석제의 블로그" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/images/favicon.ico" />
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-93247712-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">우주의 힘으로 개발하자</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">홈</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/개발/">개발</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/재테크/">재테크</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="https://about.me/seokjae">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="검색" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '포스트',
+            PAGES: 'Pages',
+            CATEGORIES: '카테고리',
+            TAGS: '태그',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/개발/">개발</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-function-expression" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Function Statement VS Function Expression
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-subtitle">
+                <a href="/2017/03/15/function-expression/" class="article-date">
+    <time datetime="2017-03-15T09:26:53.000Z" itemprop="datePublished">2017-03-15</time>
+</a>
+                
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/udemy/">udemy</a></li></ul>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>JavaScript 에만 있는 Function 의 특징이 있다.<br>바로 <strong>‘1급 XX’</strong> 라는 수식어가 붙는다는 것이다.</p>
+<p><strong>1급 시민</strong> (First Class Citizen)<br><strong>1급 객체</strong> (First Class Object)<br><strong>1급 함수</strong> (First Class Function)</p>
+<p><strong>1급 시민</strong></p>
+<p><u>변수(Variable), 인자(Parameter), 반환값(Return Value)</u>으로 전달할 수 있다.</p>
+<p><strong>1급 객체</strong><br>특정 언어에서 객체를 1급 시민으로 취급한다는 의미이다.</p>
+<p><strong>1급 함수</strong><br>1급 시민이면서, <u>추가적으로 런타임(Runtime)을 생성할 수 있으며, 익명(Anonymous)으로도 생성이 가능</u>하다.</p>
+<p>이번 시간에는 <strong>1급 함수</strong> 로서 JavaScript Function 의 특징에 대해 알아볼 것이다.</p>
+<p>Function 은 두 가지 형태로 분류할 수 있다.</p>
+<ul>
+<li>Function Statement: 함수 선언문</li>
+<li>Function Expression: 함수 표현식</li>
+</ul>
+<p><strong>Function Statement</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">greet</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Hello World!'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>Function Expression</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> greetInKorean = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'안녕하세요!'</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">logGreeting</span>(<span class="params">fn</span>) </span>&#123;</div><div class="line">  fn();</div><div class="line">&#125;</div><div class="line"></div><div class="line">logGreeting(greetInKorean); <span class="comment">// '안녕하세요' 출력</span></div></pre></td></tr></table></figure></p>
+<p><strong>Function Expression</strong> 이 바로 1급 시민의 특징을 고스란히 가지고 있다.<br>변수로, 인자로, 반환값으로 어딘가에 전달할 수가 있다.<br>그리고 var greetInKorean = <strong>function()</strong> 과 같은 익명(anonymous) 형태로도 작성할 수 있으므로 1급 함수이다.</p>
+<p>위에서 변수 <strong>greetInKorean</strong> 은 1급 시민을 가리키고 있으므로 본인 또한 1급 시민이 된다.<br>따라서 아래와 같이 실행할 수 있다.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">greetInKorean(); <span class="comment">// '안녕하세요' 출력</span></div></pre></td></tr></table></figure></p>
+<p><strong>logGreeting</strong> 함수 또한 함수를 인자로 받을 수 있으므로 아래와 같이 실행이 가능하다.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">logGreeting(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'안녕하세요!'</span>);</div><div class="line">&#125;)</div><div class="line"><span class="comment">// '안녕하세요' 출력</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="addition">+ 주의할 점은, Function Expression 의 경우 hoisting 이 안된다는 점이다.</span></div></pre></td></tr></table></figure>
+<p>참고로, 여기서 <strong>Expression</strong> 이란 특정 값으로 표현할 수 있는 코드 블록이라 할 수 있다.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span> <span class="comment">// 1 출력</span></div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>; <span class="comment">// a =&gt; 1 출력</span></div><div class="line"><span class="keyword">var</span> b = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'Hi'</span>); &#125; <span class="comment">// b =&gt; [Function: b] 출력</span></div></pre></td></tr></table></figure></p>
+<p><strong>참고</strong></p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function" target="_blank" rel="external">MDN Function</a></li>
+<li><a href="http://bestalign.github.io/2015/10/18/first-class-object" target="_blank" rel="external">bestalig’s dev blog</a></li>
+</ul>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://parkseokje.github.io/2017/03/15/function-expression/" data-id="cj0arj1eq0000ap6b82oa2562" class="article-share-link"><i class="fa fa-share"></i>공유하기</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>팔로우:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/PSJ1407" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/seokjae.park.92" target="_blank">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="google-plus" href="https://plus.google.com/u/0/110593671217098784885" target="_blank">
+                        <i class="icon fa fa-google-plus"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/Parkseokje" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    <div class="github-card" data-github="Parkseokje" data-width="340" data-height="" data-theme="medium"></div>
+    <script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/03/14/bigO/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">오래된</strong>
+        <p class="article-nav-title">Big O</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">최근 글</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/03/15/function-expression/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/javascript.png)" alt="Function Statement VS Function Expression" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/개발/">개발</a></p>
+                            <p class="item-title"><a href="/2017/03/15/function-expression/" class="title">Function Statement VS Function Expression</a></p>
+                            <p class="item-date"><time datetime="2017-03-15T09:26:53.000Z" itemprop="datePublished">2017-03-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/03/14/bigO/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/algorithm.jpg)" alt="Big O" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/개발/">개발</a></p>
+                            <p class="item-title"><a href="/2017/03/14/bigO/" class="title">Big O</a></p>
+                            <p class="item-date"><time datetime="2017-03-14T08:12:37.000Z" itemprop="datePublished">2017-03-14</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/03/10/namespace/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/javascript.png)" alt="Namespace" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/개발/">개발</a></p>
+                            <p class="item-title"><a href="/2017/03/10/namespace/" class="title">Namespace</a></p>
+                            <p class="item-date"><time datetime="2017-03-10T03:33:34.000Z" itemprop="datePublished">2017-03-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/03/10/objectAndFunction/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/javascript.png)" alt="Object and Function" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/개발/">개발</a></p>
+                            <p class="item-title"><a href="/2017/03/10/objectAndFunction/" class="title">Object and Function</a></p>
+                            <p class="item-date"><time datetime="2017-03-09T15:12:33.000Z" itemprop="datePublished">2017-03-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/03/09/TheWeirdPartOfJavascript-1/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/javascript.png)" alt="Boolean and Existence, Default Values" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/개발/">개발</a></p>
+                            <p class="item-title"><a href="/2017/03/09/TheWeirdPartOfJavascript-1/" class="title">Boolean and Existence, Default Values</a></p>
+                            <p class="item-date"><time datetime="2017-03-08T16:43:03.000Z" itemprop="datePublished">2017-03-09</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">카테고리</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/개발/">개발</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/재테크/">재테크</a><span class="category-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">아카이브</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">3월 2017</a><span class="archive-list-count">13</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">태그</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/codereview/">codereview</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/expressjs/">expressjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iterm/">iterm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/">nodejs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/passport/">passport</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udemy/">udemy</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/부동산/">부동산</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/재태크/">재태크</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">태그 클라우드</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/api/" style="font-size: 13.33px;">api</a> <a href="/tags/codereview/" style="font-size: 10px;">codereview</a> <a href="/tags/expressjs/" style="font-size: 10px;">expressjs</a> <a href="/tags/iterm/" style="font-size: 10px;">iterm</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/jwt/" style="font-size: 10px;">jwt</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/udemy/" style="font-size: 16.67px;">udemy</a> <a href="/tags/부동산/" style="font-size: 10px;">부동산</a> <a href="/tags/재태크/" style="font-size: 10px;">재태크</a>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2017 Seokje Park</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'dev-blog-sjpark';
+    
+    
+    var disqus_url = 'http://parkseokje.github.io/2017/03/15/function-expression/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

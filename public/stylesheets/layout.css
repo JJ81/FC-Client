@@ -50,7 +50,7 @@
 }
 
 .btn_login{
-	background: #4baf4d;
+	background: #FF9200; /*#4baf4d;*/
 	text-align: center;
 	color: #fff;
 	font-size: 16px;
@@ -107,7 +107,7 @@
 /* header */
 #hd{
 	height: 45px;
-	background: #42b24c;
+	background: #FF9200; /* #42b24c;*/
 	position: relative;
 	z-index: 999;
 }
@@ -186,7 +186,7 @@
 .list_item .progress{
 	display: block;
 	height: 5px;
-	background: #42b24c;
+	background: #FFB774; /*#42b24c;*/
 }
 
 .list_item .achievement{
@@ -373,7 +373,7 @@
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	background: #42b24c;
+	background: #FF9200; /*#42b24c;*/
 	font-size: 16px;
 	text-align: center;
 	height: 60px;
@@ -574,11 +574,11 @@
 	width: 250px;
 	height: 100%;
 	z-index: 999999;
-	background: #27313d;
+	background: #F5ECDA; /*#27313d;*/
 }
 
 .nav_list a{
-	color :#bdc3c7;
+	color :#3E3E3E; /*#bdc3c7;*/
 	display: block;
 	height: 40px;
 	line-height: 40px;
@@ -614,7 +614,7 @@
 .logo_section{
 	border-bottom: 1px solid #1e2832;
 	padding: 10px 10px 10px 100px;
-	background: #23282c;
+	background: #FF9200; /*#23282c;*/
 	position: relative;
 	height: 80px;
 }
@@ -667,7 +667,7 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    background: #42b24c;
+    background: #FF9200; /*#42b24c;*/
     font-size: 16px;
     text-align: center;
     height: 60px;
@@ -682,4 +682,19 @@
 
 .text-red {
   color: #dd4b39 !important;
+}
+
+.img-container {
+    position: absolute;
+    overflow: hidden;
+    bottom: 0;
+}
+
+.img-container img {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.6;
 }
