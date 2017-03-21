@@ -8,9 +8,12 @@ var QUERY = {};
 QUERY.AUTH = {
   // 사용자 정보
   SEL_INFO:
-    'SELECT `id`, `name`, `email`, `password`, `fc_id` ' +
-    '  FROM `users` ' +
-    ' WHERE `phone` = ?; ',
+    'SELECT u.`id`, u.`name`, u.`email`, u.`password`, u.`fc_id` ' +
+    '     , f.`theme-bg` AS fc_theme ' +
+    '  FROM `users` AS u ' +
+    ' INNER JOIN `fc` AS f ' +
+    '    ON u.`fc_id` = f.`id` ' +
+    ' WHERE u.`phone` = ?; ',
 
   // 비밀번호 변경
   UPD_CHANGE_PWD:

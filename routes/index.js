@@ -41,31 +41,30 @@ passport.use(new LocalStrategy({
       return done(null, false);
     } else {
       if (data.length === 1) {
-          if (!bcrypt.compareSync(password, data[0].password)) {
-            console.log('password is not matched.');
-            return done(null, false);
-          } else {
-            console.log('password is matched.');
-
+        if (!bcrypt.compareSync(password, data[0].password)) {
+          return done(null, false);
+        } else {
             // 사용자 포인트 조회
-            var user_point = 0;
-            var user_info = {
-              'user_id': data[0].id,
-              'fc_id': data[0].fc_id,
-              'name': data[0].name,
-              'email': data[0].email,
-              'point': data.point_total
-            };
+          var user_point = 0;
+          var user_info = {
+            'user_id': data[0].id,
+            'fc_id': data[0].fc_id,
+            'name': data[0].name,
+            'email': data[0].email,
+            'point': data.point_total,
+            'fc_theme': data[0].fc_theme
+          };
 
             // 교육생 포인트를 사이드탭에 표시하기 위함.
-            PointService.userpoint(connection, { user_id: data[0].id, fc_id: data[0].fc_id }, function (err, data) {
-              user_info.point = data.point_total;
-              return done(null, user_info);
-            });
-          }
-        } else {
-          return done(null, false);
+          PointService.userpoint(connection, { user_id: data[0].id, fc_id: data[0].fc_id }, (err, data) => {
+            if (err) throw err;
+            user_info.point = data.point_total;
+            return done(null, user_info);
+          });
         }
+      } else {
+        return done(null, false);
+      }
     }
   });
 }
