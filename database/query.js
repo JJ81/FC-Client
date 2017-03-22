@@ -38,8 +38,8 @@ QUERY.EDU = {
 
   // 이달의 교육과정
   SEL_CURRENT:
-    'SELECT DATE_FORMAT(e.`start_dt`, \'%Y-%m-%d\') AS `start_dt` ' +
-    '     , DATE_FORMAT(e.`end_dt`, \'%Y-%m-%d\') AS `end_dt` ' +
+    'SELECT DATE_FORMAT(ut.`start_dt`, \'%Y-%m-%d\') AS `start_dt` ' +
+    '     , DATE_FORMAT(ut.`end_dt`, \'%Y-%m-%d\') AS `end_dt` ' +
     '     , cg.`group_id` AS course_group_id ' +
     '     , cg.`order` AS course_group_order ' +
     '     , @course_id := c.`id` AS course_id ' +
@@ -68,9 +68,10 @@ QUERY.EDU = {
     '           ON u.`id` = tu.`user_id` ' +
     '        INNER JOIN `training_edu` AS te ' +
     '           ON tu.`training_edu_id` = te.`id` ' +
+    '          AND te.active = 1 ' +
     '        INNER JOIN `log_assign_edu` AS lae ' +
     '           ON lae.`training_edu_id` = te.`id` ' +
-    '          AND te.active = 1 ' +
+    '          AND lae.`active` = 1 ' +
     '        WHERE u.`id` = ? ' +
     '       ) AS ut ' +
     '    ON e.`id` = ut.`edu_id` ' +

@@ -157,8 +157,7 @@
 	display: block;
 	margin-top: 10px;
 	font-weight: bold;
-	font-size: 15px;
-
+	font-size: 16px;
 }
 
 .list_item .tit,
@@ -180,7 +179,7 @@
 .list_item .progress_bg{
 	display: block;
 	height: 5px;
-	background: #454749;
+	background: #E1E0E3; /*#454749;*/
 }
 
 .list_item .progress{
