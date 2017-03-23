@@ -13,10 +13,14 @@ requirejs.config({
     'jqueryTimer': '/static/vendor/jquery.timer',
     'plyr': '/static/vendor/plyr',
     'Vimeo': '/static/vendor/player.min',
-    'axios': 'https://unpkg.com/axios/dist/axios.min'
+    'axios': 'https://unpkg.com/axios/dist/axios.min',
+    'bootstrap': ['/static/vendor/bootstrap.min']
   },
   shim: {
     'jqueryCookie': {
+      deps: ['jquery']
+    },
+    'bootstrap': {
       deps: ['jquery']
     },
     'jqueryRating': {

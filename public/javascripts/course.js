@@ -44,7 +44,11 @@ requirejs([
       $.ajax({
         type: 'POST',
         url: '/course/log/start',
-        data: { training_user_id: training_user_id, course_id: course_id, isrepeat: isrepeat }
+        data: {
+          training_user_id: training_user_id,
+          course_id: course_id,
+          isrepeat: isrepeat
+        }
       }).done(function (res) {
         // console.log(res.msg);
         location.href = next_url;

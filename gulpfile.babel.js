@@ -45,7 +45,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'jquery-private.js',
     DIR.SRC + '/vendor/' + 'plugins/jquery_cookie/jquery.cookie.1.4.1.js',
     DIR.SRC + '/vendor/' + 'plugins/vimeo-player-js/dist/player.min.js',
-    DIR.SRC + '/vendor/' + 'plugins/jquery_timer/jquery.timer.js'
+    DIR.SRC + '/vendor/' + 'plugins/jquery_timer/jquery.timer.js',
+    DIR.SRC + '/vendor/' + 'bootstrap/js/bootstrap.min.js'
   ])
   .pipe(uglify())
   .pipe(gulp.dest(DEST.VENDOR));
@@ -53,7 +54,8 @@ gulp.task('vendor', () => {
 
 gulp.task('copy-font', () => {
   return gulp.src([
-    DIR.SRC + '/vendor/' + 'font-awesome-4.7.0/fonts/*.*'
+    DIR.SRC + '/vendor/' + 'font-awesome-4.7.0/fonts/*.*',
+    DIR.SRC + '/vendor/' + 'bootstrap/fonts/*.*'
   ])
   .pipe(gulp.dest(DEST.FONTS));
 });
@@ -61,7 +63,9 @@ gulp.task('copy-font', () => {
 gulp.task('copy-css', () => {
   return gulp.src([
     DIR.SRC + '/vendor/' + 'plugins/star-rating-svg/star-rating-svg.css',
-    DIR.SRC + '/vendor/' + 'font-awesome-4.7.0/css/font-awesome.min.css'
+    DIR.SRC + '/vendor/' + 'font-awesome-4.7.0/css/font-awesome.min.css',
+    DIR.SRC + '/vendor/' + 'bootstrap/css/bootstrap-iso.css'
+    // DIR.SRC + '/vendor/' + 'bootstrap/css/bootstrap.min.css'
   ])
   .pipe(cleanCSS({compatibility: 'ie8'}))
   .pipe(gulp.dest(DIR.DEST + '/stylesheets/'));

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <link rel="stylesheet" href="/static/stylesheets/reset.css" />
+    <link rel="stylesheet" href="/static/stylesheets/bootstrap-iso.css" />
+    <!--<link rel="stylesheet" href="/static/stylesheets/bootstrap.min.css" />-->
     <link rel="stylesheet" href="/static/stylesheets/layout.css" />
     <link rel="stylesheet" href="/static/stylesheets/skins.css" />
     <link rel="stylesheet" href="/static/stylesheets/star-rating-svg.css" />
@@ -50,6 +52,7 @@
   <script src="/static/javascripts/login.js"></script>
   {{else}}
     {{#ifCond current_path '!==' 'login'}}<script src="/static/javascripts/left_nav.js"></script>{{/ifCond}}
+    {{#if (isEquals current_path 'education') }}<script src="/static/javascripts/education.js"></script>{{/if}}
     {{#if (isEquals current_path 'course') }}<script src="/static/javascripts/course.js"></script>{{/if}}
     {{#if (isEquals current_path 'quiz')}}<script src="/static/javascripts/quiz.js"></script>{{/if}}
     {{#if (isEquals current_path 'video')}}<script src="/static/javascripts/video.js"></script>{{/if}}

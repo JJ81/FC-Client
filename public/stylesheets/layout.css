@@ -558,6 +558,14 @@
   right: 0px;
 }
 
+.search_link{
+	position: absolute;
+	top: 10px;
+	width: 30px;
+	height: 30px;
+  right: 0px;
+}
+
 .back_link{
 	position: absolute;
 	top: 5px;

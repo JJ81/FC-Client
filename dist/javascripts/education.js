@@ -1,0 +1,1 @@
+requirejs(["jquery","bootstrap"],function(r){"use strict"});
