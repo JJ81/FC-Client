@@ -48,20 +48,9 @@ router.get(['/current', '/passed'], isAuthenticated, (req, res) => {
     // query = QUERY.EDU.SEL_PASSED('month', '2017-03');
     header = '지난 교육과정';
     currentPath = 'passed';
-    if (searchby === undefined || searchtext === undefined) {
-      return res.render('education', {
-        group_path: 'education',
-        current_path: currentPath,
-        current_url: req.url,
-        title: global.PROJ_TITLE,
-        logo: logoName,
-        logo_image: logoImageName,
-        req: req.get('origin'),
-        loggedIn: req.user,
-        header: header
-      });
+    if (searchby != null && searchtext != null) {
+      query = QUERY.EDU.SEL_PASSED(searchby, searchtext);
     }
-    query = QUERY.EDU.SEL_PASSED(searchby, searchtext);
   }
 
   pool.getConnection((err, connection) => {
@@ -70,35 +59,40 @@ router.get(['/current', '/passed'], isAuthenticated, (req, res) => {
       [
         // Description
         (callback) => {
-          connection.query(query,
-            [ req.user.user_id, req.user.user_id ],
-            (err, rows) => {
-              if (err) {
-                callback(err, null);
-              } else {
-                courses = rows;
-                if (courses.length > 0) {
-                  nextTrainingUserId = courses[0].training_user_id;
-                  nextCourseId = courses[0].course_id;
+          if (query) {
+            connection.query(query,
+              [ req.user.user_id, req.user.user_id ],
+              (err, rows) => {
+                if (err) {
+                  callback(err, null);
+                } else {
+                  courses = rows;
+                  if (courses.length > 0) {
+                    nextTrainingUserId = courses[0].training_user_id;
+                    nextCourseId = courses[0].course_id;
 
-                  for (i = 0; i < courses.length; i++) {
-                    if (courses[i].completed_rate !== 100) {
-                      nextTrainingUserId = courses[i].training_user_id;
-                      nextCourseId = courses[i].course_id;
-                      break;
+                    for (i = 0; i < courses.length; i++) {
+                      if (courses[i].completed_rate !== 100) {
+                        nextTrainingUserId = courses[i].training_user_id;
+                        nextCourseId = courses[i].course_id;
+                        break;
+                      }
+                    }
+
+                    // 완료하지 않은 강의의 수
+                    for (var i = 0; i < courses.length; i++) {
+                      if (courses[i].completed_rate === 100) {
+                        courseDoneCount += 1;
+                      }
                     }
                   }
-
-                  // 완료하지 않은 강의의 수
-                  for (var i = 0; i < courses.length; i++) {
-                    if (courses[i].completed_rate === 100) {
-                      courseDoneCount += 1;
-                    }
-                  }
+                  callback(null, rows);
                 }
-                callback(null, rows);
               }
-            });
+            );
+          } else {
+            callback(null, null);
+          }
         },
         // 지난 교육과정일 경우 검색을 위한 배정월 목록을 가져온다.
         (callback) => {
