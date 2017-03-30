@@ -52,7 +52,7 @@
   <script src="/static/javascripts/login.js"></script>
   {{else}}
     {{#ifCond current_path '!==' 'login'}}<script src="/static/javascripts/left_nav.js"></script>{{/ifCond}}
-    {{#if (isEquals current_path 'education') }}<script src="/static/javascripts/education.js"></script>{{/if}}
+    {{#if (isEquals group_path 'education') }}<script src="/static/javascripts/education.js"></script>{{/if}}
     {{#if (isEquals current_path 'course') }}<script src="/static/javascripts/course.js"></script>{{/if}}
     {{#if (isEquals current_path 'quiz')}}<script src="/static/javascripts/quiz.js"></script>{{/if}}
     {{#if (isEquals current_path 'video')}}<script src="/static/javascripts/video.js"></script>{{/if}}

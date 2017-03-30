@@ -1,19 +1,24 @@
-var express = require('express');
-var router = express.Router();
-var mysqlDbc = require('../commons/db_conn')();
-var connection = mysqlDbc.init();
-var QUERY = require('../database/query');
-var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+const express = require('express');
+const router = express.Router();
+const mysqlDbc = require('../commons/db_conn')();
+const connection = mysqlDbc.init();
+const QUERY = require('../database/query');
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
   res.redirect('/login');
 };
 require('../commons/helpers');
+const pool = require('../commons/db_conn_pool');
+const async = require('async');
 
 // 이달의/지난 교육과정
-router.get(['/current', '/passed'], isAuthenticated, function (req, res) {
-  var hostName = req.headers.host;
-  var logoName = null;
-  var logoImageName = null;
+router.get(['/current', '/passed'], isAuthenticated, (req, res) => {
+  const {searchby, searchtext} = req.query;
+  const hostName = req.headers.host;
+  let logoName = null;
+  let logoImageName = null;
 
   logoName = hostName.split('.')[1];
   logoName = logoName === undefined ? 'orangenamu' : logoName;
@@ -23,71 +28,120 @@ router.get(['/current', '/passed'], isAuthenticated, function (req, res) {
   req.user.root_path = req.originalUrl;
 
   // req.url 에 따라 쿼리문을 달리한다.
-  var query;
+  let query;
   // 완료/미완료 order (정렬순서) 가장 낮은 강의의 id
-  var nextCourseId = null;
+  let nextCourseId = null;
   // 완료/미완료 order (정렬순서) 가장 낮은 사용자 강의의 id
-  var nextTrainingUserId = null;
+  let nextTrainingUserId = null;
   // 완료한 강의의 수
-  var courseDoneCount = 0;
-  var header, courses;
+  let courseDoneCount = 0;
+  let header, courses;
+  let currentPath;
 
   if (req.path === '/current') {
-    query = QUERY.EDU.SEL_CURRENT;
     header = '이달의 교육과정';
-  } else if (req.url === '/passed') {
-    query = QUERY.EDU.SEL_PASSED;
+    currentPath = 'current';
+    query = QUERY.EDU.SEL_CURRENT;
+  } else if (req.path === '/passed') {
+    // query = QUERY.EDU.SEL_PASSED();
+    // query = QUERY.EDU.SEL_PASSED('course', '운영');
+    // query = QUERY.EDU.SEL_PASSED('month', '2017-03');
     header = '지난 교육과정';
-  }
-
-  connection.query(query, [req.user.user_id, req.user.user_id], function (err, data) {
-    if (err) {
-      return res.json({
-        success: false,
-        msg: err
-      });
-    } else {
-      courses = data;
-
-      if (courses.length > 0) {
-        // 학습하기 버튼 클릭 시 시작 세션 id를 구한다.
-        // 기본은 id 가 가장 작은 세션이다.
-        // 그 다음은 완료하지 않은 세션 중 id 가 가장 작은 세션이다.
-        nextTrainingUserId = courses[0].training_user_id;
-        nextCourseId = courses[0].course_id;
-
-        for (i = 0; i < courses.length; i++) {
-          if (courses[i].completed_rate !== 100) {
-            nextTrainingUserId = courses[i].training_user_id;
-            nextCourseId = courses[i].course_id;
-            break;
-          }
-        }
-
-        // 완료하지 않은 강의의 수
-        for (var i = 0; i < courses.length; i++) {
-          if (courses[i].completed_rate === 100) {
-            courseDoneCount += 1;
-          }
-        }
-      }
-
-    // 쿼리 성공시
-      res.render('education', {
-        current_path: 'education',
+    currentPath = 'passed';
+    if (searchby === undefined || searchtext === undefined) {
+      return res.render('education', {
+        group_path: 'education',
+        current_path: currentPath,
         current_url: req.url,
         title: global.PROJ_TITLE,
         logo: logoName,
         logo_image: logoImageName,
         req: req.get('origin'),
         loggedIn: req.user,
-        header: header,
-        courses: data,
-        next_training_user_id: nextTrainingUserId,
-        next_course_id: nextCourseId,
-        courseDoneCount: courseDoneCount
+        header: header
       });
     }
+    query = QUERY.EDU.SEL_PASSED(searchby, searchtext);
+  }
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series(
+      [
+        // Description
+        (callback) => {
+          connection.query(query,
+            [ req.user.user_id, req.user.user_id ],
+            (err, rows) => {
+              if (err) {
+                callback(err, null);
+              } else {
+                courses = rows;
+                if (courses.length > 0) {
+                  nextTrainingUserId = courses[0].training_user_id;
+                  nextCourseId = courses[0].course_id;
+
+                  for (i = 0; i < courses.length; i++) {
+                    if (courses[i].completed_rate !== 100) {
+                      nextTrainingUserId = courses[i].training_user_id;
+                      nextCourseId = courses[i].course_id;
+                      break;
+                    }
+                  }
+
+                  // 완료하지 않은 강의의 수
+                  for (var i = 0; i < courses.length; i++) {
+                    if (courses[i].completed_rate === 100) {
+                      courseDoneCount += 1;
+                    }
+                  }
+                }
+                callback(null, rows);
+              }
+            });
+        },
+        // 지난 교육과정일 경우 검색을 위한 배정월 목록을 가져온다.
+        (callback) => {
+          if (currentPath === 'passed') {
+            connection.query(QUERY.EDU.SEL_PASSED_EDU_MONTH,
+                [ req.user.user_id ],
+                (err, rows) => {
+                  if (err) {
+                    callback(err, null);
+                  } else {
+                    callback(null, rows);
+                  }
+                }
+              );
+          } else {
+            callback(null, null);
+          }
+        }
+      ],
+      (err, results) => {
+        connection.release();
+        if (err) {
+          console.error(err);
+          throw new Error(err);
+        } else {
+          res.render('education', {
+            group_path: 'education',
+            current_path: currentPath,
+            current_url: req.url,
+            title: global.PROJ_TITLE,
+            logo: logoName,
+            logo_image: logoImageName,
+            req: req.get('origin'),
+            loggedIn: req.user,
+            header: header,
+            courses: courses,
+            month_list: results[1],
+            next_training_user_id: nextTrainingUserId,
+            next_course_id: nextCourseId,
+            count_course_done: courseDoneCount
+          });
+        }
+      });
   });
 });
 

@@ -7,11 +7,26 @@
           <h4 class="modal-title">검색</h4>
         </div>
         <div class="modal-body">
-          <input type="search" name="" id="input1/(\w+)/\u\1/g" class="form-control" value="" required="required" title="">
+          <div class="form-group">
+            <div class="radio">
+              <label><input type="radio" name="optradio" id="radio-course-title" checked="true">강의명</label>
+            </div>
+            <input type="search" name="course-title" id="inputCourse" class="form-control" autofocus placeholder="강의명을 입력하세요">
+          </div>
+          <div class="form-group">
+            <div class="radio">
+              <label><input type="radio" name="optradio" id="radio-assign-month" >기간별</label>
+            </div>
+            <select name="assign-month" id="selectAssignMonth" class="form-control">
+              {{#each month_list}}
+              <option value="{{yearmonth}}">{{yearmonth}}</option>
+              {{/each}}
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-          <button type="button" class="btn btn-primary">검색</button>
+          <button type="button" class="btn btn-primary" id="btnSearchCourse" data-redirect="/education/{{current_path}}">검색</button>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-var QUERY = {};
+let QUERY = {};
 
 /**
  * 쿼리를 정의한다.
@@ -86,7 +86,9 @@ QUERY.EDU = {
     ' ORDER BY completed_rate, e.id, cg.`order`; ',
 
   // 지난 교육과정
-  SEL_PASSED:
+  SEL_PASSED: (searchBy, searchText) => {
+    console.log(searchBy, searchText);
+    let sql =
     'SELECT DATE_FORMAT(ut.`start_dt`, \'%Y-%m-%d\') AS `start_dt` ' +
     '     , DATE_FORMAT(ut.`end_dt`, \'%Y-%m-%d\') AS `end_dt` ' +
     '     , cg.`group_id` AS course_group_id ' +
@@ -129,9 +131,16 @@ QUERY.EDU = {
     '    ON cg.`course_id` = c.`id` ' +
     ' INNER JOIN `teacher` AS t ' +
     '    ON c.`teacher_id` = t.`id` ' +
-    ' WHERE NOW() > ut.`end_dt` ' +
-    // ' WHERE NOW() > e.`end_dt` ' +
-    ' ORDER BY completed_rate, e.id, cg.`order`; ',
+    ' WHERE NOW() > ut.`end_dt` ';
+    if (searchBy === 'course') {
+      sql += 'AND c.`name` LIKE \'%' + searchText + '%\'';
+    } else if (searchBy === 'month') {
+      sql += 'AND DATE_FORMAT(ut.`end_dt`, \'%Y-%m\') = \'' + searchText + '\'';
+    }
+    sql += ' ORDER BY `end_dt` DESC, e.`id`, cg.`order`; ';
+
+    return sql;
+  },
 
   // 최초 학습시작 시 training_users 의 시작일시(start_dt)를 기록하여야 한다.
   UPD_TRAINING_USER_START_DT:
@@ -159,7 +168,23 @@ QUERY.EDU = {
     '    ON tu.`training_edu_id` = te.`id` ' +
     ' INNER JOIN `edu` AS e ' +
     '    ON te.`edu_id` = e.`id` ' +
-    ' WHERE tu.`id` = ? '
+    ' WHERE tu.`id` = ? ',
+
+  // 지난 교육과정 검색 월
+  SEL_PASSED_EDU_MONTH:
+    'SELECT DATE_FORMAT(lae.`start_dt`, \'%Y-%m\') AS yearmonth ' +
+    '  FROM `users` AS u ' +
+    ' INNER JOIN `training_users` AS tu ' +
+    '    ON u.`id` = tu.`user_id` ' +
+    ' INNER JOIN `training_edu` AS te ' +
+    '    ON tu.`training_edu_id` = te.`id` ' +
+    ' INNER JOIN `log_assign_edu` AS lae ' +
+    '    ON lae.`training_edu_id` = te.`id` ' +
+    '   AND te.`active` = 1 ' +
+    ' WHERE u.`id` = ? ' +
+    '   AND NOW() > lae.`end_dt` ' +
+    ' GROUP BY yearmonth ' +
+    ' ORDER BY yearmonth DESC '
 
 };
 
