@@ -59,4 +59,10 @@ function (jQuery, axios) {
       btnSearchCourse.data('redirect') +
         '?searchby=' + searchBy + '&searchtext=' + searchText;
   });
+
+  inputCourse.on('keypress', function (e) {
+    if (e.which == 13) {
+      btnSearchCourse.click();
+    }
+  });
 });
