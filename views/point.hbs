@@ -1,0 +1,18 @@
+{{> page_header}}
+
+<div class="list_section">
+  <ol>
+    {{#each list}}
+    <li class="item_wrap point_list_item no_img_list">
+        <span class="info">
+          <span class="tit">{{ edu_name }}</span>
+          <span class="point">{{point_total}} 포인트</span>
+          {{#ifCond start_dt '&&' end_dt}}
+          <span class="period">{{start_dt}} ~ {{end_dt}}</span>
+          {{/ifCond}}
+          <div style="clear: both;"></div>
+        </span>
+    </li>
+    {{/each}}
+  </ul>
+</div>

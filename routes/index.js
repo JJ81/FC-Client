@@ -1,32 +1,34 @@
 
-var express = require('express');
-var router = express.Router();
-var mysql_dbc = require('../commons/db_conn')();
-var connection = mysql_dbc.init();
-var QUERY = require('../database/query');
-var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+const express = require('express');
+const router = express.Router();
+const mySqlDbc = require('../commons/db_conn')();
+const connection = mySqlDbc.init();
+const QUERY = require('../database/query');
+let isAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
   res.redirect('/login');
 };
 require('../commons/helpers');
 
 // DB 연결 테스트
-mysql_dbc.test_open(connection);
+// mysql_dbc.test_open(connection);
 
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var flash = require('connect-flash');
-var bcrypt = require('bcrypt');
-var PointService = require('../service/PointService');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
+const PointService = require('../service/PointService');
+const pool = require('../commons/db_conn_pool');
 
 // 로그인이 성공하면 사용자 정보를 Session 에 저장
-passport.serializeUser(function (user, done) {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
 
 // 로그인이 되어있는 상태에서, 모든 사용자 페이지 접근 시 발생
 // 세션에서 사용자 profile 을 찾은 후 HTTP Request 로 리턴
-passport.deserializeUser(function (user, done) {
+passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
@@ -35,8 +37,8 @@ passport.use(new LocalStrategy({
   usernameField: 'phone',
   passwordField: 'password',
   passReqToCallback: true
-}, function (req, phone, password, done) {
-  connection.query(QUERY.AUTH.SEL_INFO, [phone], function (err, data) {
+}, (req, phone, password, done) => {
+  connection.query(QUERY.AUTH.SEL_INFO, [phone], (err, data) => {
     if (err) {
       return done(null, false);
     } else {
@@ -45,8 +47,8 @@ passport.use(new LocalStrategy({
           return done(null, false);
         } else {
             // 사용자 포인트 조회
-          var user_point = 0;
-          var user_info = {
+          let user_point = 0;
+          let user_info = {
             'user_id': data[0].id,
             'fc_id': data[0].fc_id,
             'name': data[0].name,
@@ -71,10 +73,10 @@ passport.use(new LocalStrategy({
 ));
 
 // 로그인 화면
-router.get('/login', function (req, res) {
-  var _host_name = req.headers.host;
-  var _logo_name = null;
-  var _logo_image_name = null;
+router.get('/login', (req, res) => {
+  const _host_name = req.headers.host;
+  let _logo_name = null;
+  let _logo_image_name = null;
 
   _logo_name = _host_name.split('.')[1];
   _logo_name = _logo_name === undefined ? 'orangenamu' : _logo_name;
@@ -103,14 +105,75 @@ router.post('/login',
   });
 
 // 로그아웃
-router.get('/logout', isAuthenticated, function (req, res) {
+router.get('/logout', isAuthenticated, (req, res) => {
   req.logout();
   res.redirect('/');
 });
 
 // 로그인 상태일 경우, 이달의 교육과정 메뉴로 이동
-router.get('/', isAuthenticated, function (req, res) {
+router.get('/', isAuthenticated, (req, res) => {
   res.redirect('/education/current');
+});
+
+router.get('/point', isAuthenticated, (req, res) => {
+  var hostName = req.headers.host;
+  var logoName = null;
+  var logoImageName = null;
+
+  logoName = hostName.split('.')[1];
+  logoName = logoName === undefined ? 'orangenamu' : logoName;
+  logoImageName = logoName + '.png';
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.POINT.GetUserPointDetails,
+      [
+        req.user.fc_id,
+        req.user.user_id
+      ],
+      (err, data) => {
+        connection.release();
+
+        if (err) {
+          console.log(err);
+          res.json({
+            success: false,
+            msg: err
+          });
+        } else {
+          let list = [];
+          for (let index = 0; index < data.length; index++) {
+            let item = {};
+            let logs = JSON.parse(data[index].logs);
+            // let item = JSON.parse(data[index].logs);
+
+            item.edu_name = logs.edu_name;
+            // item.point_complete = data[index].point_complete;
+            // item.point_quiz = data[index].point_quiz;
+            // item.point_final = data[index].point_final;
+            // item.point_reeltime = data[index].point_reeltime;
+            // item.point_speed = data[index].point_speed;
+            // item.point_repetition = data[index].point_repetition;
+            item.point_total = data[index].point_total;
+            item.start_dt = data[index].start_dt;
+            item.end_dt = data[index].end_dt;
+
+            list.push(item);
+          }
+          res.render('point', {
+            current_path: 'point',
+            title: global.PROJ_TITLE,
+            logo: logoName,
+            logo_image: logoImageName,
+            req: req.get('origin'),
+            loggedIn: req.user,
+            header: '포인트 현황',
+            list: list
+          });
+        }
+      }
+    );
+  });
 });
 
 module.exports = router;

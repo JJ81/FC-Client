@@ -547,6 +547,33 @@ QUERY.LOG_QUIZ = {
 // 포인트 관련
 QUERY.POINT = {
 
+    // 사용자 포인트 상세내역
+  GetUserPointDetails:
+    'SELECT lup.`logs` ' +
+    '      , ((lup.`complete` * epw.`point_complete`) + ' +
+    '        (lup.`quiz_correction` * epw.`point_quiz`) + ' +
+    '        (lup.`final_correction` * epw.`point_final`) + ' +
+    '        (lup.`reeltime` * epw.`point_reeltime`) + ' +
+    '        (lup.`speed` * epw.`point_speed`) + ' +
+    '        (lup.`repetition` * epw.`point_repetition`)) AS point_total ' +
+    '     , DATE_FORMAT(lae.`start_dt`, \'%Y-%m-%d\') AS start_dt ' +
+    '     , DATE_FORMAT(lae.`end_dt`, \'%Y-%m-%d\') AS end_dt ' +
+    '  FROM `log_user_point` AS lup ' +
+    ' INNER JOIN `training_users` AS tu ' +
+    '    ON lup.`training_user_id` = tu.`id` ' +
+    ' INNER JOIN `training_edu` AS te ' +
+    '    ON tu.`training_edu_id` = te.`id` ' +
+    '   AND te.`active` = 1 ' +
+    '  LEFT JOIN `log_assign_edu` AS lae ' +
+    '    ON lae.`training_edu_id` = te.`id` ' +
+    '   AND lae.`active` = 1 ' +
+    '  LEFT JOIN `edu_point_weight` AS epw ' +
+    '    ON lup.`edu_id` = epw.`edu_id` ' +
+    '   AND epw.`id` = (SELECT MAX(`id`) FROM `edu_point_weight` WHERE `fc_id` = ? AND `edu_id` = epw.`edu_id`) ' +
+    ' WHERE lup.`user_id` = ? ' +
+    '   AND lup.`logs` IS NOT NULL ' +
+    ' ORDER BY lae.`start_dt` DESC; ',
+
   // 포인트 조회
   SEL_POINT_WEIGHT:
 		'SELECT pw.`point_complete` ' +
