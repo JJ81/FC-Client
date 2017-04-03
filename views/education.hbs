@@ -1,5 +1,43 @@
 {{> header}}
 
+{{#ifCond (isEquals group_path 'education') '&&' (isEquals current_path 'passed') }}
+<div class="search_section">
+  <div class="not-select">
+    <div class="radio">
+      <label>
+        <input type="radio"
+          name="optradio"
+          id="radio-course-title"
+          checked="true">  강의명
+        </label>
+    </div>
+    <input
+      type="search"
+      name="course-title" id="inputCourse"
+      placeholder="강의명을 입력하세요"
+      class="search_section_input"
+      autofocus autocomplete="off"
+    />
+  </div>
+  <br />
+  <div class="radio">
+    <label>
+      <input type="radio"
+        name="optradio"
+        id="radio-assign-month">
+        기간별
+      </label>
+  </div>
+  <select name="assign-month" id="selectAssignMonth" class="">
+    {{#each month_list}}
+    <option value="{{yearmonth}}">{{yearmonth}}</option>
+    {{/each}}
+  </select>
+  <br /><br />
+  <button type="button" class="btn_login" id="btnSearchCourse" data-redirect="/education/{{current_path}}">검색</button>
+</div>
+{{/ifCond}}
+
 <div class="list_section">
   {{#if courses}}
 	<ol>
@@ -25,9 +63,9 @@
 	{{/each}}
 	</ol>
   {{else}}
-  <div class="evaluation_section">
+  <!--<div class="evaluation_section">
     <h3 class="tit">{{header}}이 존재하지 않습니다.</h3>
-  </div>
+  </div>-->
   {{/if}}
 </div>
 
@@ -49,4 +87,4 @@
 </a>
 {{/ifCond}}
 
-{{> search}}
+<!--{{> search}}-->
