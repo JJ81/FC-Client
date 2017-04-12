@@ -36,7 +36,7 @@
 </head>
 
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false"
-  class="body_bg_01 {{#if loggedIn.fc_theme}}{{loggedIn.fc_theme}}{{else}}skin-green-light{{/if}}">
+  class="body_bg_01 {{theme}}">
 
   {{#if (isEquals current_path 'login')}}
       {{{body}}}
