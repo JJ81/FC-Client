@@ -358,6 +358,7 @@ QUERY.COURSE_LIST = {
     '     , cl.`type` ' +
     '     , cl.`title` ' +
     '     , cl.`quiz_group_id` ' +
+    '     , cl.`checklist_group_id` ' +
     '     , cl.`video_id` ' +
     '     , @course_id := cl.`course_id` AS course_id ' +
     '     , @order := cl.`order` AS `order` ' +
@@ -425,6 +426,22 @@ QUERY.COURSE_LIST = {
     '    ON qo.`opt_id` = q.`option_id` ' +
     ' WHERE qg.`group_id` = ? ' +
     ' ORDER BY qg.`order`, qo.`order` ',
+
+  // 특정 세션의 아이디로 체크리스트를 조회한다.
+  GetChecklistByCourseListId:
+    'SELECT c.`id` AS checklist_id ' +
+    '     , c.`item_type` ' +
+    '     , c.`item_name` ' +
+    '     , c.`item_section` ' +
+    '     , c.`sample` ' +
+    '     , cg.`order` AS checklist_order ' +
+    '     , cl.`title` ' +
+    '  FROM `course_list` AS cl ' +
+    ' INNER JOIN `checklist_group` AS cg ' +
+    '    ON cl.`checklist_group_id` = cg.`group_id` ' +
+    ' INNER JOIN `checklist` AS c ' +
+    '    ON cg.`checklist_id` = c.`id` ' +
+    ' WHERE cl.`id` = ?; ',
 
   // 정답체크 시 퀴즈에 대한 정보를 가져온다.
   // 클라이언트에서 정답체크 시 이후에 제거해야한다.

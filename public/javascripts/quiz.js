@@ -117,7 +117,8 @@ requirejs([
       if (isOk) { btn_check_answer.removeClass('blind'); } else { btn_check_answer.addClass('blind'); }
     }
 
-    btn_check_answer.on('click', function () {
+    btn_check_answer.on('click', function (e) {
+      e.preventDefault();
       checkQuizAnswer();
     });
 
@@ -204,20 +205,21 @@ requirejs([
      * 정답을 체크한다.
      */
     function checkQuizAnswer () {
+      console.log('quiz!!');
       var quizzes = $('.quiz_select');
       var answers = [];
 
       for (var index = 0; index < quizzes.length; index++) {
-        var quiz = $(quizzes[index]),
-          quiz_type = quiz.data('quiz-type'),     // 퀴즈 타입(A/B/C)
-          quiz_id = quiz.data('quiz-id'),         // 퀴즈 id
-          quiz_answer = quiz.data('quiz-answer'),  // 퀴즈 정답
-          answer = {
-            quiz_id: quiz_id,
-            quiz_type: quiz_type,
-            iscorrect: false,
-            answer: null
-          };
+        var quiz = $(quizzes[index]);
+        var quiz_type = quiz.data('quiz-type');     // 퀴즈 타입(A/B/C)
+        var quiz_id = quiz.data('quiz-id');         // 퀴즈 id
+        var quiz_answer = quiz.data('quiz-answer');  // 퀴즈 정답
+        var answer = {
+          quiz_id: quiz_id,
+          quiz_type: quiz_type,
+          iscorrect: false,
+          answer: null
+        };
 
         // 단답형
         if (quiz_type === 'A') {

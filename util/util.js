@@ -1,44 +1,24 @@
-var util ={};
 
+exports.getImageInfo = (host) => {
+  let logoImageName;
+  let logoName;
 
-
-util.objEmptyCheck = function(obj){
-  for(var key in obj){
-    if(obj[key].length ===0){
-      return false;
-    }
+  switch (host) {
+  case 'm.vodaeyewear.orangenamu.net':
+    logoImageName = 'vodaeyewear.png';
+    logoName = '보다안경원';
+    break;
+  case 'm.waffle.kosc.orangenamu.net':
+    logoImageName = 'waffle.kosc.png';
+    logoName = '와플대학';
+    break;
+  default:
+    logoImageName = 'orangenamu.png';
+    logoName = '오렌지나무시스템';
+    break;
   }
-  return true;
+  return {
+    logoImageName: logoImageName,
+    logoName: logoName
+  };
 };
-
-/*Credit / Debit 계산*/
-util.creditResult = function (currentBalance, amount) {
-  return (creditSum(Number(currentBalance), Number(amount)));
-};
-
-util.debitResult = function (currentBalance, amount) {
-  return (debitSum(Number(currentBalance), Number(amount)));
-};
-
-function creditSum(currentBalance, amount) {
-
-  var newBalance = Number(currentBalance + amount);
-
-  if (newBalance < 0) {
-    return false;
-  } else {
-    return newBalance;
-  }
-}
-
-function debitSum(currentBalance, amount) {
-
-  var newBalance = Number(currentBalance - amount);
-
-  if (newBalance < 0) {
-    return false;
-  } else {
-    return newBalance;
-  }
-}
-module.exports = util;

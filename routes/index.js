@@ -20,6 +20,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const PointService = require('../service/PointService');
 const pool = require('../commons/db_conn_pool');
+const util = require('../util/util');
 
 // 로그인이 성공하면 사용자 정보를 Session 에 저장
 passport.serializeUser((user, done) => {
@@ -47,8 +48,8 @@ passport.use(new LocalStrategy({
           return done(null, false);
         } else {
             // 사용자 포인트 조회
-          let user_point = 0;
-          let user_info = {
+          // let userPoint = 0;
+          let userInfo = {
             'user_id': data[0].id,
             'fc_id': data[0].fc_id,
             'name': data[0].name,
@@ -60,8 +61,8 @@ passport.use(new LocalStrategy({
             // 교육생 포인트를 사이드탭에 표시하기 위함.
           PointService.userpoint(connection, { user_id: data[0].id, fc_id: data[0].fc_id }, (err, data) => {
             if (err) throw err;
-            user_info.point = data.point_total;
-            return done(null, user_info);
+            userInfo.point = data.point_total;
+            return done(null, userInfo);
           });
         }
       } else {
@@ -74,21 +75,24 @@ passport.use(new LocalStrategy({
 
 // 로그인 화면
 router.get('/login', (req, res) => {
-  const _host_name = req.headers.host;
-  let _logo_name = null;
-  let _logo_image_name = null;
+  // const hostName = req.headers.host;
+  // let logoName = null;
+  // let logoImageName = null;
 
-  _logo_name = _host_name.split('.')[1];
-  _logo_name = _logo_name === undefined ? 'orangenamu' : _logo_name;
-  _logo_image_name = _logo_name + '.png';
-  global.PROJ_TITLE = _logo_name;
+  // console.log(util.getImageInfo());
+
+  // logoName = hostName.split('.')[1];
+  // logoName = logoName === undefined ? 'orangenamu' : logoName;
+  // logoImageName = logoName + '.png';
+  const { logoImageName, logoName } = util.getImageInfo(req.header.host);
+  global.PROJ_TITLE = logoName;
 
   if (req.user == null) {
     res.render('login', {
       current_path: 'login',
-      title: PROJ_TITLE,
-      logo: _logo_name,
-      logo_image: _logo_image_name
+      title: global.PROJ_TITLE,
+      logo: logoName,
+      logo_image: logoImageName
     });
   } else {
     res.redirect('/education/current');
