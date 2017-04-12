@@ -84,7 +84,8 @@ router.get('/login', (req, res) => {
   // logoName = hostName.split('.')[1];
   // logoName = logoName === undefined ? 'orangenamu' : logoName;
   // logoImageName = logoName + '.png';
-  const { logoImageName, logoName } = util.getImageInfo(req.header.host);
+  console.log(req.header.host);
+  const { logoImageName, logoName } = util.getImageInfo('req.header.host');
   global.PROJ_TITLE = logoName;
 
   if (req.user == null) {
