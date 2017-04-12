@@ -87,3 +87,7 @@ hbs.registerHelper('truncate', function (str, len) {
   }
   return str;
 });
+
+hbs.registerHelper('addOneForIndex', function (num) {
+  return parseInt(num) + 1;
+});

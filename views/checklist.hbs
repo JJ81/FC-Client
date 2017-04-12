@@ -2,6 +2,56 @@
 
 <section id="checklist">
   {{#each contents}}
-
+    <br>
+    <div class="checklist">
+      <strong>{{addOneForIndex @key}}. {{item_name}}</strong>
+    </div>
+    <br>
+    {{#if sample}}
+    {{#ifCond item_type '!==' 'write' }}
+    <table class="table_checklist" class="table no-margin table-bordered table-striped">
+      <tbody>
+        <tr>
+    {{#each sample}}
+          <td><label>{{this}}</label></td>
+    {{/each}}
+        </tr>
+        <tr>
+    {{#each sample}}
+    {{#if (isEquals ../item_type 'select')}}
+          <td><label><input type="radio" name="sample-{{../../checklist_id}}" value="{{this}}"></label></td>
+    {{else if (isEquals ../../item_type 'choose')}}
+          <td><label><input type="checkbox" name="sample-{{../../../checklist_id}}" value="{{this}}"></label></td>
+    {{/if}}
+    {{/each}}
+        </tr>
+    </table>
+    {{/ifCond}}
+    {{else}}
+    <textarea cols="30" rows="5"></textarea>
+    {{/if}}
   {{/each}}
 </section>
+
+<br /><br /><br />
+
+<!-- 모든 문제에 답을 넣어야 정답확인 버튼이 활성화된다.-->
+<a href="#" id="btn_check_answers" class="{{#if (isEquals prev_yn 0)}}blind{{/if}}">
+  <div class="btn_play check_answers">
+    <span class="ico ico_play"></span>
+    <span class="txt">제출하기</span>
+  </div>
+</a>
+
+<!-- 정답을 확인할 후에 다음으로 버튼이 활성화된다. -->
+<a href="{{next_url}}" id="btn_play_next" class="blind"
+    data-training-user-id="{{training_user_id}}"
+    data-course-id="{{course_id}}"
+    data-course-list-id="{{course_list_id}}"
+    data-course-list-type="{{course_list_type}}"
+>
+  <div class="btn_play btn-orange">
+    <span class="ico ico_play"></span>
+    <span class="txt">다음으로</span>
+  </div>
+</a>

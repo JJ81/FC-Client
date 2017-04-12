@@ -35,7 +35,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
     // results[0]
     (callback) => {
       connection.query(QUERY.COURSE_LIST.SEL_INDEX, [trainingUserId, courseListId], (err, data) => {
-        console.log(data);
+        // console.log(data);
         courseList = data[0];
         callback(err, data);
       });
@@ -50,7 +50,14 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         });
         break;
       case 'CHECKLIST':
-        connection.query(QUERY.COURSE_LIST.GetChecklistByCourseListId, [courseList.check_group_id], (err, data) => {
+        connection.query(QUERY.COURSE_LIST.GetChecklistByCourseListId, [courseList.id], (err, data) => {
+          if (data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+              if (data[i].item_type !== 'write' && data[i].sample !== '') {
+                data[i].sample = data[i].sample.split(',');
+              }
+            }
+          }
           callback(err, data);
         });
         break;
