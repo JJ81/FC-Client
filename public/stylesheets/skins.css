@@ -35,7 +35,7 @@
 
 .skin-red-light .logo_section{
 	border-bottom: 1px solid #1e2832;
-	padding: 10px 10px 10px 10px;
+	padding: 10px 10px 10px 14px;
 	background: #FF9200;
 	position: relative;
 	height: 80px;
@@ -118,7 +118,7 @@
 }
 .skin-yellow-light .logo_section{
 	border-bottom: 1px solid #1e2832;
-	padding: 10px 10px 10px 10px;
+	padding: 10px 10px 10px 14px;
 	background: #FF9200;
 	position: relative;
 	height: 80px;
@@ -201,7 +201,7 @@
 }
 .skin-green-light .logo_section{
 	border-bottom: 1px solid #1e2832;
-	padding: 10px 10px 10px 10px;
+	padding: 10px 10px 10px 14px;
 	background: #FF9200;
 	position: relative;
 	height: 80px;
