@@ -610,24 +610,22 @@
 	top: 5px;
 }
 
-.logo_section{
-	border-bottom: 1px solid #1e2832;
-	padding: 10px 10px 10px 100px;
-	background: #FF9200; /*#23282c;*/
-	position: relative;
-	height: 80px;
-}
-
 .img_logo{
-	position: absolute;
-	top: 10px;
+	/*position: relative;*/
+	/*top: 10px;*/
 	left: 10px;
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0px 5px;
 }
 
 .logo-txt{
 	color :#fff;
 	position: relative;
-	top: 2px;
+	/*top: 2px;*/
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0px 16px;
 }
 
 .centered {

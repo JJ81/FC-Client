@@ -1,12 +1,12 @@
 <nav id="navigation" class="blind">
   <div class="logo_section">
-    <div class="middleimage">
-    <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" width="80" class="img_logo" />
+    <div class="img_logo">
+      <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" width="80" />
     </div>
-    <span class="logo-txt">오렌지나무시스템 <br />
+    <div class="logo-txt">{{logoName}} <br />
       <small>{{ loggedIn.name }} 님, 반갑습니다.</small> <br />
       <!--<small>포인트 : {{#if loggedIn.point }}{{loggedIn.point}}{{else}}없음{{/if}}</small>-->
-    </span>
+    </div>
   </div>
 
   <ol class="nav_list">

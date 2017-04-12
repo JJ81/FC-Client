@@ -117,10 +117,11 @@
 }
 .skin-yellow-light .logo_section{
 	border-bottom: 1px solid #1e2832;
-	padding: 10px 10px 10px 100px;
+	padding: 10px 10px 10px 10px;
 	background: #FF9200;
 	position: relative;
 	height: 80px;
+  display: table;
 }
 
 .skin-yellow-light .btn_login{
