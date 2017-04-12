@@ -16,7 +16,7 @@ exports.getLogoInfo = (req, res, next) => {
     theme = 'skin-red-light';
     break;
   default:
-    logoImageName = 'vodaeyewear.png';
+    logoImageName = 'orangenamu.png';
     logoName = '오렌지나무시스템';
     theme = 'skin-yellow-light';
     break;
