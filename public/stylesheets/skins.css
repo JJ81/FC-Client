@@ -40,7 +40,7 @@
 	position: relative;
 	height: 80px;
   display: table;
-  width: 230px;
+  width: 226px;
 }
 
 .skin-red-light .btn_login{
@@ -124,7 +124,7 @@
 	position: relative;
 	height: 80px;
   display: table;
-  width: 230px;
+  width: 226px;
 }
 
 .skin-yellow-light .btn_login{
@@ -208,7 +208,7 @@
 	position: relative;
 	height: 80px;
   display: table;
-  width: 230px;
+  width: 226px;
 }
 .skin-green-light .btn_login{
 	background: #42b24c; /* #4baf4d;*/
