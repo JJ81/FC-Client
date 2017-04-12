@@ -35,10 +35,11 @@
 
 .skin-red-light .logo_section{
 	border-bottom: 1px solid #1e2832;
-	padding: 10px 10px 10px 100px;
-	background: #d73925;
+	padding: 10px 10px 10px 10px;
+	background: #FF9200;
 	position: relative;
 	height: 80px;
+  display: table;
 }
 
 .skin-red-light .btn_login{
@@ -200,10 +201,11 @@
 }
 .skin-green-light .logo_section{
 	border-bottom: 1px solid #1e2832;
-	padding: 10px 10px 10px 100px;
-	background: #23282c;
+	padding: 10px 10px 10px 10px;
+	background: #FF9200;
 	position: relative;
 	height: 80px;
+  display: table;
 }
 .skin-green-light .btn_login{
 	background: #42b24c; /* #4baf4d;*/
