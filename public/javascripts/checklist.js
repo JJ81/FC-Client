@@ -124,7 +124,7 @@ function ($) {
         if (!res.success) {
           console.error(res.msg);
         } else {
-          window.alert('성실히 답변해주셔서 감사드립니다.');
+          window.alert('성실히 답변해주셔서 감사합니다');
           // 정답체크 완료 시 정답확인: 비활성화, 다음 버튼: 활성화
           $btnSumitAnswers.addClass('blind');
           $btnPlay.removeClass('blind');
@@ -132,7 +132,7 @@ function ($) {
         }
       });
     } else {
-      window.alert('작성하지 않은 항목이 감사합니다');
+      window.alert('작성하지 않은 항목이 존재합니다');
     }
   });
 });
