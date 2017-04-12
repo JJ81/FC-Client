@@ -3,20 +3,20 @@
 <section id="checklist">
   {{#each contents}}
     <br>
-    <div class="checklist">
+    <div class="checklist" data-id="{{checklist_id}}">
       <strong>{{addOneForIndex @key}}. {{item_name}}</strong>
     </div>
     <br>
     {{#if sample}}
     {{#ifCond item_type '!==' 'write' }}
-    <table class="table_checklist" class="table no-margin table-bordered table-striped">
+    <table class="table_checklist checklist-item" data-id="{{../checklist_id}}" data-type="{{../item_type}}">
       <tbody>
         <tr>
     {{#each sample}}
           <td><label>{{this}}</label></td>
     {{/each}}
         </tr>
-        <tr>
+        <tr class="sample">
     {{#each sample}}
     {{#if (isEquals ../item_type 'select')}}
           <td><label><input type="radio" name="sample-{{../../checklist_id}}" value="{{this}}"></label></td>
@@ -28,7 +28,7 @@
     </table>
     {{/ifCond}}
     {{else}}
-    <textarea cols="30" rows="5"></textarea>
+    <textarea cols="30" rows="5" class="checklist-item" data-id="{{../checklist_id}}" data-type="{{../item_type}}"></textarea>
     {{/if}}
   {{/each}}
 </section>
@@ -36,7 +36,7 @@
 <br /><br /><br />
 
 <!-- 모든 문제에 답을 넣어야 정답확인 버튼이 활성화된다.-->
-<a href="#" id="btn_check_answers" class="{{#if (isEquals prev_yn 0)}}blind{{/if}}">
+<a href="#" id="btn_submit_answers" class="{{#if (isEquals prev_yn 0)}}blind{{/if}}">
   <div class="btn_play check_answers">
     <span class="ico ico_play"></span>
     <span class="txt">제출하기</span>
@@ -48,7 +48,7 @@
     data-training-user-id="{{training_user_id}}"
     data-course-id="{{course_id}}"
     data-course-list-id="{{course_list_id}}"
-    data-course-list-type="{{course_list_type}}"
+    data-checklist-group-id="{{checklist_group_id}}"
 >
   <div class="btn_play btn-orange">
     <span class="ico ico_play"></span>

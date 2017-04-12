@@ -13,6 +13,7 @@ var course = require('./routes/course'); // 강의
 var session = require('./routes/session'); // 세션
 var video = require('./routes/video'); // 비디오
 var quiz = require('./routes/quiz'); // 퀴즈/파이널
+var checklist = require('./routes/checklist'); // 체크리스트
 var evaluate = require('./routes/evaluate'); // 평가
 var complete = require('./routes/complete'); // 완료
 var profile = require('./routes/profile'); // 정보수정
@@ -93,6 +94,7 @@ app.use('/course', course);
 app.use('/session', session);
 app.use('/video', video);
 app.use('/quiz', quiz);
+app.use('/checklist', checklist);
 app.use('/evaluate', evaluate);
 app.use('/complete', complete);
 app.use('/profile', profile);

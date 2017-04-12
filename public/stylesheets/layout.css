@@ -790,6 +790,11 @@ table {
   background-color: cornsilk;
 }
 
+.alert{
+  padding: 20px 10px 20px 10px;
+  background-color: #FE8484;
+}
+
 textarea {
   width: 100%;
   border: 1px solid #ddd;

@@ -561,6 +561,13 @@ QUERY.LOG_QUIZ = {
 
 };
 
+// 로깅
+QUERY.LOG_CHECKLIST = {
+  InsertUserAnswers:
+    'INSERT INTO `log_user_checklist` (`user_id`, `training_user_id`, `course_id`, `course_list_id`, `checklist_id`, `answer`, `created_dt`) ' +
+    'VALUES (?, ?, ?, ?, ?, ?, NOW()); '
+};
+
 // 포인트 관련
 QUERY.POINT = {
 

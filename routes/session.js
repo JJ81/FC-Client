@@ -203,10 +203,11 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         //   prev_yn: courseList.prev_yn,
         //   course_list_type: courseList.type
         // });
-        returnData.current_url = 'checklist';
+        returnData.current_path = 'checklist';
         returnData.contents = results[1];
         returnData.header = courseList.title;
         returnData.next_url = nextUrl;
+        returnData.checklist_group_id = courseList.checklist_group_id;
         res.render('checklist', returnData);
       }
     }
