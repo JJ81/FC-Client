@@ -1,29 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const mysqlDbc = require('../commons/db_conn')();
-const connection = mysqlDbc.init();
+// const mySqlDbc = require('../commons/db_conn')();
+// const connection = mySqlDbc.init();
 const QUERY = require('../database/query');
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-};
-require('../commons/helpers');
 const pool = require('../commons/db_conn_pool');
 const async = require('async');
-
+const util = require('../util/util');
 // 이달의/지난 교육과정
-router.get(['/current', '/passed'], isAuthenticated, (req, res) => {
+router.get(['/current', '/passed'], util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   const {searchby, searchtext} = req.query;
-  const hostName = req.headers.host;
-  let logoName = null;
-  let logoImageName = null;
-
-  logoName = hostName.split('.')[1];
-  logoName = logoName === undefined ? 'orangenamu' : logoName;
-  logoImageName = logoName + '.png';
-
   // 이달/지난 교육의 경로를 세션에 저장한다.
   req.user.root_path = req.originalUrl;
 
@@ -122,9 +107,6 @@ router.get(['/current', '/passed'], isAuthenticated, (req, res) => {
             group_path: 'education',
             current_path: currentPath,
             current_url: req.url,
-            title: global.PROJ_TITLE,
-            logo: logoName,
-            logo_image: logoImageName,
             req: req.get('origin'),
             loggedIn: req.user,
             header: header,

@@ -1,14 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var mysqlDbc = require('../commons/db_conn')();
-var connection = mysqlDbc.init();
-var QUERY = require('../database/query');
-var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
-};
-require('../commons/helpers');
-var async = require('async');
+const express = require('express');
+const router = express.Router();
+const mysqlDbc = require('../commons/db_conn')();
+const connection = mysqlDbc.init();
+const QUERY = require('../database/query');
+const async = require('async');
+const util = require('../util/util');
 
 /**
  * 비디오 환경설정값을 리턴한다.
@@ -17,7 +13,7 @@ var async = require('async');
  * - 비디오 시청 종료 후 눌러야 하는 팝업이 떠있는 시간.
  * - 누르지 않을 경우 비디오 학습이력 초기화 한다.
  */
-router.get('/settings', isAuthenticated, function (req, res) {
+router.get('/settings', util.isAuthenticated, (req, res, next) => {
   return res.json({
     success: true,
     interval: 5, // TODO: 서비스 오픈 전에 적절한 시간으로 변경할 것.
@@ -27,8 +23,8 @@ router.get('/settings', isAuthenticated, function (req, res) {
 
 // url: /api/v1/log/video/playtime
 // 비디오 재생시간(play_seconds, 재생중 매 5초 마다) 기록
-router.post('/log/playtime', isAuthenticated, function (req, res) {
-  var inputs = {
+router.post('/log/playtime', util.isAuthenticated, (req, res, next) => {
+  const inputs = {
     user_id: req.user.user_id,
     training_user_id: req.body.training_user_id,
     video_id: req.body.video_id,
@@ -36,10 +32,10 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
     video_duration: req.body.video_duration,
     currenttime: req.body.currenttime
   };
-  var videoLogId = null; // log_user_video 테이블의 id
-  var totalPlayedSeconds = null; // 총 재생시간
+  let videoLogId = null; // log_user_video 테이블의 id
+  let totalPlayedSeconds = null; // 총 재생시간
 
-  connection.beginTransaction(function (err) {
+  connection.beginTransaction((err) => {
     // 트렌젝션 오류 발생
     if (err) {
       res.json({
@@ -50,7 +46,7 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
 
     // async.series 쿼리 시작
     async.series([
-      function (callback) {
+      (callback) => {
         // 오늘일자의 로그가 없을 경우 생성
         connection.query(QUERY.LOG_VIDEO.INS_VIDEO, [
           inputs.user_id,
@@ -59,23 +55,23 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
           inputs.training_user_id,
           inputs.video_id
         ],
-          function (err, data) {
+          (err, data) => {
             // console.log(query.sql);
             callback(err, data);
           }
         );
       },
-      function (callback) {
+      (callback) => {
         // log id를 구한다.
         connection.query(QUERY.LOG_VIDEO.SEL_MAXID, [
           inputs.user_id,
           inputs.video_id
-        ], function (err, data) {
+        ], (err, data) => {
           videoLogId = data[0].id;
           callback(err, data);
         });
       },
-      function (callback) {
+      (callback) => {
         // 재생시간을 수정한다.
         connection.query(QUERY.LOG_VIDEO.UPD_VIDEO_PLAYTIME, [
           inputs.played_seconds,
@@ -83,38 +79,37 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
           inputs.currenttime,
           videoLogId
         ],
-          function (err, data) {
+          (err, data) => {
             callback(err, data);
           }
         );
       },
-      function (callback) {
+      (callback) => {
         // 재생시간을 조회한다.
         connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
           inputs.user_id,
           inputs.training_user_id,
           inputs.video_id
-        ], function (err, data) {
+        ], (err, data) => {
           totalPlayedSeconds = data[0].total_played_seconds;
           callback(err, data);
         });
       }
     ],
     // async endpoint
-    function (err, results) {
+    (err, results) => {
       if (err) {
-        return connection.rollback(function () {
+        return connection.rollback(() => {
           res.json({
             success: false,
             msg: err
           });
         });
       } else {
-        connection.commit(function (err) {
+        connection.commit((err) => {
           // 커밋 오류 발생
           if (err) {
-            return connection.rollback(function () {
-              // console.log('comiit rollback');
+            return connection.rollback(() => {
               res.json({
                 success: false,
                 msg: err
@@ -122,7 +117,6 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
             });
           }
           // 커밋 성공
-          // console.log('commit success');
           res.json({
             success: true,
             total_played_seconds: totalPlayedSeconds
@@ -138,7 +132,7 @@ router.post('/log/playtime', isAuthenticated, function (req, res) {
 // 1. 일시정지
 // 2. 영상이 끝났을 때
 // 3. 재생 중 다음으로 넘어가는 경우
-router.post('/log/endtime', isAuthenticated, function (req, res) {
+router.post('/log/endtime', util.isAuthenticated, (req, res, next) => {
   var inputs = {
     user_id: req.user.user_id,
     video_id: req.body.video_id,
@@ -146,7 +140,7 @@ router.post('/log/endtime', isAuthenticated, function (req, res) {
   };
   var videoLogId = null; // log_user_video 테이블의 id
 
-  connection.beginTransaction(function (err) {
+  connection.beginTransaction((err) => {
     // 트렌젝션 오류 발생
     if (err) {
       return res.json({
@@ -157,48 +151,47 @@ router.post('/log/endtime', isAuthenticated, function (req, res) {
 
     // async.series 쿼리 시작
     async.series([
-      function (callback) {
+      (callback) => {
         // log id를 구한다.
         connection.query(QUERY.LOG_VIDEO.SEL_MAXID, [
           inputs.user_id,
           inputs.video_id
-        ], function (err, data) {
+        ], (err, data) => {
           videoLogId = data[0].id;
           callback(err, data);
         });
       },
-      function (callback) {
+      (callback) => {
         // 종료일시를 수정한다.
         connection.query(QUERY.LOG_VIDEO.UPD_VIDEO_ENDTIME, [
           videoLogId
         ],
-          function (err, data) {
+          (err, data) => {
             callback(err, data);
           }
         );
       }
     ],
-    function (err, results) {
+    (err, results) => {
       if (err) {
         // 쿼리 오류 발생
-        return connection.rollback(function () {
+        return connection.rollback(() => {
           res.json({
             success: false,
             msg: err
           });
         });
       } else {
-        connection.commit(function (err) {
+        connection.commit((err) => {
           // 커밋 오류 발생
           if (err) {
-            return connection.rollback(function () {
+            return connection.rollback(() => {
               res.json({
                 success: false,
                 msg: err
               });
             });
           }
-
           // 커밋 성공
           res.json({
             success: true
@@ -213,7 +206,7 @@ router.post('/log/endtime', isAuthenticated, function (req, res) {
  * 로그를 삭제한다.
  * 비디오 시청 완료 후, 정해신 시간 내 다음 스텝으로 넘어가지 않을 경우 초기화
  */
-router.delete('/log', isAuthenticated, function (req, res) {
+router.delete('/log', util.isAuthenticated, (req, res, next) => {
   var inputs = {
     user_id: req.user.user_id,
     video_id: req.query.video_id
@@ -222,20 +215,20 @@ router.delete('/log', isAuthenticated, function (req, res) {
 
   async.series([
     // 오늘의 마지막 비디오 로그 아이디를 구한다.
-    function (callback) {
-      connection.query(QUERY.LOG_VIDEO.SEL_MAXID, [inputs.user_id, inputs.video_id], function (err, data) {
+    (callback) => {
+      connection.query(QUERY.LOG_VIDEO.SEL_MAXID, [inputs.user_id, inputs.video_id], (err, data) => {
         videoLogId = data[0].id;
         callback(err, data); // results[0]
       });
     },
     // 위에서 구한 로그 아이디로 비디오 로그를 삭제한다.
-    function (callback) {
-      connection.query(QUERY.LOG_VIDEO.DELETE_VIDEO_LOG, [videoLogId], function (err, data) {
+    (callback) => {
+      connection.query(QUERY.LOG_VIDEO.DELETE_VIDEO_LOG, [videoLogId], (err, data) => {
         callback(err, data); // results[1]
       });
     }
   ],
-  function (err, results) {
+  (err, results) => {
     if (err) {
       // 쿼리 실패
       return res.json({

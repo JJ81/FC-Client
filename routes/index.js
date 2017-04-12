@@ -4,12 +4,6 @@ const router = express.Router();
 const mySqlDbc = require('../commons/db_conn')();
 const connection = mySqlDbc.init();
 const QUERY = require('../database/query');
-let isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-};
 require('../commons/helpers');
 
 // DB 연결 테스트
@@ -74,26 +68,10 @@ passport.use(new LocalStrategy({
 ));
 
 // 로그인 화면
-router.get('/login', (req, res) => {
-  // const hostName = req.headers.host;
-  // let logoName = null;
-  // let logoImageName = null;
-
-  // console.log(util.getImageInfo());
-
-  // logoName = hostName.split('.')[1];
-  // logoName = logoName === undefined ? 'orangenamu' : logoName;
-  // logoImageName = logoName + '.png';
-  console.log(req.headers.host);
-  const { logoImageName, logoName } = util.getImageInfo(req.headers.host);
-  global.PROJ_TITLE = logoName;
-
+router.get('/login', util.getLogoInfo, (req, res, next) => {
   if (req.user == null) {
     res.render('login', {
-      current_path: 'login',
-      title: global.PROJ_TITLE,
-      logo: logoName,
-      logo_image: logoImageName
+      current_path: 'login'
     });
   } else {
     res.redirect('/education/current');
@@ -110,25 +88,17 @@ router.post('/login',
   });
 
 // 로그아웃
-router.get('/logout', isAuthenticated, (req, res) => {
+router.get('/logout', util.isAuthenticated, (req, res) => {
   req.logout();
   res.redirect('/');
 });
 
 // 로그인 상태일 경우, 이달의 교육과정 메뉴로 이동
-router.get('/', isAuthenticated, (req, res) => {
+router.get('/', util.isAuthenticated, (req, res) => {
   res.redirect('/education/current');
 });
 
-router.get('/point', isAuthenticated, (req, res) => {
-  var hostName = req.headers.host;
-  var logoName = null;
-  var logoImageName = null;
-
-  logoName = hostName.split('.')[1];
-  logoName = logoName === undefined ? 'orangenamu' : logoName;
-  logoImageName = logoName + '.png';
-
+router.get('/point', util.isAuthenticated, util.getLogoInfo, (req, res) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
     connection.query(QUERY.POINT.GetUserPointDetails,
@@ -167,9 +137,6 @@ router.get('/point', isAuthenticated, (req, res) => {
           }
           res.render('point', {
             current_path: 'point',
-            title: global.PROJ_TITLE,
-            logo: logoName,
-            logo_image: logoImageName,
             req: req.get('origin'),
             loggedIn: req.user,
             header: '포인트 현황',

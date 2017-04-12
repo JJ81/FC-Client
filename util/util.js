@@ -1,9 +1,9 @@
 
-exports.getImageInfo = (host) => {
+exports.getLogoInfo = (req, res, next) => {
   let logoImageName;
   let logoName;
 
-  switch (host) {
+  switch (req.headers.host) {
   case 'm.vodaeyewear.orangenamu.net':
     logoImageName = 'vodaeyewear.png';
     logoName = '보다안경원';
@@ -17,8 +17,19 @@ exports.getImageInfo = (host) => {
     logoName = '오렌지나무시스템';
     break;
   }
-  return {
-    logoImageName: logoImageName,
-    logoName: logoName
-  };
+  res.locals.logoImageName = logoImageName;
+  res.locals.logoName = logoName;
+
+  return next();
+  // return {
+  //   logoImageName: logoImageName,
+  //   logoName: logoName
+  // };
+};
+
+exports.isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
 };

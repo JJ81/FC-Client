@@ -3,47 +3,32 @@ const router = express.Router();
 const mysqlDbc = require('../commons/db_conn')();
 const connection = mysqlDbc.init();
 const QUERY = require('../database/query');
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-};
-require('../commons/helpers');
 const async = require('async');
 const CourseService = require('../service/CourseService');
 const PointService = require('../service/PointService');
+const util = require('../util/util');
 
 /**
  * 세션 학습시작
  */
-router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, (req, res) => {
-  const hostName = req.headers.host;
+router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res) => {
   const {
     training_user_id: trainingUserId,
     course_id: courseId,
     course_list_id: courseListId
   } = req.params;
-  let logoName = null;
-  let logoImageName = null;
-  let courseList = null;
-
-  logoName = hostName.split('.')[1];
-  logoName = logoName === undefined ? 'orangenamu' : logoName;
-  logoImageName = logoName + '.png';
 
   let returnData = {
     group_path: 'contents',
     current_url: req.url,
-    title: global.PROJ_TITLE,
-    logo: logoName,
-    logo_image: logoImageName,
     host: req.get('origin'),
     loggedIn: req.user,
     training_user_id: trainingUserId,
     course_id: courseId,
     course_list_id: courseListId
   };
+
+  let courseList;
 
   async.series([
     // 강의정보 조회
@@ -223,7 +208,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', isAuthenticated, (re
 
 // 세션 시작일시를 기록한다.
 // url: /api/v1/log/session/starttime
-router.post('/log/starttime', isAuthenticated, (req, res) => {
+router.post('/log/starttime', util.isAuthenticated, (req, res) => {
   const inputs = {
     user_id: req.user.user_id,
     training_user_id: parseInt(req.body.training_user_id),
@@ -258,7 +243,7 @@ router.post('/log/starttime', isAuthenticated, (req, res) => {
     }
   ],
   (err, results) => {
-    var hadEnded = false; // 세션 종료 여부
+    let hadEnded = false; // 세션 종료 여부
     if (results[0][0]) { hadEnded = (results[0][0].end_dt !== null); }
 
     if (err) {
@@ -281,8 +266,8 @@ router.post('/log/starttime', isAuthenticated, (req, res) => {
  * 세션 시작일시를 기록한다.
  * 포인트를 갱신한다. V
  */
-router.post('/log/endtime', isAuthenticated, (req, res) => {
-  var _inputs = {
+router.post('/log/endtime', util.isAuthenticated, (req, res) => {
+  const _inputs = {
     user_id: req.user.user_id,
     training_user_id: parseInt(req.body.training_user_id),
     course_id: parseInt(req.body.course_id),
@@ -307,6 +292,9 @@ router.post('/log/endtime', isAuthenticated, (req, res) => {
         PointService.save(connection,
           { user: req.user, training_user_id: _inputs.training_user_id },
           (err, data) => {
+            if (err) {
+              console.log(err);
+            }
             res.json({
               success: true
             });
@@ -318,8 +306,8 @@ router.post('/log/endtime', isAuthenticated, (req, res) => {
 });
 
 // 세션 로그를 삭제한다/
-router.delete('/log', isAuthenticated, (req, res) => {
-  var inputs = {
+router.delete('/log', util.isAuthenticated, (req, res) => {
+  const inputs = {
     user_id: req.user.user_id,
     training_user_id: req.query.training_user_id,
     course_list_id: req.query.course_list_id
@@ -332,13 +320,13 @@ router.delete('/log', isAuthenticated, (req, res) => {
   ],
     (err, data) => {
       if (err) {
-			// 쿼리 실패
+        // 쿼리 실패
         res.json({
           success: false,
           msg: err
         });
       } else {
-			// 쿼리 성공
+        // 쿼리 성공
         res.json({
           success: true
         });
