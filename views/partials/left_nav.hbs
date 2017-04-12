@@ -1,43 +1,45 @@
 <nav id="navigation" class="blind">
-    <div class="logo_section">
-        <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" width="80" class="img_logo" />
-        <span class="logo-txt">오렌지나무시스템 <br />
-          <small>{{ loggedIn.name }} 님, 반갑습니다.</small> <br />
-          <!--<small>포인트 : {{#if loggedIn.point }}{{loggedIn.point}}{{else}}없음{{/if}}</small>-->
-        </span>
+  <div class="logo_section">
+    <div class="middleimage">
+    <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" width="80" class="img_logo" />
     </div>
+    <span class="logo-txt">오렌지나무시스템 <br />
+      <small>{{ loggedIn.name }} 님, 반갑습니다.</small> <br />
+      <!--<small>포인트 : {{#if loggedIn.point }}{{loggedIn.point}}{{else}}없음{{/if}}</small>-->
+    </span>
+  </div>
 
-    <ol class="nav_list">
-        <li>
-            <a href="/education/current">
-                <span class="txt">이달의 교육과정</span>
-            </a>
-        </li>
-        <li>
-            <a href="/education/passed">
-                <span class="txt">지난 교육과정</span>
-            </a>
-        </li>
-        <li>
-            <a href="/point">
-                <span class="txt">포인트 현황</span>
-            </a>
-        </li>
-        <li>
-            <a href="/profile">
-                <span class="txt">정보수정</span>
-            </a>
-        </li>
-        <li>
-            <a href="/logout">
-                <span class="txt">로그아웃</span>
-            </a>
-        </li>
-    </ol>
+  <ol class="nav_list">
+    <li>
+      <a href="/education/current">
+        <span class="txt">이달의 교육과정</span>
+      </a>
+    </li>
+    <li>
+      <a href="/education/passed">
+        <span class="txt">지난 교육과정</span>
+      </a>
+    </li>
+    <li>
+      <a href="/point">
+        <span class="txt">포인트 현황</span>
+      </a>
+    </li>
+    <li>
+      <a href="/profile">
+        <span class="txt">정보수정</span>
+      </a>
+    </li>
+    <li>
+      <a href="/logout">
+        <span class="txt">로그아웃</span>
+      </a>
+    </li>
+  </ol>
 
-    <div class="img-container">
-      <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" width="80" class="" />
-    </div>
+  <div class="img-container">
+    <img src="/static/images/logo/{{logoImageName}}" alt="{{logo}}" width="80" class="" />
+  </div>
 </nav>
 
 <div id="bg_screen" class="bg_screen blind"></div>
