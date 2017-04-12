@@ -34,7 +34,9 @@
 }
 
 .frm_login .img_lg{
-	width: 100%;
+	width: 50%;
+  display: block;
+  margin: 0 auto;
 }
 
 .txt_input{
@@ -684,11 +686,13 @@
 }
 
 .img-container img {
-    position: relative;
-    left: 0;
-    top: 0;
+    /*position: relative;*/
+    /*left: 0;*/
+    /*top: 0;*/
     width: 100%;
+    max-width: 90%;
     height: auto;
+    padding: 10px 10px 10px 10px;
     opacity: 0.6;
 }
 
