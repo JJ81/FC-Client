@@ -4,7 +4,7 @@ const router = express.Router();
 const mySqlDbc = require('../commons/db_conn')();
 const connection = mySqlDbc.init();
 const QUERY = require('../database/query');
-require('../commons/helpers');
+// require('../commons/helpers');
 
 // DB 연결 테스트
 // mysql_dbc.test_open(connection);
