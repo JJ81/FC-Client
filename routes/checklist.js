@@ -37,17 +37,17 @@ router.post('/submit', util.isAuthenticated, (req, res, next) => {
           return startIndex <= endIndex;
         },
         (callback) => {
-          let q = connection.query(QUERY.LOG_CHECKLIST.InsertUserAnswers,
+          connection.query(QUERY.LOG_CHECKLIST.InsertUserAnswers,
             [
               req.user.user_id,
               trainingUserId,
+              req.user.edu_id,
               courseId,
               courseListId,
               userAnswers[startIndex].id,
               userAnswers[startIndex].answer
             ],
             (err, data) => {
-              // console.log(q.sql);
               if (err) {
                 console.log(err);
               }

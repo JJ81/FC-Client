@@ -90,7 +90,7 @@ function ($) {
       default:
         var str = $(this).find('tr.sample').find('td').find('input:checked').map(function () {
           return $(this).val();
-        }).get().join();
+        }).get().join(';');
 
         if (str === '') {
           inputIsValid = false;

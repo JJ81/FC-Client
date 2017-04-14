@@ -80,8 +80,8 @@ exports.save = (_connection, _data, _callback) => {
           (err, result) => {
             console.log(q.sql);
             logs.edu_name = result[0].edu_name;
-            logs.edu_start_dt = result[0].start_dt;
-            logs.edu_end_dt = result[0].end_dt;
+            // logs.edu_start_dt = result[0].start_dt;
+            // logs.edu_end_dt = result[0].end_dt;
             callback(err, null);
           }
         );
