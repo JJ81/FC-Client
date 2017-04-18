@@ -11,7 +11,7 @@ exports.getLogoInfo = (req, res, next) => {
     theme = 'skin-green-light';
     break;
   case 'm.waffle.kosc.orangenamu.net':
-    logoImageName = 'waffle.kosc.png';
+    logoImageName = 'waffle-kosc.png';
     logoName = '와플대학';
     theme = 'skin-red-light';
     break;
