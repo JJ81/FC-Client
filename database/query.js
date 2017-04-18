@@ -9,7 +9,7 @@ QUERY.AUTH = {
   // 사용자 정보
   SEL_INFO:
     'SELECT u.`id`, u.`name`, u.`email`, u.`password`, u.`fc_id` ' +
-    '     , f.`theme-bg` AS fc_theme ' +
+    '     , f.`backoffice_url`, f.`mobile_url` ' +
     '  FROM `users` AS u ' +
     ' INNER JOIN `fc` AS f ' +
     '    ON u.`fc_id` = f.`id` ' +
