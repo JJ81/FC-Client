@@ -41,15 +41,13 @@ passport.use(new LocalStrategy({
         if (!bcrypt.compareSync(password, data[0].password)) {
           return done(null, false);
         } else {
-          console.log(req.headers.host);
-          console.log(data[0].backoffice_url);
-          console.log(data[0].mobile_url);
-
-          if (process.env.NODE_ENV == 'production') {
-            console.log('Production Mode');
-          } else if (process.env.NODE_ENV == 'development') {
-            console.log('Development Mode');
+          if (process.env.NODE_ENV === 'production') {
+            const { mobile_ur: mobileUrl } = data[0];
+            if (mobileUrl !== req.headers.host) {
+              return done(null, false);
+            }
           }
+
           // 사용자 포인트 조회
           // let userPoint = 0;
           let userInfo = {
