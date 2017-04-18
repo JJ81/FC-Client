@@ -46,7 +46,7 @@ passport.use(new LocalStrategy({
             console.log(mobileUrl);
             console.log(req.headers.host);
             if (mobileUrl !== req.headers.host) {
-              return done(null, false, req.flash('로그인 메세지', '잘못된 접근입니다.'));
+              return done(null, false, { message: '등록되지 않은 핸드폰 입니다.' });
             }
           }
 
@@ -78,8 +78,10 @@ passport.use(new LocalStrategy({
 // 로그인 화면
 router.get('/login', util.getLogoInfo, (req, res, next) => {
   if (req.user == null) {
+    // console.log(req.flash('error')[0]);
     res.render('login', {
-      current_path: 'login'
+      current_path: 'login',
+      message: req.flash('error')[0]
     });
   } else {
     res.redirect('/education/current');

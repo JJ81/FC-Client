@@ -799,3 +799,31 @@ textarea {
   width: 100%;
   border: 1px solid #ddd;
 }
+
+/* The alert message box */
+.alert {
+    /*padding: 20px;*/
+    background-color: #FF584E; /* Red */
+    color: white;
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 10px;
+    border-radius: 5px;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+    color: black;
+}

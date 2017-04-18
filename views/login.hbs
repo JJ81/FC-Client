@@ -6,7 +6,6 @@
             <div>
                 <h1 class="lg"><img src="/images/logo/{{logoImageName}}" alt="{{logo}}" class="img_lg" /></h1>
             </div>
-
             <div class="form_control_id">
                 <input
                 id="phone"
@@ -32,6 +31,12 @@
 
             <br />
 
+            {{#if message}}
+            <div class="alert">
+              <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+              {{message}}
+            </div>
+            {{/if}}
             <button id="submit" type="submit" class="btn_login">로그인</button>
         </fieldset>
     </form>
