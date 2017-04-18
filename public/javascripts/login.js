@@ -9,10 +9,10 @@ requirejs(
   ],
 function (jQuery) {
   var $ = jQuery;
-  var password = $('#password'),  // 암호
-    phone = $('#phone'), // 핸드폰 번호
-    remember = $('#remember'), // 핸드폰 저장유무
-    btn_login = $('.btn_login'); // 로그인
+  var password = $('#password');  // 암호
+  var phone = $('#phone'); // 핸드폰 번호
+  var remember = $('#remember'); // 핸드폰 저장유무
+  var btn_login = $('.btn_login'); // 로그인
 
         // 핸드폰 저장유무를 확인한다.
   checkCookie();
@@ -48,17 +48,17 @@ function (jQuery) {
     }
   });
 
-    // 핸드폰 번호를 쿠키에 저장한다.
+  // 핸드폰 번호를 쿠키에 저장한다.
   function setCookie (phone) {
     $.cookie('phone', phone);
   }
 
-    // 핸드폰 번호를 꺼내온다.
+  // 핸드폰 번호를 꺼내온다.
   function getCookie () {
     phone.val($.cookie('phone'));
   }
 
-    // 핸드폰 저장유무를 확인하다.
+  // 핸드폰 저장유무를 확인하다.
   function checkCookie () {
     if ($.cookie('phone') === undefined) {
       remember.removeClass('check_on');
@@ -74,5 +74,13 @@ function (jQuery) {
   function removeCookie () {
     $.removeCookie('phone');
   }
+
+  phone.bind('click', function (e) {
+    window.$('.alert').hide();
+  });
+
+  password.bind('click', function (e) {
+    window.$('.alert').hide();
+  });
 } // end of function
 );

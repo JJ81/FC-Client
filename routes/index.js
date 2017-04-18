@@ -15,6 +15,7 @@ const bcrypt = require('bcrypt');
 const PointService = require('../service/PointService');
 const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
+const validator = require('validator');
 
 // 로그인이 성공하면 사용자 정보를 Session 에 저장
 passport.serializeUser((user, done) => {
@@ -33,9 +34,12 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, (req, phone, password, done) => {
+  if (!validator.isLength(phone, { min: 10, max: 11 })) {
+    return done(null, false, { message: '잘못된 핸드폰 형식입니다.' });
+  }
   connection.query(QUERY.AUTH.SEL_INFO, [phone], (err, data) => {
     if (err) {
-      return done(null, false);
+      return done(null, false, { message: '오류가 발생하였습니다.' });
     } else {
       if (data.length === 1) {
         if (!bcrypt.compareSync(password, data[0].password)) {
@@ -68,7 +72,7 @@ passport.use(new LocalStrategy({
           });
         }
       } else {
-        return done(null, false);
+        return done(null, false, { message: '등록되지 않은 핸드폰 번호입니다.' });
       }
     }
   });
