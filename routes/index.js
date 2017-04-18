@@ -46,7 +46,7 @@ passport.use(new LocalStrategy({
             console.log(mobileUrl);
             console.log(req.headers.host);
             if (mobileUrl !== req.headers.host) {
-              return done(null, false, '잘못된 접근입니다.');
+              return done(null, false, req.flash('로그인 메세지', '잘못된 접근입니다.'));
             }
           }
 
