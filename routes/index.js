@@ -39,14 +39,14 @@ passport.use(new LocalStrategy({
     } else {
       if (data.length === 1) {
         if (!bcrypt.compareSync(password, data[0].password)) {
-          return done(null, false);
+          return done(null, false, { message: '잘못된 암호입니다.' });
         } else {
           if (process.env.NODE_ENV === 'production') {
             const { mobile_url: mobileUrl } = data[0];
-            console.log(mobileUrl);
-            console.log(req.headers.host);
+            // console.log(mobileUrl);
+            // console.log(req.headers.host);
             if (mobileUrl !== req.headers.host) {
-              return done(null, false, { message: '등록되지 않은 핸드폰 입니다.' });
+              return done(null, false, { message: '등록되지 않은 핸드폰 번호입니다.' });
             }
           }
 
