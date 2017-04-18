@@ -43,6 +43,8 @@ passport.use(new LocalStrategy({
         } else {
           if (process.env.NODE_ENV === 'production') {
             const { mobile_ur: mobileUrl } = data[0];
+            console.log(mobileUrl);
+            console.log(req.headers.host);
             if (mobileUrl !== req.headers.host) {
               return done(null, false);
             }
