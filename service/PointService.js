@@ -75,19 +75,18 @@ exports.save = (_connection, _data, _callback) => {
     [
       /* 교육과정 정보 조회 */
       (callback) => {
-        let q = connection.query(QUERY.EDU.SEL_COURSE_GROUP,
+        // console.log('SEL_COURSE_GROUP');
+        connection.query(QUERY.EDU.SEL_COURSE_GROUP,
           [ trainingUserId ],
           (err, result) => {
-            console.log(q.sql);
             logs.edu_name = result[0].edu_name;
-            // logs.edu_start_dt = result[0].start_dt;
-            // logs.edu_end_dt = result[0].end_dt;
             callback(err, null);
           }
         );
       },
       /* 포인트 로그 입력 */
       (callback) => {
+        // console.log('INS_POINT_LOG..');
         connection.query(QUERY.POINT.INS_POINT_LOG,
           [ userId, trainingUserId, eduId ],
           (err, result) => {
@@ -97,6 +96,7 @@ exports.save = (_connection, _data, _callback) => {
       },
       /* 특정 교육과정의 전체 강의수와 이수한 강의수를 가져온다. */
       (callback) => {
+        // console.log('SEL_COURSE_PROGRESS..');
         connection.query(QUERY.POINT.SEL_COURSE_PROGRESS,
           [ trainingUserId, courseGroupId ],
           (err, result) => {
@@ -109,8 +109,9 @@ exports.save = (_connection, _data, _callback) => {
       },
       /* 특정 교육과정의 기간과 사용자 학습 기간을 가져온다. */
       (callback) => {
+        // console.log('SEL_USER_PERIOD');
         connection.query(QUERY.POINT.SEL_USER_PERIOD,
-          [ eduId, trainingUserId ],
+          [ trainingUserId ],
           (err, result) => {
             logs.speed.edu_period = result[0].edu_period === 0 ? 1 : result[0].edu_period;
             logs.speed.user_period = result[0].user_period === 0 ? 1 : result[0].user_period;
@@ -121,31 +122,46 @@ exports.save = (_connection, _data, _callback) => {
       },
       // 특정 교육과정의 퀴즈 전체, 맞은 문항수를 가져온다.
       (callback) => {
+        // console.log('SEL_QUIZ_CORRECT_COUNT');
         connection.query(QUERY.POINT.SEL_QUIZ_CORRECT_COUNT,
           [ trainingUserId, courseGroupId, 'QUIZ' ],
           (err, result) => {
-            logs.quiz_correction.total_count = result[0].total_quiz_count;
-            logs.quiz_correction.correct_count = result[0].user_quiz_count;
-            logs.quiz_correction.value = (result[0].user_quiz_count / result[0].total_quiz_count).toFixed(2);
-            if (logs.quiz_correction.value > 1) logs.quiz_correction.value = 1;
+            if (result.total_quiz_count > 0) {
+              logs.quiz_correction.total_count = result[0].total_quiz_count;
+              logs.quiz_correction.correct_count = result[0].user_quiz_count;
+              logs.quiz_correction.value = (result[0].user_quiz_count / result[0].total_quiz_count).toFixed(2);
+              if (logs.quiz_correction.value > 1) logs.quiz_correction.value = 1;
+            } else {
+              logs.quiz_correction.total_count = 0;
+              logs.quiz_correction.correct_count = 0;
+              logs.quiz_correction.value = 0;
+            }
             callback(err, null);
           }
         );
       },
       // 특정 교육과정의 파이널테스트 전체, 맞은 문항수를 가져온다.
       (callback) => {
+        // console.log('SEL_QUIZ_CORRECT_COUNT');
         connection.query(QUERY.POINT.SEL_QUIZ_CORRECT_COUNT,
           [ trainingUserId, courseGroupId, 'FINAL' ],
           (err, result) => {
-            logs.final_correction.total_count = result[0].total_quiz_count;
-            logs.final_correction.correct_count = result[0].user_quiz_count;
-            logs.final_correction.value = (result[0].user_quiz_count / result[0].total_quiz_count).toFixed(2);
+            if (result.total_quiz_count > 0) {
+              logs.final_correction.total_count = result[0].total_quiz_count;
+              logs.final_correction.correct_count = result[0].user_quiz_count;
+              logs.final_correction.value = (result[0].user_quiz_count / result[0].total_quiz_count).toFixed(2);
+            } else {
+              logs.final_correction.total_count = 0;
+              logs.final_correction.correct_count = 0;
+              logs.final_correction.value = 0;
+            }
             callback(err, null);
           }
         );
       },
       // 포인트 로그테이블에 교육시청 이수율을 가져온다.
       (callback) => {
+        // console.log('SEL_VIDEO_RESULTS');
         connection.query(QUERY.POINT.SEL_VIDEO_RESULTS,
           [ courseGroupId, trainingUserId ],
           (err, result) => {
@@ -159,6 +175,7 @@ exports.save = (_connection, _data, _callback) => {
       },
       // 강의 반복 여부를 가져온다.
       (callback) => {
+        // console.log('SEL_COURSE_REPEAT_YN');
         connection.query(QUERY.COURSE.SEL_COURSE_REPEAT_YN,
           [ courseGroupId, trainingUserId ],
           (err, result) => {
@@ -169,6 +186,8 @@ exports.save = (_connection, _data, _callback) => {
       },
       /* 포인트 로그 갱신 */
       (callback) => {
+        // console.log(logs);
+        // console.log('UPD_POINT_LOG');
         connection.query(QUERY.POINT.UPD_POINT_LOG,
           [
             logs.complete.value,

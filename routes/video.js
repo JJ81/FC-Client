@@ -16,7 +16,7 @@ const util = require('../util/util');
 router.get('/settings', util.isAuthenticated, (req, res, next) => {
   return res.json({
     success: true,
-    interval: 5, // TODO: 서비스 오픈 전에 적절한 시간으로 변경할 것.
+    interval: 10, // TODO: 서비스 오픈 전에 적절한 시간으로 변경할 것.
     waiting_seconds: 31 // 대기시간 5초 + 1초 delay
   });
 });

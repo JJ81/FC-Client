@@ -703,10 +703,15 @@ QUERY.POINT = {
 
   // 사용자가 이수한 기간을 구한다.
   SEL_USER_PERIOD:
-    'SELECT DATEDIFF(`end_dt`, `start_dt`) AS user_period ' +
-    '     , (SELECT DATEDIFF(`end_dt`, `start_dt`) FROM `edu` WHERE `id` = ?) AS edu_period ' +
-    '  FROM `training_users` ' +
-    ' WHERE `id` = ?; ',
+    'SELECT DATEDIFF(tu.`end_dt`, tu.`start_dt`) AS user_period ' +
+    '     , DATEDIFF(lae.`end_dt`, lae.`start_dt`) AS edu_period ' +
+    '  FROM `training_users` AS tu ' +
+    ' INNER JOIN `training_edu` AS te ' +
+    '    ON tu.`training_edu_id` = te.`id` ' +
+    '   AND te.active = 1 ' +
+    ' INNER JOIN `log_assign_edu` AS lae ' +
+    '   ON lae.`training_edu_id` = te.`id` ' +
+    ' WHERE tu.`id` = ?; ',
 
   // 교육과정 이수, 교육과정 이수 속도를 기록
   UPD_EDU_RESULTS:
