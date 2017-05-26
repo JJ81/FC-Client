@@ -705,6 +705,8 @@ QUERY.POINT = {
   SEL_USER_PERIOD:
     'SELECT DATEDIFF(tu.`end_dt`, tu.`start_dt`) AS user_period ' +
     '     , DATEDIFF(lae.`end_dt`, lae.`start_dt`) AS edu_period ' +
+    '     , DATE_FORMAT(tu.`start_dt`, \'%Y-%m-%d\') AS edu_start_dt ' +
+    '     , DATE_FORMAT(tu.`end_dt`, \'%Y-%m-%d\') AS edu_end_dt ' +
     '  FROM `training_users` AS tu ' +
     ' INNER JOIN `training_edu` AS te ' +
     '    ON tu.`training_edu_id` = te.`id` ' +

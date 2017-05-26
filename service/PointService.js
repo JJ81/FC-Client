@@ -113,6 +113,8 @@ exports.save = (_connection, _data, _callback) => {
         connection.query(QUERY.POINT.SEL_USER_PERIOD,
           [ trainingUserId ],
           (err, result) => {
+            logs.edu_start_dt = result[0].edu_start_dt;
+            logs.edu_end_dt = result[0].edu_end_dt;
             logs.speed.edu_period = result[0].edu_period === 0 ? 1 : result[0].edu_period;
             logs.speed.user_period = result[0].user_period === 0 ? 1 : result[0].user_period;
             logs.speed.value = 1 - (result[0].user_period / result[0].edu_period).toFixed(2);
