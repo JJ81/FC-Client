@@ -271,7 +271,7 @@ router.post('/log/starttime', util.isAuthenticated, (req, res) => {
 });
 
 /**
- * 세션 시작일시를 기록한다.
+ * 세션 종료일시를 기록한다.
  * 포인트를 갱신한다. V
  */
 router.post('/log/endtime', util.isAuthenticated, (req, res) => {

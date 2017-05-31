@@ -29,11 +29,11 @@ requirejs([
     });
 
     quiz_inputs.on('change keyup', function (e) {
-        // 정답 체크 시마다 모든 문제의 정답 입력/선택 여부를 검사한다.
+      // 정답 체크 시마다 모든 문제의 정답 입력/선택 여부를 검사한다.
       validateOptionInputs();
     });
 
-      // 정답 체크/미체크, 정답확인 노출여부 판단
+    // 정답 체크/미체크, 정답확인 노출여부 판단
     quiz_options.click(function (e) {
       e.preventDefault();
 
@@ -67,13 +67,11 @@ requirejs([
       }).done(function (res) {
         if (!res.success) {
           console.error(res.msg);
-        } else {
-            // console.info('세션 시작시간 기록');
         }
       });
     }
 
-      // 세션 종료일시 로깅
+    // 세션 종료일시 로깅
     function sessionProgressEndLogger () {
       $.ajax({
         type: 'POST',
@@ -205,7 +203,6 @@ requirejs([
      * 정답을 체크한다.
      */
     function checkQuizAnswer () {
-      console.log('quiz!!');
       var quizzes = $('.quiz_select');
       var answers = [];
 
@@ -266,7 +263,7 @@ requirejs([
       }
 
       // 사용자 입력 답안, 정답여부 등을 기록
-      console.log(answers);
+      // console.log(answers);
       $.ajax({
         type: 'POST',
         url: '/quiz/log/checkanswer',
