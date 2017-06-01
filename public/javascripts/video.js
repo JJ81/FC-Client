@@ -13,7 +13,7 @@ requirejs(
   ],
 function ($, axios, Vimeo) {
   var player = null;
-  var playerContainer = $('#videoplayer');
+  var playerContainer = $('.videoplayer');
   var timerLoggingInterval = playerContainer.data('interval'); // log every 5 seconds
   var timerLog = null;
   var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머

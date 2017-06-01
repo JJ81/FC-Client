@@ -796,6 +796,7 @@ table {
 }
 
 .alert{
+  margin: 10px;
   padding: 20px 10px 20px 10px;
   background-color: #FE8484;
 }
@@ -811,8 +812,8 @@ textarea {
     background-color: #FF584E; /* Red */
     color: white;
     margin-bottom: 15px;
-    font-size: 16px;
-    line-height: 10px;
+    font-size: 14px;
+    line-height: 150%;
     border-radius: 5px;
 }
 
@@ -831,4 +832,32 @@ textarea {
 /* When moving the mouse over the close button */
 .closebtn:hover {
     color: black;
+}
+
+.need-help
+{
+    margin-top: 20px;
+    text-align: center;
+    border: 2px solid #FF9200;
+    padding: 10px;
+}
+
+.need-help a {
+  color: #FF9200;
+}
+
+.custom-button
+{
+    margin: 10px;
+    text-align: center;
+    border: 2px solid #FF9200;
+    padding: 10px;
+}
+
+.custom-button a {
+  color: #FF9200;
+}
+
+.videoplayer {
+  padding: 10px 10px 0 10px;
 }

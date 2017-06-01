@@ -162,4 +162,12 @@ router.get('/point', util.isAuthenticated, util.getLogoInfo, (req, res) => {
   });
 });
 
+// 로그인 상태일 경우, 이달의 교육과정 메뉴로 이동
+router.get('/video-quick-icon', util.getLogoInfo, (req, res, next) => {
+  res.render('video_quick_icon', {
+    current_path: 'quickicon',
+    header: '바로가기 추가'
+  });
+});
+
 module.exports = router;

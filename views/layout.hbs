@@ -45,10 +45,12 @@
   class="body_bg_01 {{theme}}">
 
   {{#if (isEquals current_path 'login')}}
-      {{{body}}}
+    {{{body}}}
+  {{else if (isEquals current_path 'quickicon')}}
+    {{{body}}}
   {{else}}
-      {{> left_nav}}
-      {{{body}}}
+    {{> left_nav}}
+    {{{body}}}
   {{/if}}
 
   <script src="/static/vendor/require.2.3.2.js"></script>
@@ -66,6 +68,7 @@
     {{#if (isEquals current_path 'evaluate')}}<script src="/static/javascripts/evaluate.js"></script>{{/if}}
     {{#if (isEquals current_path 'complete')}}<script src="/static/javascripts/complete.js"></script>{{/if}}
     {{#if (isEquals current_path 'profile')}}<script src="/static/javascripts/profile.js"></script>{{/if}}
+    {{#if (isEquals current_path 'quickicon')}}<script src="/static/javascripts/video_quick_icon.js"></script>{{/if}}
   {{/if}}
 
 <script>
