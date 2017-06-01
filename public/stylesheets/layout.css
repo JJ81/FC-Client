@@ -795,26 +795,20 @@ table {
   background-color: cornsilk;
 }
 
-.alert{
-  margin: 10px;
-  padding: 20px 10px 20px 10px;
-  background-color: #FE8484;
-}
-
 textarea {
   width: 100%;
   border: 1px solid #ddd;
 }
 
-/* The alert message box */
-.alert {
-    /*padding: 20px;*/
-    background-color: #FF584E; /* Red */
-    color: white;
-    margin-bottom: 15px;
-    font-size: 14px;
-    line-height: 150%;
-    border-radius: 5px;
+.alert{
+  margin: 10px;
+  padding: 10px 10px 10px 10px;
+  background-color: #FE8484;
+  color: white;
+  margin-bottom: 15px;
+  font-size: 14px;
+  line-height: 150%;
+  border-radius: 5px;
 }
 
 /* The close button */
@@ -859,7 +853,7 @@ textarea {
 }
 
 .videoplayer {
-  padding: 10px 10px 0 10px;
+  padding: 20px 20px 20px 20px;
 }
 
 .btn:link,
@@ -874,7 +868,7 @@ textarea {
     text-align: center;
     color: #fff;
     -webkit-transition: background-color 0.2s, border 0.2s, color 0.2s;
-    transition: background-color 0.2s, border 0.2s, color 0.2s;    
+    transition: background-color 0.2s, border 0.2s, color 0.2s;
 }
 
 .btn:hover,
