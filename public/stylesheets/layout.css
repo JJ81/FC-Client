@@ -801,14 +801,13 @@ textarea {
 }
 
 .alert{
-  margin: 10px;
-  padding: 10px 10px 10px 10px;
+  /*margin: 10px;*/
+  padding: 10px 10px;
   background-color: #FE8484;
   color: white;
-  margin-bottom: 15px;
+  margin: 15px 0;
   font-size: 14px;
   line-height: 150%;
-  border-radius: 5px;
 }
 
 /* The close button */
