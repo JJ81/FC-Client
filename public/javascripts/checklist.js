@@ -10,11 +10,29 @@ function ($) {
   var courseId = $btnPlay.data('course-id');
   var courseListId = $btnPlay.data('course-list-id');
   var nextUrl = $btnPlay.attr('href');
+
   // var checklistGroupId = $btnPlay.data('checklist-group-id');
 
   // jquery load event
   $(function () {
     sessionProgressStartLogger();
+  });
+
+  $('[name*="sample-"]').click(function () {
+    var $button = $(this).parent();
+    var $buttonGroup = $button.parent();
+    var $groupButtons = $buttonGroup.children().children($('[name*="sample-"]'));
+
+    if ($button.hasClass('active')) {
+      $(this).removeAttr('checked').prop('checked', false);
+      $button.removeClass('active focus');
+    } else {
+      $button.addClass('active focus');
+      $(this).attr('checked', 'checked').prop('checked', true);
+      if ($buttonGroup.data('type') !== 'choose') {
+        $groupButtons.not($(this)).removeAttr('checked').prop('checked', false).parent().removeClass('active focus');
+      }
+    }
   });
 
   // 세션 시작일시 로깅
@@ -63,41 +81,32 @@ function ($) {
     e.preventDefault();
 
     var answers = [];
-    var inputIsValid = true;
+    var invalidInputCount = 0;
 
     $('.checklist-item').each(function (index) {
-      // console.log($(this).data('id'), $(this).data('type'));
       var itemId = $(this).data('id');
       var itemType = $(this).data('type');
-      var $checklist = $('.checklist[data-id=' + itemId + ']');
-      $checklist.addClass('alert').removeClass('alert');
+      var inputIsValid = true;
 
       switch (itemType) {
       case 'write':
         if ($(this).val() === '') {
-          // window.alert('답변을 입력하세요.');
-          // $(this).focus();
           inputIsValid = false;
-          $checklist.addClass('alert');
-          return false;
         }
         answers.push({
           id: itemId,
           answer: $(this).val()
         });
-        // console.log($(this).val());
-        return false;
+        break;
+
       default:
-        var str = $(this).find('tr.sample').find('td').find('input:checked').map(function () {
+        var str = $(this).find('input:checked').map(function () {
           return $(this).val();
         }).get().join(';');
 
         if (str === '') {
           inputIsValid = false;
-          console.log($('.checklist[data-id=' + itemId + ']'));
-          $checklist.addClass('alert');
-          return false;
-        } else {}
+        }
 
         answers.push({
           id: itemId,
@@ -105,9 +114,18 @@ function ($) {
         });
         break;
       }
+
+      if (!inputIsValid) {
+        invalidInputCount++;
+        $('.alert[data-id=' + itemId + ']').removeClass('alert-success');
+        $('.alert[data-id=' + itemId + ']').addClass('alert-danger');
+      } else {
+        $('.alert[data-id=' + itemId + ']').removeClass('alert-danger');
+        $('.alert[data-id=' + itemId + ']').addClass('alert-success');
+      }
     });
 
-    if (inputIsValid) {
+    if (invalidInputCount === 0) {
       // 자료 저장
       $.ajax({
         type: 'POST',
