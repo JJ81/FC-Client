@@ -10,9 +10,16 @@ QUERY.AUTH = {
   SEL_INFO:
     'SELECT u.`id`, u.`name`, u.`email`, u.`password`, u.`fc_id` ' +
     '     , f.`backoffice_url`, f.`mobile_url`, u.`active` ' +
+    '     , b.name AS branch_name ' +
+    '     , d.name AS duty_name ' +
+    '     , u.terms_approved ' +
     '  FROM `users` AS u ' +
     ' INNER JOIN `fc` AS f ' +
     '    ON u.`fc_id` = f.`id` ' +
+    ' INNER JOIN `branch` AS b ' +
+    '    ON u.`branch_id` = b.`id` ' +
+    ' INNER JOIN `duty` AS d ' +
+    '    ON u.`duty_id` = d.`id` ' +
     ' WHERE u.`phone` = ?; ',
 
   // 비밀번호 변경
@@ -31,6 +38,12 @@ QUERY.AUTH = {
   UPD_CHANGE_PHONE:
     'UPDATE `users` SET ' +
     '       `phone` = ? ' +
+    ' WHERE `id` = ?; ',
+
+  // 보안서약서 인증여부 갱신
+  UPD_CHANGE_TERMS:
+    'UPDATE `users` SET ' +
+    '       `terms_approved` = ? ' +
     ' WHERE `id` = ?; '
 };
 
@@ -117,6 +130,7 @@ QUERY.EDU = {
     '  		) AS completed_rate ' +
     '     , (SELECT `end_dt` FROM `log_course_progress` WHERE `training_user_id` = @training_user_id AND `course_id` = @course_id) AS course_end_dt ' +
     '     , e.name AS edu_name ' +
+    '     , e.can_replay ' +
     '  FROM `edu` AS e ' +
     ' INNER JOIN ( ' +
     ' 	    SELECT te.`edu_id`, tu.id AS training_user_id ' +

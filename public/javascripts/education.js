@@ -6,10 +6,18 @@ requirejs([
 function (jQuery, axios) {
   'use strict';
 
+  var $ = $ || window.$;
+
   var inputCourse = $('#inputCourse');
   var selectAssignMonth = $('#selectAssignMonth');
   var optSearchType = $('input[type=radio][name=optradio]');
   var btnSearchCourse = $('#btnSearchCourse');
+  var $notActivelistItem = $('a.not-active');
+
+  $notActivelistItem.on('click', function (e) {
+    e.preventDefault();
+    window.alert('재수강이 불가한 강의입니다.');
+  });
 
   optSearchType.change(function () {
     var id = $(this).attr('id');

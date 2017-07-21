@@ -63,16 +63,20 @@ passport.use(new LocalStrategy({
             'user_id': data[0].id,
             'fc_id': data[0].fc_id,
             'name': data[0].name,
+            'branch': data[0].branch_name,
+            'duty': data[0].duty_name,
             'email': data[0].email,
-            'point': data.point_total
+            // 'point': data.point_total,
+            'terms_approved': data[0].terms_approved
           };
 
-            // 교육생 포인트를 사이드탭에 표시하기 위함.
-          PointService.userpoint(connection, { user_id: data[0].id, fc_id: data[0].fc_id }, (err, data) => {
-            if (err) throw err;
-            userInfo.point = data.point_total;
-            return done(null, userInfo);
-          });
+          // 교육생 포인트를 사이드탭에 표시하기 위함.
+          return done(null, userInfo);
+          // PointService.userpoint(connection, { user_id: data[0].id, fc_id: data[0].fc_id }, (err, data) => {
+          //   if (err) throw err;
+          //   userInfo.point = data.point_total;
+          //   return done(null, userInfo);
+          // });
         }
       } else {
         return done(null, false, { message: '등록되지 않은 핸드폰 번호입니다.' });
@@ -101,7 +105,11 @@ router.post('/login',
     failureRedirect: '/login',
     failureFlash: true
   }), (req, res) => {
-    res.redirect('/education/current');
+    if (req.user.terms_approved === 0) {
+      res.redirect('/terms');
+    } else {
+      res.redirect('/education/current');
+    }
   });
 
 // 로그아웃
@@ -170,6 +178,54 @@ router.get('/video-quick-icon', util.getLogoInfo, (req, res, next) => {
   res.render('video_quick_icon', {
     current_path: 'quickicon',
     header: '바로가기 추가'
+  });
+});
+
+router.get('/terms', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+  const content = `
+
+본인은 가맹사업법에 따른 가맹점 사업자로서,
+
+가맹본부가 제공하는 학습내용을 타인에게 유출하거나
+
+계약범위 이외의 목적으로 활용하지 않겠습니다.
+
+이를 위반 시 가맹사업법 위반 행위로서 민형사상
+
+불이익이 발생할 수 있음을 인지하였습니다.
+  `;
+
+  res.render('terms', {
+    current_path: 'terms',
+    header: '비밀유지 서약서',
+    loggedIn: req.user,
+    content: content
+  });
+});
+
+router.post('/terms', util.isAuthenticated, (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(QUERY.AUTH.UPD_CHANGE_TERMS,
+      [
+        1,
+        req.user.user_id
+      ],
+      (err, data) => {
+        connection.release();
+
+        if (err) {
+          console.log(err);
+          res.json({
+            success: false,
+            msg: err
+          });
+        } else {
+          req.user.terms_approved = 1;
+          res.redirect('/education/current');
+        }
+      }
+    );
   });
 });
 

@@ -33,6 +33,15 @@
   transform: translate(-50%, -50%);
 }
 
+.terms {
+  position: absolute;
+  width: 90%;
+  top: 30%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
 .frm_login{
 	max-width: 1024px;
 	margin:0 auto;
@@ -56,6 +65,15 @@
 }
 
 .btn_login{
+	background: #FF9200; /*#4baf4d;*/
+	text-align: center;
+	color: #fff;
+	font-size: 16px;
+	width: 100%;
+	line-height: 45px;
+	border-radius: 5px;
+}
+.btn_terms_agree{
 	background: #FF9200; /*#4baf4d;*/
 	text-align: center;
 	color: #fff;
@@ -889,4 +907,9 @@ textarea {
 
 .img-kakao img {
   width: 100%;
+}
+
+.not-active {
+   /*pointer-events: none;*/
+   cursor: default;
 }

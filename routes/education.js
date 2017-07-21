@@ -42,7 +42,6 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.getLogoInfo, (req
     if (err) throw err;
     async.series(
       [
-        // Description
         (callback) => {
           if (query) {
             connection.query(query,
@@ -57,10 +56,13 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.getLogoInfo, (req
                     nextCourseId = courses[0].course_id;
 
                     for (i = 0; i < courses.length; i++) {
-                      if (courses[i].completed_rate !== 100) {
-                        nextTrainingUserId = courses[i].training_user_id;
-                        nextCourseId = courses[i].course_id;
-                        break;
+                      if (currentPath !== 'passed' || (currentPath === 'passed' && courses[i].can_replay === 1)) {
+                        if (courses[i].completed_rate !== 100) {
+                          nextTrainingUserId = courses[i].training_user_id;
+                          nextCourseId = courses[i].course_id;
+                          console.log(nextTrainingUserId, nextCourseId);
+                          break;
+                        }
                       }
                     }
 
