@@ -34,9 +34,10 @@
 }
 
 .terms {
+  padding: 20px;
   position: absolute;
   width: 90%;
-  top: 30%;
+  top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
