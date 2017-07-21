@@ -9,7 +9,7 @@ QUERY.AUTH = {
   // 사용자 정보
   SEL_INFO:
     'SELECT u.`id`, u.`name`, u.`email`, u.`password`, u.`fc_id` ' +
-    '     , f.`backoffice_url`, f.`mobile_url` ' +
+    '     , f.`backoffice_url`, f.`mobile_url`, u.`active` ' +
     '  FROM `users` AS u ' +
     ' INNER JOIN `fc` AS f ' +
     '    ON u.`fc_id` = f.`id` ' +
@@ -47,7 +47,7 @@ QUERY.EDU = {
     '     , c.`name` AS course_name ' +
     '     , c.`desc` ' +
     '     , c.`thumbnail` ' +
-    '     , t.`name` AS teacher_name ' +
+    '     , c.`teacher` AS teacher_name ' +
     '     , ( ' +
     '        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
     '          FROM `course_list` AS cl ' +
@@ -61,26 +61,33 @@ QUERY.EDU = {
     '     , e.name AS edu_name ' +
     '  FROM `edu` AS e ' +
     ' INNER JOIN ( ' +
-    '       SELECT te.`edu_id`, tu.id AS training_user_id ' +
-    '            , lae.`start_dt`, lae.`end_dt` ' +
-    '         FROM `users` AS u ' +
-    '        INNER JOIN `training_users` AS tu ' +
-    '           ON u.`id` = tu.`user_id` ' +
-    '        INNER JOIN `training_edu` AS te ' +
-    '           ON tu.`training_edu_id` = te.`id` ' +
-    '          AND te.active = 1 ' +
-    '        INNER JOIN `log_assign_edu` AS lae ' +
-    '           ON lae.`training_edu_id` = te.`id` ' +
-    '          AND lae.`active` = 1 ' +
-    '        WHERE u.`id` = ? ' +
+    '       SELECT ut.`user_id`, ut.`edu_id` ' +
+    '            , MAX(ut.`training_user_id`) AS training_user_id ' +
+    '            , MAX(ut.`start_dt`) AS start_dt ' +
+    '            , MAX(ut.`end_dt`) AS end_dt ' +
+    '         FROM (' +
+    '               SELECT tu.`user_id`, te.`edu_id`, tu.id AS training_user_id ' +
+    '                    , lae.`start_dt`, lae.`end_dt` ' +
+    '                 FROM `users` AS u ' +
+    '                INNER JOIN `training_users` AS tu ' +
+    '                   ON u.`id` = tu.`user_id` ' +
+    '                INNER JOIN `training_edu` AS te ' +
+    '                   ON tu.`training_edu_id` = te.`id` ' +
+    '                  AND te.active = 1 ' +
+    '                INNER JOIN `log_assign_edu` AS lae ' +
+    '                   ON lae.`training_edu_id` = te.`id` ' +
+    '                  AND lae.`active` = 1 ' +
+    '                WHERE u.`id` = ? ' +
+    '               ) AS ut ' +
+    '         GROUP BY ut.`user_id`, ut.`edu_id` ' +
     '       ) AS ut ' +
     '    ON e.`id` = ut.`edu_id` ' +
     ' INNER JOIN `course_group` AS cg ' +
     '    ON e.`course_group_id` = cg.`group_id` ' +
     ' INNER JOIN `course` AS c ' +
     '    ON cg.`course_id` = c.`id` ' +
-    ' INNER JOIN `teacher` AS t ' +
-    '    ON c.`teacher_id` = t.`id` ' +
+    // ' INNER JOIN `teacher` AS t ' +
+    // '    ON c.`teacher_id` = t.`id` ' +
     ' WHERE NOW() BETWEEN ut.`start_dt` AND ut.`end_dt` ' +
     // ' WHERE NOW() BETWEEN e.`start_dt` AND e.`end_dt` ' +
     ' ORDER BY completed_rate, e.id, cg.`order`; ',
@@ -98,7 +105,7 @@ QUERY.EDU = {
     '     , c.`name` AS course_name ' +
     '     , c.`desc` ' +
     '     , c.`thumbnail` ' +
-    '     , t.`name` AS teacher_name ' +
+    '     , c.`teacher` AS teacher_name ' +
     ' 	  , ( ' +
     '        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
     '  		   FROM `course_list` AS cl ' +
@@ -129,8 +136,8 @@ QUERY.EDU = {
     '    ON e.`course_group_id` = cg.`group_id` ' +
     ' INNER JOIN `course` AS c ' +
     '    ON cg.`course_id` = c.`id` ' +
-    ' INNER JOIN `teacher` AS t ' +
-    '    ON c.`teacher_id` = t.`id` ' +
+    // ' INNER JOIN `teacher` AS t ' +
+    // '    ON c.`teacher_id` = t.`id` ' +
     ' WHERE NOW() > ut.`end_dt` ';
     if (searchBy === 'course') {
       sql += 'AND c.`name` LIKE \'%' + searchText + '%\'';
@@ -196,7 +203,7 @@ QUERY.COURSE = {
 		'     , c.`name` AS course_name ' +
 		'     , c.`thumbnail` ' +
 		'     , c.`desc` ' +
-		'     , t.`name` AS teacher_name ' +
+		'     , c.`teacher` AS teacher_name ' +
     ' 	  , ( ' +
 		'        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
 		'  		   FROM `course_list` AS cl ' +
@@ -213,8 +220,8 @@ QUERY.COURSE = {
 		'  		) AS course_rate ' +
     '     , (SELECT `end_dt` FROM `log_course_progress` WHERE `training_user_id` = ? AND `course_id` = @course_id) AS course_end_dt ' +
 		'  FROM `course` AS c ' +
-		' INNER JOIN `teacher` AS t ' +
-		'    ON c.`teacher_id` = t.`id` ' +
+		// ' INNER JOIN `teacher` AS t ' +
+		// '    ON c.`teacher_id` = t.`id` ' +
 		' WHERE c.id = ? ',
 
 	// 강의 세션 목록
@@ -330,10 +337,10 @@ QUERY.COURSE = {
   // 중복 평가는 일단 불가하도록
   // params : user_id, course_rate, teacher_rate, course_id
   INS_EVALUATE:
-    'INSERT INTO `user_rating` (`user_id`, `course_id`, `teacher_id`, `course_rate`, `teacher_rate`, `created_dt`) ' +
+    'INSERT INTO `user_rating` (`user_id`, `course_id`, `teacher_name`, `course_rate`, `teacher_rate`, `created_dt`) ' +
     'SELECT ? AS user_id ' +
-	  '     , c.`id` AS course_id ' +
-    '     , c.`teacher_id` ' +
+    '     , c.`id` AS course_id ' +
+    '     , c.`teacher` ' +
     '     , ? AS course_rate ' +
     '     , ? AS teacher_rate ' +
     '     , NOW() AS created_dt ' +

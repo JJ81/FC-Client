@@ -16,17 +16,16 @@ exports.getLogoInfo = (req, res, next) => {
     theme = 'skin-red-light';
     break;
   case 'm.momstouch.edu1004.kr':
-  default:
     logoImageName = 'momstouch.png';
     logoName = '맘스터치';
     theme = 'skin-momstouch';
     break;
-  // case 'm.dev.edu1004.kr':
-  // default:
-  //   logoImageName = 'orangenamu.png';
-  //   logoName = '오렌지나무시스템';
-  //   theme = 'skin-yellow-light';
-  //   break;
+  case 'm.dev.edu1004.kr':
+  default:
+    logoImageName = 'orangenamu.png';
+    logoName = '오렌지나무시스템';
+    theme = 'skin-yellow-light';
+    break;
   }
   res.locals.logoImageName = logoImageName;
   res.locals.logoName = logoName;

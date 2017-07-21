@@ -32,14 +32,14 @@ requirejs([
     useGradient: false,
     readOnly: false,
     callback: function (currentRating, $el) {
-        $el.attr('data-rating', currentRating);
+      $el.attr('data-rating', currentRating);
 
-        if ($el.hasClass('course')) {
-          $('#course').val(currentRating);
-        } else if ($el.hasClass('teacher')) {
-          $('#teacher').val(currentRating);
-        }
+      if ($el.hasClass('course')) {
+        $('#course').val(currentRating);
+      } else if ($el.hasClass('teacher')) {
+        $('#teacher').val(currentRating);
       }
+    }
   });
 
   // 제출하기
@@ -47,11 +47,11 @@ requirejs([
     e.preventDefault();
 
     if (course_rating.attr('data-rating') === '' || teacher_rating.attr('data-rating') === '') {
-      alert('평가부탁드립니다.');
+      window.alert('평가부탁드립니다.');
       return false;
     }
 
-    if (confirm('제출하시겠습니까?')) {
+    if (window.confirm('제출하시겠습니까?')) {
       ratingLogger();
     } else {
       return false;
@@ -72,8 +72,7 @@ requirejs([
       if (!res.success) {
         console.error(res.msg);
       } else {
-        console.info('강의/강사평가 기록');
-        location.href = next_url;
+        window.location.href = next_url;
       }
     });
   }

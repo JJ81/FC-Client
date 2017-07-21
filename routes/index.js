@@ -47,11 +47,14 @@ passport.use(new LocalStrategy({
         } else {
           if (process.env.NODE_ENV === 'production') {
             const { mobile_url: mobileUrl } = data[0];
-            // console.log(mobileUrl);
-            // console.log(req.headers.host);
+
             if (mobileUrl !== req.headers.host) {
               return done(null, false, { message: '등록되지 않은 핸드폰 번호입니다.' });
             }
+          }
+
+          if (data[0].active !== 1) {
+            return done(null, false, { message: '일치하는 정보가 없습니다.' });
           }
 
           // 사용자 포인트 조회
