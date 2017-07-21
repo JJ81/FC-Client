@@ -128,7 +128,7 @@ QUERY.EDU = {
     '           ON tu.`training_edu_id` = te.`id` ' +
     '        INNER JOIN `log_assign_edu` AS lae ' +
     '           ON lae.`training_edu_id` = te.`id` ' +
-    '     		 AND te.active = 1 ' +
+    '          AND te.active = 1 ' +
     '        WHERE u.`id` = ? ' +
     '       ) AS ut ' +
     '    ON e.`id` = ut.`edu_id` ' +
