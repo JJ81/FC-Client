@@ -1,9 +1,11 @@
 
 <header id="hd">
 	<h1 class="title ellipsis">{{header}}</h1>
+    {{#ifCond loggedIn.terms_approved '===' 1}}
     <a href="#" class="nav_link">
       <img src="/static/images/ico_hamburg.png" alt="메뉴" width="25" class="ico_hamburg" />
     </a>
+    {{/ifCond}}
     {{#ifCond (isEquals current_path 'profile') '||' (isEquals current_path 'point') }}
     <a href="javascript:history.go(-1);" class="back_link">
       <img src="/static/images/img_exit.png" alt="이전 페이지" width="25" class="ico_exit" />

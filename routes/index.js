@@ -119,11 +119,11 @@ router.get('/logout', util.isAuthenticated, (req, res) => {
 });
 
 // 로그인 상태일 경우, 이달의 교육과정 메뉴로 이동
-router.get('/', util.isAuthenticated, (req, res) => {
+router.get('/', util.isAuthenticated, util.isTermsApproved, (req, res) => {
   res.redirect('/education/current');
 });
 
-router.get('/point', util.isAuthenticated, util.getLogoInfo, (req, res) => {
+router.get('/point', util.isAuthenticated, util.isTermsApproved, util.getLogoInfo, (req, res) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
     connection.query(QUERY.POINT.GetUserPointDetails,

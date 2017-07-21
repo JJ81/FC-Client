@@ -40,3 +40,9 @@ exports.isAuthenticated = (req, res, next) => {
   }
   res.redirect('/login');
 };
+exports.isTermsApproved = (req, res, next) => {
+  if (req.user.terms_approved === 1) {
+    return next();
+  }
+  res.redirect('/terms');
+};

@@ -7,7 +7,7 @@ const QUERY = require('../database/query');
 const bcrypt = require('bcrypt');
 const util = require('../util/util');
 
-router.get('/', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+router.get('/', util.isAuthenticated, util.isTermsApproved, util.getLogoInfo, (req, res, next) => {
   res.render('profile', {
     current_path: 'profile',
     current_url: req.url,

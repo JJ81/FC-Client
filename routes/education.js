@@ -7,7 +7,7 @@ const pool = require('../commons/db_conn_pool');
 const async = require('async');
 const util = require('../util/util');
 // 이달의/지난 교육과정
-router.get(['/current', '/passed'], util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, util.getLogoInfo, (req, res, next) => {
   const {searchby, searchtext} = req.query;
   // 이달/지난 교육의 경로를 세션에 저장한다.
   req.user.root_path = req.originalUrl;
