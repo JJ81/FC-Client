@@ -27,4 +27,8 @@
   position: relative;
   left: -1px; }
 
+#terms {
+  overflow: auto;
+}
+
 /*# sourceMappingURL=styles.css.map */
