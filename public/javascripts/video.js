@@ -76,6 +76,15 @@ function ($, axios, Vimeo) {
     }).catch(function (error) {
       console.error(error);
     });
+
+    // player.enableTextTrack('ko').then(function (track) {
+    //   track.language = 'kr';
+    //   track.kind = 'subtitles';
+    //   track.label = 'hahaha';
+    // })
+    // .catch(function (error) {
+    //   console.log('track : ' + error);
+    // });
   }
 
   /**
@@ -333,6 +342,10 @@ function ($, axios, Vimeo) {
       }, 3000);
     }
   });
+
+  // player.on('timeupdate', function (event) {
+  //   console.log(event.percent);
+  // });
 
   btnReplayVideo.on('click', function (e) {
     e.preventDefault();

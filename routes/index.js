@@ -30,7 +30,7 @@ passport.deserializeUser((user, done) => {
 
 // Local Strategy 에 의해 인증시 호출되는 인증 메서드 정의
 passport.use(new LocalStrategy({
-  usernameField: 'phone',
+  usernameField: 'cell',
   passwordField: 'password',
   passReqToCallback: true
 }, (req, phone, password, done) => {
