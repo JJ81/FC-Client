@@ -28,7 +28,7 @@
   left: -1px; }
 
 #terms {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 /*# sourceMappingURL=styles.css.map */
