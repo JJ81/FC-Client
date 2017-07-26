@@ -20,7 +20,8 @@ QUERY.AUTH = {
     '    ON u.`branch_id` = b.`id` ' +
     ' INNER JOIN `duty` AS d ' +
     '    ON u.`duty_id` = d.`id` ' +
-    ' WHERE u.`phone` = ?; ',
+    ' WHERE u.`phone` = ? ' +
+    '   AND u.`active` = 1; ',
 
   // 비밀번호 변경
   UPD_CHANGE_PWD:
