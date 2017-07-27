@@ -109,7 +109,6 @@ exports.save = (_connection, _data, _callback) => {
       },
       /* 특정 교육과정의 기간과 사용자 학습 기간을 가져온다. */
       (callback) => {
-        // console.log('SEL_USER_PERIOD');
         connection.query(QUERY.POINT.SEL_USER_PERIOD,
           [ trainingUserId ],
           (err, result) => {
@@ -117,7 +116,10 @@ exports.save = (_connection, _data, _callback) => {
             logs.edu_end_dt = result[0].edu_end_dt;
             logs.speed.edu_period = result[0].edu_period === 0 ? 1 : result[0].edu_period;
             logs.speed.user_period = result[0].user_period === 0 ? 1 : result[0].user_period;
-            logs.speed.value = 1 - (result[0].user_period / result[0].edu_period).toFixed(2);
+            logs.speed.edu_period_by_seconds = result[0].edu_period_by_seconds;
+            logs.speed.user_period_by_seconds = result[0].user_period_by_seconds;
+            logs.speed.value = 1 - (result[0].user_period_by_seconds / result[0].edu_period_by_seconds).toFixed(2);
+            // logs.speed.value = 1 - (result[0].user_period / result[0].edu_period).toFixed(2);
             callback(err, null);
           }
         );
@@ -164,13 +166,20 @@ exports.save = (_connection, _data, _callback) => {
       // 포인트 로그테이블에 교육시청 이수율을 가져온다.
       (callback) => {
         // console.log('SEL_VIDEO_RESULTS');
-        connection.query(QUERY.POINT.SEL_VIDEO_RESULTS,
+        connection.query(QUERY.POINT.SEL_VIDEO_RESULTS2,
+        // connection.query(QUERY.POINT.SEL_VIDEO_RESULTS,
           [ courseGroupId, trainingUserId ],
           (err, result) => {
-            logs.reeltime.duration = result[0].duration;
-            logs.reeltime.played_seconds = result[0].played_seconds;
-            logs.reeltime.value = (result[0].played_seconds / result[0].duration).toFixed(2);
-            logs.reeltime.value = logs.reeltime.value > 1 ? 1 : logs.reeltime.value; // 1보다 클 경우 1로 한정한다.
+            // console.log(result);
+            // logs.reeltime.duration = result[0].duration;
+            // logs.reeltime.played_seconds = result[0].played_seconds;
+            // logs.reeltime.value = (result[0].played_seconds / result[0].duration).toFixed(2);
+            // logs.reeltime.value = logs.reeltime.value > 1 ? 1 : logs.reeltime.value; // 1보다 클 경우 1로 한정한다.
+
+            logs.reeltime.video_count = result[0].video_count;
+            logs.reeltime.video_watch_count = result[0].video_watch_count;
+            logs.reeltime.value = (result[0].video_watch_count / result[0].video_count).toFixed(2);
+            logs.reeltime.refresh_count = result[0].refresh_count;
             callback(err, null);
           }
         );
@@ -199,6 +208,7 @@ exports.save = (_connection, _data, _callback) => {
             logs.speed.value,
             logs.repetition.value,
             JSON.stringify(logs),
+            logs.reeltime.refresh_count,
             trainingUserId
           ],
           (err, result) => {

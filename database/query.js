@@ -499,9 +499,11 @@ QUERY.LOG_COURSE_LIST = {
   // 여러건 입력이 가능한지?
   INS_SESSION_PROGRESS:
     'INSERT INTO `log_session_progress` (`user_id`, `training_user_id`, `course_id`, `course_list_id`, `start_dt`) ' +
-    'SELECT ?, ?, ?, ?, NOW()' +
-    '  FROM dual ' +
-    ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_session_progress` WHERE `user_id` = ? AND `training_user_id` = ? AND `course_list_id` = ?); ',
+    'VALUES(?, ?, ?, ?, NOW())' +
+    '    ON DUPLICATE KEY UPDATE `start_dt` = NOW(); ',
+    // 'SELECT ?, ?, ?, ?, NOW()' +
+    // '  FROM dual ' +
+    // ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_session_progress` WHERE `user_id` = ? AND `training_user_id` = ? AND `course_list_id` = ?); ',
 
   UPD_SESSION_PROGRESS:
     'UPDATE `log_session_progress` SET ' +
@@ -512,7 +514,16 @@ QUERY.LOG_COURSE_LIST = {
 
   // 세션 로그를 삭제한다.
   DEL_SESSION_PROGRESS:
-    'DELETE FROM `log_session_progress` WHERE `user_id` = ? AND `training_user_id` = ? AND `course_list_id` = ?; '
+    'DELETE FROM `log_session_progress` WHERE `user_id` = ? AND `training_user_id` = ? AND `course_list_id` = ?; ',
+  // 세션 로그를 초기화 한다.
+  INIT_SESSION_PROGRESS:
+    'UPDATE `log_session_progress` SET ' +
+    '       `start_dt` = NULL ' +
+    '     , `end_dt` = NULL ' +
+    '     , `refresh_count` = `refresh_count` + 1 ' +
+    ' WHERE `user_id` = ? ' +
+    '   AND `training_user_id` = ? ' +
+    '   AND `course_list_id` = ?; '
 
 };
 
@@ -669,6 +680,7 @@ QUERY.POINT = {
     '     , speed = ? ' +
     '     , repetition = ? ' +
     '     , logs = ? ' +
+    '     , video_refresh_count = video_refresh_count + ? ' +
     '     , updated_dt = NOW() ' +
     ' WHERE training_user_id = ?; ',
 
@@ -729,6 +741,8 @@ QUERY.POINT = {
     '     , DATEDIFF(lae.`end_dt`, lae.`start_dt`) AS edu_period ' +
     '     , DATE_FORMAT(tu.`start_dt`, \'%Y-%m-%d\') AS edu_start_dt ' +
     '     , DATE_FORMAT(tu.`end_dt`, \'%Y-%m-%d\') AS edu_end_dt ' +
+    '     , TIME_TO_SEC(TIMEDIFF(tu.end_dt, tu.start_dt)) AS user_period_by_seconds ' +
+    '     , TIME_TO_SEC(TIMEDIFF(lae.end_dt, lae.start_dt)) AS edu_period_by_seconds ' +
     '  FROM `training_users` AS tu ' +
     ' INNER JOIN `training_edu` AS te ' +
     '    ON tu.`training_edu_id` = te.`id` ' +
@@ -760,6 +774,19 @@ QUERY.POINT = {
     '          AND luv.`training_user_id` = ? ' +
     '        GROUP BY luv.`video_id` ' +
     '      ) AS r; ',
+
+  SEL_VIDEO_RESULTS2:
+  'SELECT lsp.`training_user_id` ' +
+  '     , SUM(`refresh_count`) AS refresh_count ' +
+  '     , COUNT(*) AS video_count ' +
+  '     , SUM(CASE WHEN lsp.`end_dt` IS NULL THEN 0 ELSE 1 END) AS video_watch_count ' +
+  '  FROM `log_session_progress` AS lsp ' +
+  ' INNER JOIN `course_list` AS cl ' +
+  '    ON cl.`id` = lsp.`course_list_id` ' +
+  '   AND cl.`type` = \'VIDEO\' ' +
+  '   AND EXISTS (SELECT \'X\' FROM `course_group` WHERE `course_id` = cl.`course_id` AND `group_id` = ?) ' +
+  ' WHERE lsp.`training_user_id` = ? ' +
+  ' GROUP BY lsp.`training_user_id` ',
 
   // 교육 시청시간 (비디오 시청시간 ÷ 비디오 재생시간) 갱신
   UPD_VIDEO_RESULTS:

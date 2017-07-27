@@ -132,51 +132,9 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.header = courseList.title;
         returnData.next_url = nextUrl;
         res.render('video', returnData);
-
-        // res.render('video', {
-        //   group_path: 'contents',
-        //   current_path: 'video',
-        //   current_url: req.url,
-        //   title: global.PROJ_TITLE,
-        //   logo: logoName,
-        //   logo_image: logoImageName,
-        //   host: req.get('origin'),
-        //   loggedIn: req.user,
-        //   header: courseList.title,
-        //   content: results[1][0],
-        //   total_played_seconds: results[2][0].total_played_seconds,
-        //   currenttime: currenttime,
-        //   next_url: nextUrl,
-        //   training_user_id: trainingUserId,
-        //   course_id: courseId,
-        //   course_list_id: courseListId,
-        //   setting: {
-        //     interval: 5, // playtime 로깅 간격
-        //     waiting_seconds: 30, // 비디오 종료 후 다음 버튼이 노출되는 시간
-        //     passive_rate: 80 // 다음 버튼이 활성화되는 시청시간 (%)
-        //   }
-        // });
       } else if (courseList.type === 'QUIZ' || courseList.type === 'FINAL') {
         var quizList = CourseService.makeQuizList(results[1]);
-        // 퀴즈뷰 출력
-        // res.render('quiz', {
-        //   group_path: 'contents',
-        //   current_path: 'quiz',
-        //   current_url: req.url,
-        //   title: global.PROJ_TITLE,
-        //   logo: logoName,
-        //   logo_image: logoImageName,
-        //   host: req.get('origin'),
-        //   loggedIn: req.user,
-        //   header: courseList.title,
-        //   contents: quizList, // results[1],
-        //   next_url: nextUrl,
-        //   training_user_id: trainingUserId,
-        //   course_id: courseId,
-        //   course_list_id: courseListId,
-        //   prev_yn: courseList.prev_yn,
-        //   course_list_type: courseList.type
-        // });
+
         returnData.current_path = 'quiz';
         returnData.contents = quizList;
         returnData.prev_yn = courseList.prev_yn;
@@ -184,25 +142,6 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.next_url = nextUrl;
         res.render('quiz', returnData);
       } else if (courseList.type === 'CHECKLIST') {
-        // 체크리스트뷰 출력
-        // res.render('checklist', {
-        //   group_path: 'contents',
-        //   current_path: 'checklist',
-        //   current_url: req.url,
-        //   title: global.PROJ_TITLE,
-        //   logo: logoName,
-        //   logo_image: logoImageName,
-        //   host: req.get('origin'),
-        //   loggedIn: req.user,
-        //   header: courseList.title,
-        //   contents: results[1],
-        //   next_url: nextUrl,
-        //   training_user_id: trainingUserId,
-        //   course_id: courseId,
-        //   course_list_id: courseListId,
-        //   prev_yn: courseList.prev_yn,
-        //   course_list_type: courseList.type
-        // });
         returnData.current_path = 'checklist';
         returnData.contents = results[1];
         returnData.header = courseList.title;
@@ -240,10 +179,10 @@ router.post('/log/starttime', util.isAuthenticated, (req, res) => {
         inputs.user_id,
         inputs.training_user_id,
         inputs.course_id,
-        inputs.course_list_id,
-        inputs.user_id,
-        inputs.training_user_id,
         inputs.course_list_id
+        // inputs.user_id,
+        // inputs.training_user_id,
+        // inputs.course_list_id
       ],
       (err, data) => {
         callback(err, data);
@@ -321,7 +260,8 @@ router.delete('/log', util.isAuthenticated, (req, res) => {
     course_list_id: req.query.course_list_id
   };
 
-  connection.query(QUERY.LOG_COURSE_LIST.DEL_SESSION_PROGRESS, [
+  connection.query(QUERY.LOG_COURSE_LIST.INIT_SESSION_PROGRESS, [
+  // connection.query(QUERY.LOG_COURSE_LIST.DEL_SESSION_PROGRESS, [
     inputs.user_id,
     inputs.training_user_id,
     inputs.course_list_id
