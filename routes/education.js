@@ -51,16 +51,18 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
                   callback(err, null);
                 } else {
                   courses = rows;
+
+                  console.log(courses);
                   if (courses.length > 0) {
-                    nextTrainingUserId = courses[0].training_user_id;
-                    nextCourseId = courses[0].course_id;
+                    // nextTrainingUserId = courses[0].training_user_id;
+                    // nextCourseId = courses[0].course_id;
 
                     for (i = 0; i < courses.length; i++) {
                       if (currentPath !== 'passed' || (currentPath === 'passed' && courses[i].can_replay === 1)) {
                         if (courses[i].completed_rate !== 100) {
                           nextTrainingUserId = courses[i].training_user_id;
                           nextCourseId = courses[i].course_id;
-                          console.log(nextTrainingUserId, nextCourseId);
+                          // console.log(nextTrainingUserId, nextCourseId);
                           break;
                         }
                       }

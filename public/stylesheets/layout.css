@@ -916,3 +916,7 @@ textarea {
    /*pointer-events: none;*/
    cursor: default;
 }
+
+.btn-play {
+  text-decoration: none;
+}

@@ -67,7 +67,8 @@ passport.use(new LocalStrategy({
             'duty': data[0].duty_name,
             'email': data[0].email,
             // 'point': data.point_total,
-            'terms_approved': data[0].terms_approved
+            'terms_approved': data[0].terms_approved,
+            'isdemo': data[0].isdemo
           };
 
           // 교육생 포인트를 사이드탭에 표시하기 위함.
