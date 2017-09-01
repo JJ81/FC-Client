@@ -920,3 +920,7 @@ textarea {
 .btn-play {
   text-decoration: none;
 }
+
+.table_checklist th, td {
+  border: 1px solid;
+}

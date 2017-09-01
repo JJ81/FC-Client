@@ -145,6 +145,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.current_path = 'checklist';
         returnData.contents = results[1];
         returnData.header = courseList.title;
+        returnData.description = courseList.desc;
         returnData.next_url = nextUrl;
         returnData.checklist_group_id = courseList.checklist_group_id;
         res.render('checklist', returnData);

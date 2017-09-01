@@ -121,21 +121,21 @@ QUERY.EDU = {
     '     , c.`desc` ' +
     '     , c.`thumbnail` ' +
     '     , c.`teacher` AS teacher_name ' +
-    ' 	  , ( ' +
+    '     , ( ' +
     '        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
-    '  		   FROM `course_list` AS cl ' +
-    '  	     LEFT JOIN `log_session_progress` AS up ' +
-    '  				 ON cl.id = up.course_list_id ' +
-    ' 			    AND up.`training_user_id` = @training_user_id ' +
-    ' 			    AND up.`end_dt` IS NOT NULL ' +
-    ' 			  WHERE cl.`course_id` = @course_id ' +
-    '  		) AS completed_rate ' +
+    '         FROM `course_list` AS cl ' +
+    '         LEFT JOIN `log_session_progress` AS up ' +
+    '           ON cl.id = up.course_list_id ' +
+    '           AND up.`training_user_id` = @training_user_id ' +
+    '           AND up.`end_dt` IS NOT NULL ' +
+    '         WHERE cl.`course_id` = @course_id ' +
+    '      ) AS completed_rate ' +
     '     , (SELECT `end_dt` FROM `log_course_progress` WHERE `training_user_id` = @training_user_id AND `course_id` = @course_id) AS course_end_dt ' +
     '     , e.name AS edu_name ' +
     '     , e.can_replay ' +
     '  FROM `edu` AS e ' +
     ' INNER JOIN ( ' +
-    ' 	    SELECT te.`edu_id`, tu.id AS training_user_id ' +
+    '       SELECT te.`edu_id`, tu.id AS training_user_id ' +
     '            , lae.`start_dt`, lae.`end_dt` ' +
     '         FROM `users` AS u ' +
     '        INNER JOIN `training_users` AS tu ' +
@@ -213,39 +213,39 @@ QUERY.EDU = {
 
 QUERY.COURSE = {
 
-	// 강의 정보 조회
+  // 강의 정보 조회
   SEL_INDEX:
-		'SELECT @course_id := c.`id` AS course_id ' +
-		'     , c.`name` AS course_name ' +
-		'     , c.`thumbnail` ' +
-		'     , c.`desc` ' +
-		'     , c.`teacher` AS teacher_name ' +
-    ' 	  , ( ' +
-		'        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
-		'  		   FROM `course_list` AS cl ' +
-		'  	     LEFT JOIN `log_session_progress` AS up ' +
-		'  				 ON cl.id = up.course_list_id ' +
-    ' 			    AND up.`training_user_id` = ? ' +
-    ' 			    AND up.`end_dt` IS NOT NULL ' +
-		' 			  WHERE cl.`course_id` = @course_id ' +
-		'  		) AS completed_rate ' +
-		' 	  , ( ' +
-		'  		 SELECT IFNULL(TRUNCATE(AVG(course_rate) / 5, 2) * 100, 0) ' +
-  	'  				 FROM `user_rating` AS ur ' +
- 	  ' 			  WHERE ur.`course_id` = @course_id ' +
-		'  		) AS course_rate ' +
+    'SELECT @course_id := c.`id` AS course_id ' +
+    '     , c.`name` AS course_name ' +
+    '     , c.`thumbnail` ' +
+    '     , c.`desc` ' +
+    '     , c.`teacher` AS teacher_name ' +
+    '     , ( ' +
+    '        SELECT IFNULL(TRUNCATE(SUM(CASE WHEN ISNULL(up.`id`) THEN 0 ELSE 1 END) / COUNT(cl.`id`), 2) * 100, 0) ' +
+    '         FROM `course_list` AS cl ' +
+    '         LEFT JOIN `log_session_progress` AS up ' +
+    '           ON cl.id = up.course_list_id ' +
+    '           AND up.`training_user_id` = ? ' +
+    '           AND up.`end_dt` IS NOT NULL ' +
+    '         WHERE cl.`course_id` = @course_id ' +
+    '      ) AS completed_rate ' +
+    '     , ( ' +
+    '       SELECT IFNULL(TRUNCATE(AVG(course_rate) / 5, 2) * 100, 0) ' +
+    '           FROM `user_rating` AS ur ' +
+    '         WHERE ur.`course_id` = @course_id ' +
+    '      ) AS course_rate ' +
     '     , (SELECT `end_dt` FROM `log_course_progress` WHERE `training_user_id` = ? AND `course_id` = @course_id) AS course_end_dt ' +
-		'  FROM `course` AS c ' +
-		// ' INNER JOIN `teacher` AS t ' +
-		// '    ON c.`teacher_id` = t.`id` ' +
-		' WHERE c.id = ? ',
+    '  FROM `course` AS c ' +
+    // ' INNER JOIN `teacher` AS t ' +
+    // '    ON c.`teacher_id` = t.`id` ' +
+    ' WHERE c.id = ? ',
 
-	// 강의 세션 목록
+  // 강의 세션 목록
   SEL_SESSION_LIST:
     'SELECT cl.`id` ' +
     '     , cl.title ' +
-		// '  	, (CASE WHEN cl.`type` = \'VIDEO\' THEN (SELECT name FROM `video` WHERE id = cl.video_id) ELSE cl.type END) AS title ' +
-		'    , cl.type ' +
+    // '    , (CASE WHEN cl.`type` = \'VIDEO\' THEN (SELECT name FROM `video` WHERE id = cl.video_id) ELSE cl.type END) AS title ' +
+    '    , cl.type ' +
     '     , (CASE WHEN ISNULL(up.id) THEN 0 ELSE 1 END) AS done ' +
     '  FROM `course_list` AS cl ' +
     '  LEFT JOIN `log_session_progress` AS up ' +
@@ -278,11 +278,11 @@ QUERY.COURSE = {
     'SELECT cg.`course_id` ' +
     '  FROM `course_group` AS cg ' +
     ' WHERE cg.`id` = ( ' +
-	  '   SELECT `id` ' +
-	  '     FROM `course_group` AS icg ' +
-	  '    WHERE `group_id` = ? ' +
+    '   SELECT `id` ' +
+    '     FROM `course_group` AS icg ' +
+    '    WHERE `group_id` = ? ' +
     '      AND `course_id` <> ? ' +
-	  '      AND `order` >= ? ' +
+    '      AND `order` >= ? ' +
     '      AND NOT EXISTS (SELECT \'X\' FROM `log_course_progress` WHERE training_user_id = ? AND `end_dt` IS NOT NULL AND `course_id` = icg.`course_id`) ' +
     '    ORDER BY `order`, `id` LIMIT 1 ' +
     '  ); ',
@@ -292,11 +292,11 @@ QUERY.COURSE = {
     'SELECT cg.`course_id` ' +
     '  FROM `course_group` AS cg ' +
     ' WHERE cg.`id` = ( ' +
-	  '   SELECT `id` ' +
-	  '     FROM `course_group` AS icg ' +
-	  '    WHERE `group_id` = ? ' +
+    '   SELECT `id` ' +
+    '     FROM `course_group` AS icg ' +
+    '    WHERE `group_id` = ? ' +
     '      AND `course_id` <> ? ' +
-	  '      AND `order` >= ? ' +
+    '      AND `order` >= ? ' +
     '    ORDER BY `order`, `id` LIMIT 1 ' +
     '  ); ',
 
@@ -306,12 +306,12 @@ QUERY.COURSE = {
     '   FROM `course_group` AS cg ' +
     '  WHERE `group_id` = ? ' +
     '    AND EXISTS ( ' +
-		'	          SELECT \'X\' ' +
-		'	            FROM `log_course_progress` ' +
-		'	           WHERE `training_user_id` = ? ' +
+    '            SELECT \'X\' ' +
+    '              FROM `log_course_progress` ' +
+    '             WHERE `training_user_id` = ? ' +
     '              AND `course_id` = cg.`course_id` ' +
-		'         	   AND `end_dt` IS NULL ' +
-		'        ); ',
+    '              AND `end_dt` IS NULL ' +
+    '        ); ',
 
   // 모든 강의 반복여부
   SEL_COURSE_REPEAT_YN:
@@ -320,11 +320,11 @@ QUERY.COURSE = {
     '  WHERE `group_id` = ? ' +
     '    AND EXISTS ( ' +
     '           SELECT \'X\' ' +
-    '	            FROM `log_course_progress` ' +
-		'	           WHERE `training_user_id` = ? ' +
+    '              FROM `log_course_progress` ' +
+    '             WHERE `training_user_id` = ? ' +
     '              AND `course_id` = cg.`course_id` ' +
-		'         	   AND `repeat_count` = 0 ' +
-		'        ); ',
+    '              AND `repeat_count` = 0 ' +
+    '        ); ',
 
   // 사용자별 강의 진행정보를 입력
   INS_COURSE_PROGRESS:
@@ -380,6 +380,7 @@ QUERY.COURSE_LIST = {
     'SELECT @id := cl.`id` AS id ' +
     '     , cl.`type` ' +
     '     , cl.`title` ' +
+    '     , cl.`desc` ' +
     '     , cl.`quiz_group_id` ' +
     '     , cl.`checklist_group_id` ' +
     '     , cl.`video_id` ' +
@@ -394,7 +395,7 @@ QUERY.COURSE_LIST = {
   // 비디오 정보
   SEL_VIDEO:
     'SELECT v.`id` ' +
-    '	    , v.`name` ' +
+    '      , v.`name` ' +
     '     , v.`url` ' +
     '     , LOWER(v.`type`) AS video_type ' +
     // '     , SUBSTRING_INDEX(v.`url`, \'/\', -1) AS video_id ' +
@@ -426,7 +427,7 @@ QUERY.COURSE_LIST = {
     '   FROM `quiz` AS q ' +
     '  INNER JOIN `quiz_group` AS qg ' +
     '     ON q.`id` = qg.`quiz_id` ' +
-    '	   AND qg.`group_id` = ?; ',
+    '     AND qg.`group_id` = ?; ',
 
   // 특정 세션의 그룹아이디로 퀴즈를 조회한다.
   GetQuizDataByGroupId:
@@ -634,18 +635,18 @@ QUERY.POINT = {
 
   // 포인트 조회
   SEL_POINT_WEIGHT:
-		'SELECT pw.`point_complete` ' +
+    'SELECT pw.`point_complete` ' +
     '     , pw.`point_quiz` ' +
     '     , pw.`point_final` ' +
     '     , pw.`point_reeltime` ' +
     '     , pw.`point_speed` ' +
     '     , pw.`point_repetition` ' +
-		'  FROM `point_weight` AS pw ' +
-		'  LEFT JOIN `admin` AS a ' +
-		'    ON a.`id` = pw.`setter_id` ' +
-		' WHERE a.`fc_id` = ? ' +
-		' ORDER BY pw.`created_dt` DESC ' +
-		' LIMIT 1; ',
+    '  FROM `point_weight` AS pw ' +
+    '  LEFT JOIN `admin` AS a ' +
+    '    ON a.`id` = pw.`setter_id` ' +
+    ' WHERE a.`fc_id` = ? ' +
+    ' ORDER BY pw.`created_dt` DESC ' +
+    ' LIMIT 1; ',
 
   // 포인트 현황
   SEL_USER_POINT:
@@ -767,11 +768,11 @@ QUERY.POINT = {
     '         FROM `log_user_video` AS luv ' +
     '        WHERE EXISTS ( ' +
     '               SELECT \'X\' ' +
-    '  		            FROM `course_list` AS cl ' +
-    '  		           WHERE EXISTS (SELECT \'X\' FROM `course_group` WHERE `course_id` = cl.`course_id` AND `group_id` = ?) ' +
-    '  		             AND cl.`type` = \'VIDEO\' ' +
-    '  		             AND cl.`video_id` = luv.video_id ' +
-    '  	          ) ' +
+    '                  FROM `course_list` AS cl ' +
+    '                 WHERE EXISTS (SELECT \'X\' FROM `course_group` WHERE `course_id` = cl.`course_id` AND `group_id` = ?) ' +
+    '                   AND cl.`type` = \'VIDEO\' ' +
+    '                   AND cl.`video_id` = luv.video_id ' +
+    '              ) ' +
     '          AND luv.`training_user_id` = ? ' +
     '        GROUP BY luv.`video_id` ' +
     '      ) AS r; ',
