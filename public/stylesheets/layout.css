@@ -921,6 +921,10 @@ textarea {
   text-decoration: none;
 }
 
+.table_checklist {
+  width: 100%;
+}
+
 .table_checklist th, td {
   border: 1px solid;
 }

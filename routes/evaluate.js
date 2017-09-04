@@ -34,7 +34,8 @@ router.get('/:training_user_id/:course_id', util.isAuthenticated, util.getLogoIn
           loggedIn: req.user,
           header: '평가하기',
           next_url: nextUrl,
-          course_id: courseId
+          course_id: courseId,
+          training_user_id: trainingUserId
         });
       }
     }

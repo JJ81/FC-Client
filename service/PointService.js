@@ -176,10 +176,12 @@ exports.save = (_connection, _data, _callback) => {
             // logs.reeltime.value = (result[0].played_seconds / result[0].duration).toFixed(2);
             // logs.reeltime.value = logs.reeltime.value > 1 ? 1 : logs.reeltime.value; // 1보다 클 경우 1로 한정한다.
 
-            logs.reeltime.video_count = result[0].video_count;
-            logs.reeltime.video_watch_count = result[0].video_watch_count;
-            logs.reeltime.value = (result[0].video_watch_count / result[0].video_count).toFixed(2);
-            logs.reeltime.refresh_count = result[0].refresh_count;
+            if (result.length > 0) {
+              logs.reeltime.video_count = result[0].video_count;
+              logs.reeltime.video_watch_count = result[0].video_watch_count;
+              logs.reeltime.value = (result[0].video_watch_count / result[0].video_count).toFixed(2);
+              logs.reeltime.refresh_count = result[0].refresh_count;
+            }
             callback(err, null);
           }
         );
