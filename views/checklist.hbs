@@ -10,23 +10,28 @@
       {{/if}}-->
       <strong>{{item_name}}</strong>
     </div>
-    {{#if sample}}
-    {{#ifCond item_type '!==' 'write' }}
-    <div class="btn-group btn-group-justified checklist-item" data-toggle="buttons" data-id="{{../checklist_id}}" data-type="{{../item_type}}">
-      {{#each sample}}
-      <label class="btn btn-default btn-lg">
-        {{#if (isEquals ../item_type 'select')}}
-        <input type="radio" name="sample-{{../../checklist_id}}" autocomplete="off" value="{{this}}"> {{this}}
-        {{else if (isEquals ../../item_type 'choose')}}
-        <input type="checkbox" name="sample-{{../../../checklist_id}}" autocomplete="off" value="{{this}}"> {{this}}
+    <div class="row">
+      <div class="col-xs-12">
+        {{#if sample}}
+        {{#ifCond item_type '!==' 'write' }}
+        <!-- btn-group-justified -->
+        <div class="btn-group checklist-item" data-toggle="buttons" data-id="{{../checklist_id}}" data-type="{{../item_type}}">
+          {{#each sample}}
+          <label class="btn btn-default btn-lg">
+          {{#if (isEquals ../item_type 'select')}}
+            <input type="radio" name="sample-{{../../checklist_id}}" autocomplete="off" value="{{this}}"> {{this}}
+          {{else if (isEquals ../../item_type 'choose')}}
+            <input type="checkbox" name="sample-{{../../../checklist_id}}" autocomplete="off" value="{{this}}"> {{this}}
+          {{/if}}
+          </label>
+          {{/each}}
+          </div>
+        {{/ifCond}}
+        {{else}}
+          <textarea cols="30" rows="5" class="checklist-item" data-id="{{../checklist_id}}" data-type="{{../item_type}}"></textarea>
         {{/if}}
-      </label>
-      {{/each}}
+      </div>
     </div>
-    {{/ifCond}}
-    {{else}}
-    <textarea cols="30" rows="5" class="checklist-item" data-id="{{../checklist_id}}" data-type="{{../item_type}}"></textarea>
-    {{/if}}
   {{/each}}
   </div>
 </section>
