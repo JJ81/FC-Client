@@ -927,4 +927,5 @@ textarea {
 
 .table_checklist th, td {
   border: 1px solid;
+  text-align: left;
 }
