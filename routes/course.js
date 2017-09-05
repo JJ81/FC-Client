@@ -260,6 +260,7 @@ router.get('/check', (req, res, next) => {
   const { training_user_id: trainingUserId, course_id: courseId } = req.query;
   let courseGroupId;
   let prevCourseId;
+  let eduName;
   let prevCourseName;
   let canProceed;
   let canAdvance = 0; // 강의 선진행 여부
@@ -271,6 +272,7 @@ router.get('/check', (req, res, next) => {
         if (data !== null) {
           courseGroupId = data[0].course_group_id;
           canAdvance = data[0].can_advance;
+          eduName = data[0].edu_name;
         }
         callback(err, data);
       });
@@ -333,7 +335,8 @@ router.get('/check', (req, res, next) => {
       res.send({
         success: true,
         can_progress: canProceed === true ? 1 : 0,
-        prev_course_name: prevCourseName !== '' ? prevCourseName : '1'
+        eduName: eduName,
+        prev_course_name: prevCourseName !== '' ? prevCourseName : ''
       });
     }
   });

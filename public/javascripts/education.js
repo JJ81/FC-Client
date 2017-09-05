@@ -92,7 +92,7 @@ function (jQuery, axios) {
       if (data.success) {
         if (data.can_progress !== 1) {
           if (data.prev_course_name !== '') {
-            window.alert(data.prev_course_name + '\n' + '강의를 먼저 이수하세요.');
+            window.alert('교육과정 : ' + data.eduName + '\n' + '강의명 : ' + data.prev_course_name + '\n' + '\n을 먼저 이수하세요.');
           }
         } else {
           if (url) {
