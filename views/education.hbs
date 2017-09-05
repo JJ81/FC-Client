@@ -45,27 +45,28 @@
     {{#if (isEquals ../current_path 'passed')}}
     <li class="item_wrap">
       {{#ifCond can_replay '==' 1}}
-      {{#if thumbnail}}
-      {{#if (isEquals ../loggedIn.isdemo 0)}}
-      <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item">
-      {{else}}
-      <a href="#" class="list_item">
-      {{/if}}
-      <img src="/uploads/{{thumbnail}}" alt="" width="100" class="img_list" />
-      {{else}} <!-- thumbnail not exists -->
-      {{#if (isEquals ../loggedIn.isdemo 0)}}
-      <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item no_img_list">
-      {{else}}
-      <a href="#" class="list_item no_img_list">
-      {{/if}} <!-- is demo -->
-      {{/if}}
+        {{#if thumbnail}}
+          {{#if (isEquals ../../../loggedIn.isdemo 0)}}
+          <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item" data-training-user-id="{{training_user_id}}" data-course-id="{{course_id}}">
+          {{else}}
+          <a href="#" class="list_item">
+          {{/if}}
+          <img src="/uploads/{{thumbnail}}" alt="" width="100" class="img_list" />
+        {{else}}
+          <!-- thumbnail not exists -->
+          {{#if (isEquals ../../../../loggedIn.isdemo 0)}}
+          <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item no_img_list"  data-training-user-id="{{training_user_id}}" data-course-id="{{course_id}}">
+          {{else}}
+          <a href="#" class="list_item no_img_list">
+          {{/if}} <!-- is demo -->
+        {{/if}}
       {{else}} <!-- can not replay -->
-      {{#if thumbnail}}
-      <a href="#" class="list_item not-active">
-      <img src="/uploads/{{thumbnail}}" alt="" width="100" class="img_list" />
-      {{else}}
-      <a href="#" class="list_item no_img_list not-active">
-      {{/if}}
+        {{#if thumbnail}}
+        <a href="#" class="list_item not-active">
+        <img src="/uploads/{{thumbnail}}" alt="" width="100" class="img_list" />
+        {{else}}
+        <a href="#" class="list_item no_img_list not-active">
+        {{/if}}
       {{/ifCond}}
       <span class="info">
         {{#ifCond can_replay '==' 1}}
@@ -86,14 +87,14 @@
     <li class="item_wrap">
       {{#if thumbnail}}
       {{#if (isEquals ../../../loggedIn.isdemo 0)}}
-      <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item">
+      <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item" data-training-user-id="{{training_user_id}}" data-course-id="{{course_id}}">
       {{else}}
       <a href="#" class="list_item">
       {{/if}}
       <img src="/uploads/{{thumbnail}}" alt="" width="100" class="img_list" />
       {{else}}
       {{#if (isEquals ../../../loggedIn.isdemo 0)}}
-      <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item no_img_list">
+      <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item no_img_list"  data-training-user-id="{{training_user_id}}" data-course-id="{{course_id}}">
       {{else}}
       <a href="#" class="list_item no_img_list">
       {{/if}}

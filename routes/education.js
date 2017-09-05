@@ -6,6 +6,7 @@ const QUERY = require('../database/query');
 const pool = require('../commons/db_conn_pool');
 const async = require('async');
 const util = require('../util/util');
+
 // 이달의/지난 교육과정
 router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, util.getLogoInfo, (req, res, next) => {
   const {searchby, searchtext} = req.query;
@@ -51,8 +52,7 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
                   callback(err, null);
                 } else {
                   courses = rows;
-
-                  console.log(courses);
+                  // console.log(courses);
                   if (courses.length > 0) {
                     // nextTrainingUserId = courses[0].training_user_id;
                     // nextCourseId = courses[0].course_id;
@@ -107,6 +107,7 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
           console.error(err);
           throw new Error(err);
         } else {
+          // console.log(req.user);
           res.render('education', {
             group_path: 'education',
             current_path: currentPath,

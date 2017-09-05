@@ -14,18 +14,18 @@ router.get('/:training_user_id/:course_id', util.isAuthenticated, util.getLogoIn
   let minCourseListId = null; // 학습을 시작/반복/이어할 세션 id
 
   async.series([
-    (callback) => {
+    callback => {
       connection.query(QUERY.COURSE.SEL_INDEX, [trainingUserId, trainingUserId, courseId], (err, data) => {
         callback(err, data[0]);
       });
     },
-    (callback) => {
+    callback => {
       connection.query(QUERY.COURSE.SEL_SESSION_LIST, [req.user.user_id, trainingUserId, courseId], (err, data) => {
         callback(err, data);
       });
     },
     // edu_id, course_group_id 조회 (세션에 저장해둔다.)
-    (callback) => {
+    callback => {
       connection.query(QUERY.EDU.SEL_COURSE_GROUP, [trainingUserId], (err, data) => {
         callback(err, data);
       });
@@ -91,7 +91,7 @@ router.post('/log/start', util.isAuthenticated, util.getLogoInfo, (req, res, nex
 
     async.series([
       // 최초 학습시작 시 training_users 의 시작일시(start_dt)를 기록
-      (callback) => {
+      callback => {
         connection.query(QUERY.EDU.UPD_TRAINING_USER_START_DT, [
           _inputs.trainingUserId
         ],
@@ -100,7 +100,7 @@ router.post('/log/start', util.isAuthenticated, util.getLogoInfo, (req, res, nex
           });
       },
       // 사용자별 강의 진행정보를 입력
-      (callback) => {
+      callback => {
         connection.query(QUERY.COURSE.INS_COURSE_PROGRESS, [
           _inputs.user_id,
           _inputs.trainingUserId,
@@ -114,7 +114,7 @@ router.post('/log/start', util.isAuthenticated, util.getLogoInfo, (req, res, nex
         );
       },
       // 사용자별 강의 반복횟수 갱신
-      (callback) => {
+      callback => {
         if (_inputs.isrepeat) {
           connection.query(QUERY.COURSE.UPD_COURSE_PROGRESS_REPEAT, [
             _inputs.trainingUserId,
@@ -186,7 +186,7 @@ router.post('/log/end', util.isAuthenticated, (req, res) => {
 
     // async.series 쿼리 시작
     async.series([
-      (callback) => {
+      callback => {
         // 강의 종료일시 기록
         connection.query(QUERY.COURSE.UPD_COURSE_PROGRESS, [
           inputs.trainingUserId,
@@ -197,7 +197,7 @@ router.post('/log/end', util.isAuthenticated, (req, res) => {
           }
         );
       },
-      (callback) => {
+      callback => {
         // 강의 종료여부 조회
         connection.query(QUERY.COURSE.SEL_COURSE_END, [
           inputs.courseGroupId,
@@ -211,7 +211,7 @@ router.post('/log/end', util.isAuthenticated, (req, res) => {
           }
         );
       },
-      (callback) => {
+      callback => {
         // 교육 종료여부 기록
         if (courseEndYn) {
           connection.query(QUERY.EDU.UPD_TRAINING_USER_END_DT, [
@@ -253,6 +253,89 @@ router.post('/log/end', util.isAuthenticated, (req, res) => {
         });
       }
     });
+  });
+});
+
+router.get('/check', (req, res, next) => {
+  const { training_user_id: trainingUserId, course_id: courseId } = req.query;
+  let courseGroupId;
+  let prevCourseId;
+  let prevCourseName;
+  let canProceed;
+  let canAdvance = 0; // 강의 선진행 여부
+
+  async.series([
+    callback => {
+      connection.query(QUERY.EDU.SEL_COURSE_GROUP, [trainingUserId], (err, data) => {
+        console.log(data);
+        if (data !== null) {
+          courseGroupId = data[0].course_group_id;
+          canAdvance = data[0].can_advance;
+        }
+        callback(err, data);
+      });
+    },
+    callback => {
+      if (canAdvance !== 1) {
+        console.log('prev_course id 조회');
+        connection.query(QUERY.COURSE.GetPrevCourseId, [ courseId, courseGroupId ], (err, data) => {
+          if (data !== null) {
+            prevCourseId = data[0].prev_course_id;
+          }
+          callback(err, data);
+        });
+      } else {
+        callback(null, null);
+      }
+    },
+    // callback => {
+    //   if (prevCourseId === courseId) {
+    //     console.log('prev_course id 재조회');
+    //     connection.query(QUERY.COURSE.GetPrevCourseId2, [ courseId, courseGroupId ], (err, data) => {
+    //       if (data !== null) {
+    //         prevCourseId = data[0].prev_course_id;
+    //       }
+    //       callback(err, data);
+    //     });
+    //   } else {
+    //     callback(null, null);
+    //   }
+    // },
+    callback => {
+      if (canAdvance !== 1) {
+        console.log('prev_course 학습여부 조회', prevCourseId);
+        if (prevCourseId === 0) {
+          canProceed = true;
+          callback(null, null);
+        } else {
+          connection.query(QUERY.COURSE.GetCourseDone, [ trainingUserId, prevCourseId ], (err, data) => {
+            if (data !== undefined) {
+              if (data[0].end_dt !== null) {
+                canProceed = true;
+              }
+            }
+
+            prevCourseName = data[0].course_name;
+            console.log(prevCourseName);
+            callback(err, data);
+          });
+        }
+      } else {
+        canProceed = true;
+        callback(false, false);
+      }
+    }
+  ],
+  (err, results) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.send({
+        success: true,
+        can_progress: canProceed === true ? 1 : 0,
+        prev_course_name: prevCourseName !== '' ? prevCourseName : '1'
+      });
+    }
   });
 });
 

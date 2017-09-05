@@ -184,6 +184,7 @@ QUERY.EDU = {
   // @params : training_user_id,
   SEL_COURSE_GROUP:
     'SELECT te.`edu_id`, e.`course_group_id`, e.`name` AS edu_name ' +
+    '     , e.`can_advance` ' +
     '     , IFNULL(DATE_FORMAT(tu.`start_dt`, \'%Y.%m.%d\'), \'\') AS start_dt ' +
     '     , IFNULL(DATE_FORMAT(tu.`end_dt`, \'%Y.%m.%d\'), \'\') AS end_dt ' +
     '  FROM `training_users` AS tu ' +
@@ -369,7 +370,44 @@ QUERY.COURSE = {
     'SELECT ur.`course_rate`, ur.`teacher_rate` ' +
     '  FROM `user_rating` AS ur ' +
     ' WHERE ur.`user_id` = ? ' +
-    '   AND ur.`course_id` = ?; '
+    '   AND ur.`course_id` = ?; ',
+
+  GetPrevCourseId:
+    'SELECT c.`name`, cg.`order` ' +
+    '     , @seq := cg.`order` AS `seq` ' +
+    '     , cg.`course_id` ' +
+    '     , @group_id := cg.`group_id` AS group_id ' +
+    '     , IFNULL((SELECT `course_id` FROM `course_group` WHERE `group_id` = @group_id AND `order` < @seq ORDER BY `order` DESC LIMIT 1),0) as prev_course_id ' +
+    // '     , IFNULL((SELECT `course_id` FROM `course_group` WHERE `group_id` = @group_id AND `order` > @seq ORDER BY `order` LIMIT 1),0) as next_course_id ' +
+    '  FROM `course_group` AS cg ' +
+    ' INNER JOIN `course` AS c ' +
+    '    ON cg.`course_id` = c.`id` ' +
+    '   AND c.`id` = ? ' +
+    ' WHERE cg.`group_id` = ? ' +
+    ' ORDER BY cg.`order`; ',
+
+  GetPrevCourseId2:
+    'SELECT c.`name`, cg.`order` ' +
+    '     , @id := cg.`id` AS id ' +
+    '     , cg.`course_id` ' +
+    '     , @course_id := cg.`course_id` AS course_id ' +
+    '     , @group_id := cg.`group_id` AS group_id ' +
+    '     , IFNULL((SELECT `course_id` FROM `course_group` WHERE `group_id` = @group_id AND `id` < @id ORDER BY `id` DESC LIMIT 1),0) as prev_course_id ' +
+    // '     , IFNULL((SELECT `course_id` FROM `course_group` WHERE `group_id` = @group_id AND `order` > @seq ORDER BY `order` LIMIT 1),0) as next_course_id ' +
+    '  FROM `course_group` AS cg ' +
+    ' INNER JOIN `course` AS c ' +
+    '    ON cg.`course_id` = c.`id` ' +
+    '   AND c.`id` = ? ' +
+    ' WHERE cg.`group_id` = ? ' +
+    ' ORDER BY cg.`order`; ',
+
+  GetCourseDone:
+    'SELECT c.`name` AS course_name, lcp.`end_dt` ' +
+    '  FROM `course` AS c ' +
+    '  LEFT JOIN `log_course_progress` AS lcp ' +
+    '    ON c.`id` = lcp.`course_id` ' +
+    '   AND lcp.`training_user_id` = ? ' +
+    ' WHERE c.`id` = ?; '
 };
 
 // 세션정보

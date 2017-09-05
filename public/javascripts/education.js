@@ -13,6 +13,7 @@ function (jQuery, axios) {
   var optSearchType = $('input[type=radio][name=optradio]');
   var btnSearchCourse = $('#btnSearchCourse');
   var $notActivelistItem = $('a.not-active');
+  var $listItem = $('.list_item');
 
   $notActivelistItem.on('click', function (e) {
     e.preventDefault();
@@ -72,5 +73,36 @@ function (jQuery, axios) {
     if (e.which == 13) {
       btnSearchCourse.click();
     }
+  });
+
+  $listItem.on('click', function (e) {
+    e.preventDefault();
+
+    var url = $(this).attr('href');
+
+    axios.get('/course/check', {
+      params: {
+        training_user_id: $(this).data('training-user-id'),
+        course_id: $(this).data('course-id')
+      }
+    })
+    .then(function (res) {
+      var data = res.data;
+
+      if (data.success) {
+        if (data.can_progress !== 1) {
+          if (data.prev_course_name !== '') {
+            window.alert(data.prev_course_name + '\n' + '강의를 먼저 이수하세요.');
+          }
+        } else {
+          if (url) {
+            window.location.href = url;
+          }
+        }
+      }
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
   });
 });
