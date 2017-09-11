@@ -11,5 +11,6 @@ require('../commons/helpers');
 const AquaPlayerService = require('../service/AquaPlayerService');
 
 router.get('/aquaplayer', AquaPlayerService.getPlayer);
+router.get('/aquademo', AquaPlayerService.demo);
 
 module.exports = router;

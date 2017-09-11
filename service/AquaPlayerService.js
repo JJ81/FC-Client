@@ -76,11 +76,16 @@ exports.getPlayer = (req, res, next) => {
       const iosUrl = 'cdnmp://cddr_dnp/webstream?param=' + stdout;
       const androidUrl = 'intent://cddr_dnp/webstream?param=' + stdout + '#Intent;scheme=cdnmp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.cdn.aquanmanager;end';
 
-      res.render('aquaplayer', {
-        current_path: 'aquaplayer',
+      res.send({
         iosUrl: iosUrl,
         android: androidUrl
       });
     }
   );
+};
+
+exports.demo = (req, res, next) => {
+  res.render('aquaplayer', {
+    current_path: 'aquaplayer'
+  });
 };
