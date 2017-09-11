@@ -46,3 +46,22 @@ exports.isTermsApproved = (req, res, next) => {
   }
   res.redirect('/terms');
 };
+
+exports.microtime = (getAsFloat) => {
+  // php microtime 함수를 javascript 로 제작
+  // https://stackoverflow.com/questions/38758655/php-microtime-in-javascript-or-angularjs
+  var s, now, multiplier;
+
+  now = (Date.now ? Date.now() : new Date().getTime()) / 1000;
+  multiplier = 1e3; // 1,000
+
+  // Getting microtime as a float is easy
+  if (getAsFloat) {
+    return Math.round(now);
+  }
+
+    // Dirty trick to only get the integer part
+  s = now | 0;
+
+  return (Math.round((now - s) * multiplier) / multiplier) + ' ' + s;
+};

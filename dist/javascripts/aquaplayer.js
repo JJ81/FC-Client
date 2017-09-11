@@ -1,0 +1,1 @@
+"use strict";window.requirejs(["jquery","axios"],function(n,o){n(function(){o.get("/api/v1/player/encparam",{params:{userid:123}}).then(function(n){console.log(n.data)}).catch(function(n){console.log(n)})})});
