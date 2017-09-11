@@ -50,7 +50,7 @@ exports.getPlayer = (req, res, next) => {
   let param;
   param = 'MasterKey=' + MasterKey;
   param += '&userid=' + UserID;
-  param += '&userip=' + UserIP;
+  // param += '&userip=' + UserIP;
   param += '&serverip=' + ServerIP;
   param += '&WebServerTime=' + WebserverTime;
   param += '&AquaAuth=' + AquaAuth;
@@ -60,6 +60,8 @@ exports.getPlayer = (req, res, next) => {
   param += '&dup_cycle=' + AUTH_DUP_CYCLE;
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   param += '&return_url=' + 'dev.edu1004.kr';
+  param += '&wm_pos=' + '8';
+  param += '&wm_text=' + UserID;
   param += '$url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
