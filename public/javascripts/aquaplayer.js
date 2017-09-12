@@ -32,6 +32,7 @@ window.requirejs(
       .then(function (res) {
         if (deviceType === 'iOS') {
           var time = (new Date()).getTime();
+          console.log(res.data.iosUrl);
           window.location.href = res.data.iosUrl;
 
           setTimeout(function () {
