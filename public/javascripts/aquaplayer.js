@@ -11,7 +11,6 @@ window.requirejs(
     });
 
     function getDeviceType () {
-      console.log(navigator.userAgent);
       if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i))) {
         return 'iOS';
       } else if (navigator.userAgent.match(/Android/i)) {
@@ -31,7 +30,8 @@ window.requirejs(
         }
       })
       .then(function (res) {
-        // console.log(res.data);
+        console.log(res.data);
+        console.log(deviceType);
 
         if (deviceType === 'iOS') {
           var time = (new Date()).getTime();
