@@ -2,10 +2,7 @@
 window.requirejs(
   ['jquery', 'axios'],
   function ($, axios) {
-    var deviceType;
-
     $(function () {
-      getDeviceType();
     });
 
     $('#start-player').on('click', function () {
@@ -13,19 +10,20 @@ window.requirejs(
       startPlayer();
     });
 
-    var getDeviceType = function () {
+    function getDeviceType () {
       console.log(navigator.userAgent);
       if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i))) {
-        deviceType = 'iOS';
+        return 'iOS';
       } else if (navigator.userAgent.match(/Android/i)) {
-        deviceType = 'Android';
+        return 'Android';
       } else if (navigator.userAgent.match(/Mac/i)) {
-        deviceType = 'Mac';
+        return 'Mac';
       }
     };
 
-    var startPlayer = function () {
-      console.log(deviceType);
+    function startPlayer () {
+      var deviceType = getDeviceType();
+
       axios.get('/api/v1/aquaplayer', {
         params: {
           userid: 123,
