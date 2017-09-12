@@ -30,18 +30,12 @@ window.requirejs(
         }
       })
       .then(function (res) {
-        console.log(res.data);
-        console.log(deviceType);
-
         if (deviceType === 'iOS') {
           var time = (new Date()).getTime();
           window.location.href = res.data.iosUrl;
 
           setTimeout(function () {
             setTimeout(function () {
-              window.alert('time : ' + time);
-              window.alert('device type :', deviceType);
-
               var now = (new Date()).getTime();
               if ((now - time) < 400) {
                 window.location = 'https://itunes.apple.com/kr/app/aquanmanager/id1048325731';

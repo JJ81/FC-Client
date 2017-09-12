@@ -78,12 +78,13 @@ exports.getPlayer = (req, res, next) => {
       const iosUrl = 'cdnmp://cddr_dnp/webstream?param=' + stdout;
       const androidUrl = 'intent://cddr_dnp/webstream?param=' + stdout + '#Intent;scheme=cdnmp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.cdn.aquanmanager;end';
 
-      // res.send({
-      //   iosUrl: iosUrl,
-      //   android: androidUrl
-      // });
-
-      res.location(androidUrl);
+      if (req.query.device_type === 'iOS') {
+        return res.send({
+          iosUrl: iosUrl
+        });
+      } else if (req.query.device_type === 'Android') {
+        return res.location(androidUrl);
+      }
     }
   );
 };
