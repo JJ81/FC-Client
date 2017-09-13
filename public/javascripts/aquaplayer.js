@@ -43,6 +43,8 @@ window.requirejs(
               }
             }, 10);
           }, 300);
+        } else {
+          window.location.href = res.data.androidUrl;
         }
       })
       .catch(function (err) {
