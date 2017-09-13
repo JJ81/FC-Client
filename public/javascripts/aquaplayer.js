@@ -43,7 +43,7 @@ window.requirejs(
               }
             }, 10);
           }, 300);
-        } else {
+        } else if (deviceType === 'Android') {
           console.log(res.data.androidUrl);
           window.location.href = res.data.androidUrl;
         }
