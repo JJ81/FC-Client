@@ -85,6 +85,7 @@ exports.getPlayer = (req, res, next) => {
           iosUrl: iosUrl
         });
       } else if (req.query.device_type === 'Android') {
+        console.log('android');
         res.redirect(androidUrl);
       }
     }
