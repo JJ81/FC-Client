@@ -13,7 +13,7 @@ exports.getPlayer = (req, res, next) => {
 
   // 사용자 및 웹서버 IP 정보
   const UserIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  const ServerIP = '127.0.0.1:3002'; // req.connection.localAddress;
+  const ServerIP = '127.0.0.1'; // req.connection.localAddress;
   const TimeOut = '300';
 
   // AquaAuth 사용 여부
@@ -59,10 +59,12 @@ exports.getPlayer = (req, res, next) => {
   param += '&dup_scope=' + AUTH_DUP_SCOPE;
   param += '&dup_cycle=' + AUTH_DUP_CYCLE;
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
-  param += '&return_url=' + 'dev.edu1004.kr';
+  if (req.query.device_type === 'iOS') {
+    param += '&return_url=' + 'dev.edu1004.kr';
+  }
   param += '&wm_pos=' + '8';
   param += '&wm_text=' + UserID;
-  param += '$url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
+  param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
   // console.log(param);
