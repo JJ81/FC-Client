@@ -30,6 +30,7 @@ window.requirejs(
         }
       })
       .then(function (res) {
+        console.log(res.data);
         if (deviceType === 'iOS') {
           var time = (new Date()).getTime();
           console.log(res.data.iosUrl);
