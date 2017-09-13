@@ -12,7 +12,7 @@ exports.getPlayer = (req, res, next) => {
   const MasterKey = 'orgnm';
 
   // 사용자 및 웹서버 IP 정보
-  const UserIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  // const UserIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const ServerIP = '127.0.0.1'; // req.connection.localAddress;
   const TimeOut = '300';
 
@@ -60,7 +60,7 @@ exports.getPlayer = (req, res, next) => {
   param += '&dup_cycle=' + AUTH_DUP_CYCLE;
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   if (req.query.device_type === 'iOS') {
-    param += '&return_url=' + 'dev.edu1004.kr';
+    param += '&return_url=' + 'http://dev.edu1004.kr';
   }
   param += '&wm_pos=' + '8';
   param += '&wm_text=' + UserID;
