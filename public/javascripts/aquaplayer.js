@@ -44,6 +44,7 @@ window.requirejs(
             }, 10);
           }, 300);
         } else {
+          console.log(res.data.androidUrl);
           window.location.href = res.data.androidUrl;
         }
       })
