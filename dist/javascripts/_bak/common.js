@@ -1,1 +1,2 @@
 "use strict";requirejs(["jquery"],function(n){function e(e){n.ajax({url:"/api/v1/agent/get/current/balance?code="+e.val().trim(),type:"get",success:function(e,c,t){n("#navbar-custom-menu").load(location.href+" #navbar-custom-menu>*","")},error:function(n,e,c){console.log(c)}})}var c=n("#agent-code");n(document).on("click",".get-current-balance",function(){e(c)})});
+//# sourceMappingURL=../../maps/_bak/common.js.map

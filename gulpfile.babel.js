@@ -7,6 +7,8 @@ import cleanCSS from 'gulp-clean-css';
 import htmlmin from 'gulp-htmlmin';
 import imagemin from 'gulp-imagemin';
 import del from 'del';
+import sourcemaps from 'gulp-sourcemaps';
+import babel from 'gulp-babel';
 
 const DIR = {
   SRC: 'public',
@@ -33,8 +35,13 @@ const DEST = {
 
 gulp.task('js', () => {
   return gulp.src(SRC.JS, { base: './public/javascripts' })
-          .pipe(uglify())
-          .pipe(gulp.dest(DEST.JS));
+      .pipe(uglify())
+      .pipe(sourcemaps.init())
+      .pipe(babel())
+      .pipe(uglify({ output: { max_line_len: 0 } }))
+      .pipe(sourcemaps.write('../maps'))
+      .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+      .pipe(gulp.dest(DEST.JS));
 });
 
 // SRC.VENDOR, { base: './public/vendor' }

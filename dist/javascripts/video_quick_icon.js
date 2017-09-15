@@ -1,1 +1,2 @@
 "use strict";window.requirejs(["jquery","Vimeo"],function(e,o){function n(){var e={loop:!1};r=new o("videoplayer-android",e),r.setVolume(.5),r.ready().then(function(){console.info("playerAndroid is ready.")}).catch(function(e){console.error(e)}),i=new o("videoplayer-iphone",e),i.setVolume(.5),i.ready().then(function(){console.info("playerIphone is ready.")}).catch(function(e){console.error(e)})}var r,i;e(function(){n()})});
+//# sourceMappingURL=../maps/video_quick_icon.js.map

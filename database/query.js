@@ -407,7 +407,11 @@ QUERY.COURSE = {
     '  LEFT JOIN `log_course_progress` AS lcp ' +
     '    ON c.`id` = lcp.`course_id` ' +
     '   AND lcp.`training_user_id` = ? ' +
-    ' WHERE c.`id` = ?; '
+    ' WHERE c.`id` = ?; ',
+
+  // 비디오를 ID로 조회한다.
+  GetVideoDataById:
+    'SELECT * FROM `video` WHERE id = ?;'
 };
 
 // 세션정보

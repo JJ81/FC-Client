@@ -2,10 +2,14 @@
 const { execFile } = require('child_process');
 const func = require('../util/util');
 const path = require('path');
+const qs = require('querystring');
 
 exports.getPlayer = (req, res, next) => {
+  const { device, video } = req.query;
+  const returnUrl = req.header('Referer');
+
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
-  const UserID = 'mobileid'; // req.user.user_id;
+  const UserID = req.user !== undefined ? req.user.user_id : 'test_id';
 
   // AquaAuth 파라메터 설정
   // 당사에서 정해진 고정된 값 ,5자로 제한
@@ -60,14 +64,15 @@ exports.getPlayer = (req, res, next) => {
   param += '&dup_cycle=' + AUTH_DUP_CYCLE;
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   // if (req.query.device_type === 'iOS') {
-  param += '&return_url=' + 'http://m.dev.edu1004.kr';
+  param += '&return_url=' + qs.escape(returnUrl);
   // }
   param += '&wm_pos=' + '8';
   param += '&wm_text=' + UserID;
-  param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
+  param += '&url=' + res.locals.vodUrl + video;
+  // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
-  // console.log(param);
+  console.log(param);
 
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
@@ -80,13 +85,11 @@ exports.getPlayer = (req, res, next) => {
       const iosUrl = 'cdnmp://cddr_dnp/webstream?param=' + stdout;
       const androidUrl = 'intent://cddr_dnp/webstream?param=' + stdout + '#Intent;scheme=cdnmp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.cdn.aquanmanager;end';
 
-      if (req.query.device_type === 'iOS') {
+      if (device === 'ios') {
         return res.send({
           iosUrl: iosUrl
         });
-      } else if (req.query.device_type === 'Android') {
-        // console.log('android');
-        // res.redirect(androidUrl);
+      } else if (device === 'android') {
         return res.send({
           androidUrl: androidUrl
         });
@@ -96,7 +99,7 @@ exports.getPlayer = (req, res, next) => {
 };
 
 exports.demo = (req, res, next) => {
-  res.render('aquaplayer', {
+  res.render('video_aqua', {
     current_path: 'aquaplayer'
   });
 };

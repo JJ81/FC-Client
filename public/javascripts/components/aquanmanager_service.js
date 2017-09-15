@@ -1,16 +1,38 @@
 'use strict';
-window.requirejs(
-  ['jquery', 'axios'],
-  function ($, axios) {
-    $(function () {
-    });
+window.define([
+  'axios'
+], function (axios) {
+  var self = null;
 
-    $('#start-player').on('click', function () {
-      console.log('start!');
-      startPlayer();
-    });
+  function AquaNManagerService (options) {
+    self = this;
 
-    function getDeviceType () {
+    self.extendOptions(options);
+    self.init();
+  }
+
+  AquaNManagerService.prototype = {
+    // 옵션 저장 변수
+    options: {},
+    // 옵션 저장 함수
+    extend: function (a, b) {
+      for (var key in b) {
+        if (b.hasOwnProperty(key)) {
+          a[key] = b[key];
+        }
+      }
+      return a;
+    },
+    // 옵션 확장
+    extendOptions: function (options) {
+      this.options = this.extend({}, this.options);
+      this.extend(this.options, options);
+    },
+    // 컴포넌트 초기화
+    init: function () {
+      console.log('init');
+    },
+    getDeviceType: function () {
       if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i))) {
         return 'ios';
       } else if (navigator.userAgent.match(/Android/i)) {
@@ -18,20 +40,19 @@ window.requirejs(
       } else if (navigator.userAgent.match(/Mac/i)) {
         return 'mac';
       }
-    };
-
-    function startPlayer () {
-      var deviceType = getDeviceType();
+    },
+    startPlayer: function () {
+      var deviceType = self.getDeviceType();
 
       axios.get('/api/v1/aquaplayer', {
         params: {
-          userid: 123,
-          device_type: deviceType
+          device: deviceType,
+          video: this.options.videoUrl
         }
       })
       .then(function (res) {
         console.log(res.data);
-        if (deviceType === 'iOS') {
+        if (deviceType === 'ios') {
           var time = (new Date()).getTime();
           console.log(res.data.iosUrl);
           window.location.href = res.data.iosUrl;
@@ -44,7 +65,7 @@ window.requirejs(
               }
             }, 10);
           }, 300);
-        } else if (deviceType === 'Android') {
+        } else if (deviceType === 'android') {
           console.log(res.data.androidUrl);
           window.location.href = res.data.androidUrl;
         }
@@ -52,6 +73,9 @@ window.requirejs(
       .catch(function (err) {
         console.log(err);
       });
-    };
-  }
-);
+    }
+  };
+
+  return AquaNManagerService;
+});
+
