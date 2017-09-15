@@ -67,15 +67,6 @@
 	box-sizing: border-box;
 }
 
-.btn_login{
-	background: #FF9200; /*#4baf4d;*/
-	text-align: center;
-	color: #fff;
-	font-size: 16px;
-	width: 100%;
-	line-height: 45px;
-	border-radius: 5px;
-}
 .btn_terms_agree{
 	background: #FF9200; /*#4baf4d;*/
 	text-align: center;
@@ -401,6 +392,30 @@
 }
 
 .btn_play .txt{
+	position: relative;
+	top: 8px;
+}
+
+.btn_login{
+	width: 100%;
+	background: #FF9200; /*#42b24c;*/
+	font-size: 16px;
+	text-align: center;
+	height: 60px;
+	color :#fff;
+	cursor: pointer;
+  border-radius: 5px;
+  
+	/*background: #FF9200;
+	text-align: center;
+	color: #fff;
+	font-size: 16px;
+	width: 100%;
+	line-height: 45px;
+	border-radius: 5px;*/
+}
+
+.btn_login .txt{
 	position: relative;
 	top: 8px;
 }
