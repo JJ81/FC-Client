@@ -140,7 +140,10 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.course_id = courseId;
         returnData.course_list_id = courseListId;
 
-        if (returnData.status === undefined) {
+        console.log(results[2][0].max_duration);
+        console.log(returnData.total_played_seconds);
+
+        if (returnData.status === undefined && returnData.total_played_seconds !== null) {
           if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
             returnData.status = 'done';
           } else {
@@ -194,7 +197,7 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
     console.log(data);
 
     if (data.passive === true) {
-      if (inputs.video_status === 'progress') {
+      if (inputs.video_status === 'done') {
         // 과거 상태가 진행중이었을 경우 완료 시 30초 이내 클릭하도록 설정
         return res.redirect(
           `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=done&confirm=1`);

@@ -32,7 +32,7 @@ function ($, axios, AquaNManagerService) {
     if (playerContainer.data('confirm') == '1') {
       setTimeout(function () {
         timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
-      }, 3000);
+      }, 1000);
     }
     showPlayBtn();
   });
@@ -106,8 +106,6 @@ function ($, axios, AquaNManagerService) {
    * 학습을 초기화 하는 타이머 컨트롤러
    */
   function waitingTimeLogger () {
-    timerWaitingSeconds -= 1;
-    waitMessage.html('');
     waitMessage.html(' ( ' + timerWaitingSeconds + ' 초 이내 클릭 )');
 
     // 세션과 비디오 로그를 삭제한다.
@@ -116,13 +114,21 @@ function ($, axios, AquaNManagerService) {
       window.alert('비디오를 재시청 해주시기 바랍니다.');
 
       axios.all([ deleteVideoLog(), deleteSessionLog() ])
-        .then(axios.spread(function (res1, res2) {
-          window.location.href = '/session' +
-            '/' + playerContainer.data('training-user-id') +
-            '/' + playerContainer.data('course-id') +
-            '/' + playerContainer.data('course-list-id');
+        .then(axios.spread(function (acct, perms) {
+          console.log(acct);
+          // if (acct.data.success) {
+          var redirectUrl = '/session' +
+              '/' + playerContainer.data('training-user-id') +
+              '/' + playerContainer.data('course-id') +
+              '/' + playerContainer.data('course-list-id');
+
+          console.log(redirectUrl);
+          window.location.href = redirectUrl;
+          // }
         }));
     }
+
+    timerWaitingSeconds -= 1;
   }
 
   /**
