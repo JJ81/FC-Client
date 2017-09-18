@@ -24,7 +24,7 @@ function ($, axios, AquaNManagerService) {
     };
     AquaNManagerService = new AquaNManagerService(options);
 
-    if (playerContainer.data('confirm') === 1) {
+    if (playerContainer.data('confirm') == 1) {
       window.alert('hahaha you must click next button right now!');
     }
     showPlayBtn();
