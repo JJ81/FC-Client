@@ -140,8 +140,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.course_id = courseId;
         returnData.course_list_id = courseListId;
 
-        console.log(results[2][0].max_duration);
-        console.log(returnData.total_played_seconds);
+        // console.log(results[2][0].max_duration);
+        // console.log(returnData.total_played_seconds);
 
         if (returnData.status === undefined && returnData.total_played_seconds !== null) {
           if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
@@ -194,7 +194,7 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
 
   VideoService.CheckPlayTime(inputs, (err, data) => {
     if (err) throw err;
-    console.log(data);
+    // console.log(data);
 
     if (data.passive === true) {
       if (inputs.video_status === 'done') {

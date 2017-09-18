@@ -16,9 +16,6 @@ exports.getPlayer = (req, res, next) => {
     total_played_seconds: totalPlayedSeconds
   } = req.query;
 
-  if (!videoStatus == null) videoStatus = 'progress';
-  if (!totalPlayedSeconds == null) totalPlayedSeconds = 0;
-
   const returnUrl = `http://${req.hostname}/session/player/check/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${videoStatus}`;
   // const returnUrl = req.header('Referer');
   const bookmarkData = `http://${req.hostname}/session/player/log/${req.user.user_id}/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${totalPlayedSeconds}`;
