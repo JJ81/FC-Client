@@ -86,6 +86,8 @@ exports.CheckPlayTime = (_data, _callback) => {
   let totalPlayedSeconds;
   let videoDuration;
 
+  console.log(_data);
+
   pool.getConnection((err, connection) => {
     if (err) throw err;
     async.series(
