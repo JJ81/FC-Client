@@ -173,13 +173,20 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
   const inputs = {
     user_id: parseInt(req.user.user_id),
     training_user_id: parseInt(req.params.training_user_id),
+    course_id: parseInt(req.params.course_id),
+    course_list_id: parseInt(req.params.course_list_id),
     video_id: parseInt(req.params.video_id)
   };
 
   VideoService.CheckPlayTime(inputs, (err, data) => {
     if (err) throw err;
     console.log(data);
-    return res.sendStatus(200);
+
+    if (data.passive === true) {
+      return res.redirect(`/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}`);
+    } else {
+      return res.redirect(`/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}`);
+    }
   });
 });
 

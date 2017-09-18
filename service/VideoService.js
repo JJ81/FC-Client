@@ -112,9 +112,9 @@ exports.CheckPlayTime = (_data, _callback) => {
           throw new Error(err);
         } else {
           if (Math.floor(videoDuration * 0.8) <= totalPlayedSeconds) {
-            _callback(null, { complete: true });
+            _callback(null, { passive: true });
           } else {
-            _callback(null, { complete: false });
+            _callback(null, { passive: false });
           }
         }
       }
