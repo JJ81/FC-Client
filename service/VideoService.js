@@ -40,7 +40,7 @@ exports.logPlayTime = (_data, _callback) => {
           },
           callback => {
             // 재생시간을 수정한다.
-            connection.query(QUERY.LOG_VIDEO.UPD_VIDEO_PLAYTIME, [
+            connection.query(QUERY.LOG_VIDEO.UPD_VIDEO_PLAYTIME2, [
               _data.played_seconds,
               _data.video_duration,
               _data.currenttime,
