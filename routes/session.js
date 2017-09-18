@@ -169,7 +169,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
  * AquaPlayer의 return url 요청을 처리할 route
  */
 router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
-  console.log(req.query);
+  console.log(req.user, req.params);
   res.sendStatus(200);
 });
 
