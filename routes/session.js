@@ -199,15 +199,13 @@ router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:
     VideoService.logPlayTime(inputs, (err, data) => {
       if (err) throw err;
       console.log(data);
-      return res.send(data);
+      return res.sendStatus(data);
     });
   } else if (inputs.pos_type === 'reg') {
 
   } else if (inputs.pos_type === 'del') {
 
   }
-
-  res.sendStatus(200);
 });
 
 // 세션 시작일시를 기록한다.
