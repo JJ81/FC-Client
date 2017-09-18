@@ -15,7 +15,7 @@ exports.getPlayer = (req, res, next) => {
     video_status: videoStatus,
     total_played_seconds: totalPlayedSeconds
   } = req.query;
-
+  console.log(videoStatus, totalPlayedSeconds);
   if (!videoStatus) videoStatus = 'progress';
   if (!totalPlayedSeconds) totalPlayedSeconds = 0;
 
