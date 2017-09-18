@@ -107,6 +107,7 @@ function ($, axios, AquaNManagerService) {
    */
   function waitingTimeLogger () {
     timerWaitingSeconds -= 1;
+    waitMessage.html('');
     waitMessage.html(' ( ' + timerWaitingSeconds + ' 초 이내 클릭 )');
 
     // 세션과 비디오 로그를 삭제한다.
@@ -116,7 +117,10 @@ function ($, axios, AquaNManagerService) {
 
       axios.all([ deleteVideoLog(), deleteSessionLog() ])
         .then(axios.spread(function (res1, res2) {
-          window.location.reload();
+          window.location.href('/session' +
+            '/' + playerContainer.data('training-user-id') +
+            '/' + playerContainer.data('course-id') +
+            '/' + playerContainer.data('course-list-id'));
         }));
     }
   }
