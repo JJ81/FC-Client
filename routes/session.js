@@ -171,7 +171,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
  */
 router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
   const inputs = {
-    user_id: parseInt(req.params.user_id),
+    user_id: parseInt(req.user.user_id),
     training_user_id: parseInt(req.params.training_user_id),
     video_id: parseInt(req.params.video_id)
   };

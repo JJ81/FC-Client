@@ -88,7 +88,7 @@ exports.getPlayer = (req, res, next) => {
   // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
-  console.log(param);
+  // console.log(param);
 
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
@@ -96,7 +96,7 @@ exports.getPlayer = (req, res, next) => {
       if (err) {
         throw err;
       }
-      console.log(stdout);
+      // console.log(stdout);
 
       const iosUrl = 'cdnmp://cddr_dnp/webstream?param=' + stdout;
       const androidUrl = 'intent://cddr_dnp/webstream?param=' + stdout + '#Intent;scheme=cdnmp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.cdn.aquanmanager;end';
