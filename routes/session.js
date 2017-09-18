@@ -180,8 +180,8 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id', (req, r
 /**
  * AquaPlayer의 bookmark data 를 처리할 route
  */
-router.post('/player/log/:training_user_id/:course_id/:course_list_id', (req, res, next) => {
-  console.log(req.body);
+router.get('/player/log/:training_user_id/:course_id/:course_list_id', (req, res, next) => {
+  console.log(req.query);
   res.sendStatus(200);
 });
 

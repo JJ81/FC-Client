@@ -348,3 +348,97 @@
 	line-height: 40px;
 	padding-left: 30px;
 }
+
+/*
+ * Skin: Homesfood
+ * ----------
+ */
+.skin-homesfood #hd{
+	height: 45px;
+	background: #000;
+	position: relative;
+	z-index: 999;
+}
+.skin-homesfood .list_item .progress{
+	display: block;
+	height: 5px;
+	background: #FF7A7B;
+}
+.skin-homesfood .btn_play{
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background: #000;
+	font-size: 16px;
+	text-align: center;
+	height: 60px;
+	color :#fff;
+	cursor: pointer;
+  z-index: 9999;
+}
+.skin-homesfood .btn_submit{
+	line-height: 40px;
+	text-align: center;
+	background: #000;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.skin-homesfood .logo_section{
+	border-bottom: 1px solid #1e2832;
+	padding: 10px 10px 10px 14px;
+	background: #fff;
+	position: relative;
+	height: 80px;
+  display: table;
+  width: 226px;
+}
+.skin-homesfood .btn_login{
+	background: #000;
+	text-align: center;
+	color: #fff;
+	font-size: 16px;
+	width: 100%;
+	line-height: 45px;
+	border-radius: 5px;
+}
+@media (min-width:1281px) {
+  .skin-homesfood .btn_play{
+    position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #000;
+    font-size: 16px;
+    text-align: center;
+    height: 60px;
+    color :#fff;
+    cursor: pointer;
+    z-index: 9999;
+  }
+}
+.skin-homesfood #navigation{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 250px;
+	height: 100%;
+	z-index: 999999;
+	background: #fff;
+}
+.skin-homesfood .nav_list a{
+	color :#3E3E3E;
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	padding-left: 30px;
+}
+
+.skin-homesfood .logo-txt{
+	color :#000;
+	position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0px 5px;
+}

@@ -84,7 +84,6 @@ exports.getPlayer = (req, res, next) => {
   param += '&url=' + res.locals.vodUrl + video;
   param += '&progress=5';
   param += '&bookmark_url=' + qs.escape(bookmarkData);
-  param += '&bookmark_data=';
   // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
