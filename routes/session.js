@@ -199,7 +199,7 @@ router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:
     VideoService.logPlayTime(inputs, (err, data) => {
       if (err) throw err;
       console.log(data);
-      return res.sendStatus(data);
+      return res.send(data);
     });
   } else if (inputs.pos_type === 'reg') {
 
