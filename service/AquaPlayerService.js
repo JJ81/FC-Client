@@ -11,10 +11,11 @@ exports.getPlayer = (req, res, next) => {
     training_user_id: trainingUserId,
     course_id: courseId,
     course_list_id: courseListId,
-    video_id: videoId
+    video_id: videoId,
+    video_status: videoStatus
   } = req.query;
 
-  const returnUrl = `http://${req.hostname}/session/player/check/${trainingUserId}/${courseId}/${courseListId}/${videoId}`;
+  const returnUrl = `http://${req.hostname}/session/player/check/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${videoStatus}`;
   // const returnUrl = req.header('Referer');
   const bookmarkData = `http://${req.hostname}/session/player/log/${req.user.user_id}/${trainingUserId}/${courseId}/${courseListId}/${videoId}`;
 

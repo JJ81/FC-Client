@@ -27,7 +27,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
     training_user_id: trainingUserId,
     course_id: courseId,
     course_list_id: courseListId,
-    status: req.query.status
+    status: req.query.status,
+    confirm: req.query.confirm === '1'
   };
 
   let courseList;
@@ -178,13 +179,14 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
  * AquaPlayer의 return url 요청을 처리할 route
  * 세션 유지 됨
  */
-router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
+router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id/:video_status', (req, res, next) => {
   const inputs = {
     user_id: parseInt(req.user.user_id),
     training_user_id: parseInt(req.params.training_user_id),
     course_id: parseInt(req.params.course_id),
     course_list_id: parseInt(req.params.course_list_id),
-    video_id: parseInt(req.params.video_id)
+    video_id: parseInt(req.params.video_id),
+    video_status: req.params.video_status
   };
 
   VideoService.CheckPlayTime(inputs, (err, data) => {
@@ -192,8 +194,14 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
     console.log(data);
 
     if (data.passive === true) {
-      return res.redirect(
-        `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=done`);
+      if (inputs.video_status === 'progress') {
+        // 과거 상태가 진행중이었을 경우 완료 시 30초 이내 클릭하도록 설정
+        return res.redirect(
+          `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=done&confirm=1`);
+      } else {
+        return res.redirect(
+          `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=done`);
+      }
     } else {
       return res.redirect(
         `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=progress`);

@@ -51,7 +51,8 @@ window.define([
           training_user_id: this.options.trainingUserId,
           course_id: this.options.courseId,
           course_list_id: this.options.courseListId,
-          video_id: this.options.videoId
+          video_id: this.options.videoId,
+          video_status: this.options.videoStatus
         }
       })
       .then(function (res) {

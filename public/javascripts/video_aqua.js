@@ -19,16 +19,20 @@ function ($, axios, AquaNManagerService) {
       trainingUserId: playerContainer.data('training-user-id'),
       courseId: playerContainer.data('course-id'),
       courseListId: playerContainer.data('course-list-id'),
-      videoId: playerContainer.data('id')
+      videoId: playerContainer.data('id'),
+      videoStatus: playerContainer.data('status')
     };
     AquaNManagerService = new AquaNManagerService(options);
 
+    if (playerContainer.data('confirm') === 1) {
+      window.alert('hahaha you must click next button right now!');
+    }
     showPlayBtn();
   });
 
   btnPlayVideo.on('click', function () {
-    AquaNManagerService.startPlayer();
     sessionProgressStartLogger();
+    AquaNManagerService.startPlayer();
   });
 
   /**
