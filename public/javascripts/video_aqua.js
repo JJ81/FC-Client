@@ -13,7 +13,8 @@ function ($, axios, AquaNManagerService) {
       videoUrl: 'cdnetworks.mp4', // playerContainer.data('url')
       trainingUserId: playerContainer.data('training-user-id'),
       courseId: playerContainer.data('course-id'),
-      courseListId: playerContainer.data('course-list-id')
+      courseListId: playerContainer.data('course-list-id'),
+      videoId: playerContainer.data('id')
     };
     AquaNManagerService = new AquaNManagerService(options);
   });

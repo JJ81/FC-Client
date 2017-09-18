@@ -10,11 +10,13 @@ exports.getPlayer = (req, res, next) => {
     video,
     training_user_id: trainingUserId,
     course_id: courseId,
-    course_list_id: courseListId
+    course_list_id: courseListId,
+    video_id: videoId
   } = req.query;
 
-  const returnUrl = req.header('Referer');
-  const bookmarkData = `http://${req.hostname}/session/aquaplayer/${trainingUserId}/${courseId}/${courseListId}`;
+  const returnUrl = `http://${req.hostname}/session/player/check/${trainingUserId}/${courseId}/${courseListId}`;
+  // const returnUrl = req.header('Referer');
+  const bookmarkData = `http://${req.hostname}/session/player/log/${trainingUserId}/${courseId}/${courseListId}/video`;
 
   // console.log(bookmark_data);
   // return res.sendStatus(200);
@@ -82,7 +84,7 @@ exports.getPlayer = (req, res, next) => {
   param += '&url=' + res.locals.vodUrl + video;
   param += '&progress=5';
   param += '&bookmark_url=' + qs.escape(bookmarkData);
-  // param += '&bookmark_data=' + qs.escape(bookmarkData);
+  param += '&bookmark_data=' + qs.escape('a=b');
   // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 

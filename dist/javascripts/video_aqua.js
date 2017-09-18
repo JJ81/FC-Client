@@ -1,2 +1,2 @@
-"use strict";window.requirejs(["jquery","axios","aquaNManagerService"],function(i,r,e){var a=i(".videoplayer"),n=i("#btn_play_video");i(function(){var i={videoUrl:"cdnetworks.mp4",trainingUserId:a.data("training-user-id"),courseId:a.data("course-id"),courseListId:a.data("course-list-id")};e=new e(i)}),n.on("click",function(){e.startPlayer()})});
+"use strict";window.requirejs(["jquery","axios","aquaNManagerService"],function(i,a,e){var r=i(".videoplayer"),d=i("#btn_play_video");i(function(){var i={videoUrl:"cdnetworks.mp4",trainingUserId:r.data("training-user-id"),courseId:r.data("course-id"),courseListId:r.data("course-list-id"),videoId:r.data("id")};e=new e(i)}),d.on("click",function(){e.startPlayer()})});
 //# sourceMappingURL=../maps/video_aqua.js.map
