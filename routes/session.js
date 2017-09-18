@@ -187,6 +187,8 @@ router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id'
     bookmark_del: req.body.del
   };
 
+  console.log(req.body);
+
   console.log(inputs);
   res.sendStatus(200);
 });
