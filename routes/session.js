@@ -176,18 +176,17 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
  * AquaPlayer의 bookmark data 를 처리할 route
  */
 router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
+  console.log(req.body);
+  console.log('----------------');
+
   const inputs = {
-    training_user_id: req.query.training_user_id,
-    video_id: req.query.video_id,
+    training_user_id: req.param.training_user_id,
+    video_id: req.param.video_id,
     played_seconds: parseInt(req.body.RT) / 1000, // 순수 재생시간(배속을 고려하지 않음)
     video_duration: parseInt(req.body.cl) / 1000, // 컨텐츠의 총 길이
     currenttime: parseInt(req.body.pos) / 1000, // 재생중인 강의의 위치
-    device_id: req.body.mid,
-    boomark_new: req.body.req,
-    bookmark_del: req.body.del
+    post_type: req.body.post_type
   };
-
-  console.log(req.query);
 
   console.log(inputs);
   res.sendStatus(200);
