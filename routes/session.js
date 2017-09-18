@@ -6,6 +6,7 @@ const QUERY = require('../database/query');
 const async = require('async');
 const CourseService = require('../service/CourseService');
 const PointService = require('../service/PointService');
+const VideoService = require('../service/VideoService');
 const util = require('../util/util');
 
 /**
@@ -194,6 +195,12 @@ router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:
   // req, del => 북마크 신규, 삭제
   if (inputs.pos_type !== 'reg' && inputs.pos_type !== 'del') {
     console.log(inputs);
+
+    VideoService.logPlayTime(inputs, (err, data) => {
+      if (err) throw err;
+      console.log(data);
+      return res.send(data);
+    });
   } else if (inputs.pos_type === 'reg') {
 
   } else if (inputs.pos_type === 'del') {
