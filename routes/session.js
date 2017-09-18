@@ -167,14 +167,25 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
 
 /**
  * AquaPlayer의 return url 요청을 처리할 route
+ * 세션 유지 됨
  */
 router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
-  console.log(req.user, req.params);
-  res.sendStatus(200);
+  const inputs = {
+    user_id: parseInt(req.params.user_id),
+    training_user_id: parseInt(req.params.training_user_id),
+    video_id: parseInt(req.params.video_id)
+  };
+
+  VideoService.CheckPlayTime(inputs, (err, data) => {
+    if (err) throw err;
+    console.log(data);
+    return res.sendStatus(200);
+  });
 });
 
 /**
  * AquaPlayer의 bookmark data 를 처리할 route
+ * 세션 유지 안됨
  */
 router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
   const inputs = {

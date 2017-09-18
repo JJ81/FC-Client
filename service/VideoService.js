@@ -49,18 +49,18 @@ exports.logPlayTime = (_data, _callback) => {
             (err, data) => {
               callback(err, data);
             });
-          },
-          callback => {
-            // 재생시간을 조회한다.
-            connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
-              _data.user_id,
-              _data.training_user_id,
-              _data.video_id
-            ], (err, data) => {
-              totalPlayedSeconds = data[0].total_played_seconds;
-              callback(err, data);
-            });
           }
+          // callback => {
+          //   // 재생시간을 조회한다.
+          //   connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
+          //     _data.user_id,
+          //     _data.training_user_id,
+          //     _data.video_id
+          //   ], (err, data) => {
+          //     totalPlayedSeconds = data[0].total_played_seconds;
+          //     callback(err, data);
+          //   });
+          // }
         ],
         (err, results) => {
           connection.release();
@@ -72,12 +72,50 @@ exports.logPlayTime = (_data, _callback) => {
             connection.commit((err) => {
               if (err) throw err;
               _callback(null, {
-                total_played_seconds: totalPlayedSeconds
+                success: true
               });
             });
           }
         }
       );
     });
+  });
+};
+
+exports.CheckPlayTime = (_data, _callback) => {
+  let totalPlayedSeconds;
+  let videoDuration;
+
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    async.series(
+      [
+        callback => {
+          // 재생시간을 조회한다.
+          connection.query(QUERY.LOG_VIDEO.SEL_TOTAL_VIDEO_PLAYTIME, [
+            _data.user_id,
+            _data.training_user_id,
+            _data.video_id
+          ], (err, data) => {
+            totalPlayedSeconds = data[0].total_played_seconds;
+            videoDuration = data[0].max_duration;
+            callback(err, data);
+          });
+        }
+      ],
+      (err, results) => {
+        connection.release();
+        if (err) {
+          console.error(err);
+          throw new Error(err);
+        } else {
+          if (Math.floor(videoDuration * 0.8) <= totalPlayedSeconds) {
+            _callback(null, { complete: true });
+          } else {
+            _callback(null, { complete: false });
+          }
+        }
+      }
+    );
   });
 };

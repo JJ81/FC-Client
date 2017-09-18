@@ -599,6 +599,7 @@ QUERY.LOG_VIDEO = {
   // 재생시간 획득
   SEL_TOTAL_VIDEO_PLAYTIME:
     'SELECT SUM(`play_seconds`) AS total_played_seconds ' +
+    '     , MAX(`duration`) AS max_duration ' +
     '  FROM `log_user_video` ' +
     ' WHERE `user_id` = ? ' +
     '   AND `training_user_id` = ? ' +
