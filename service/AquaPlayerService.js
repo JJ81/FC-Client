@@ -5,7 +5,7 @@ const path = require('path');
 const qs = require('querystring');
 
 exports.getPlayer = (req, res, next) => {
-  const {
+  let {
     device,
     video,
     training_user_id: trainingUserId,
@@ -15,6 +15,9 @@ exports.getPlayer = (req, res, next) => {
     video_status: videoStatus,
     total_played_seconds: totalPlayedSeconds
   } = req.query;
+
+  if (videoStatus === undefined) videoStatus = 'progress';
+  if (totalPlayedSeconds === undefined) totalPlayedSeconds = 0;
 
   const returnUrl = `http://${req.hostname}/session/player/check/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${videoStatus}`;
   // const returnUrl = req.header('Referer');
