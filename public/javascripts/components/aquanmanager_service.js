@@ -55,7 +55,7 @@ window.define([
         }
       })
       .then(function (res) {
-        console.log(res.data);
+        // console.log(res.data);
         if (deviceType === 'ios') {
           var time = (new Date()).getTime();
           // console.log(res.data.iosUrl);
@@ -70,7 +70,7 @@ window.define([
             }, 10);
           }, 300);
         } else if (deviceType === 'android') {
-          console.log(res.data.androidUrl);
+          // console.log(res.data.androidUrl);
           window.location.href = res.data.androidUrl;
         }
       })
