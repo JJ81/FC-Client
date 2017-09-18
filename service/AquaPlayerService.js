@@ -14,7 +14,7 @@ exports.getPlayer = (req, res, next) => {
     video_id: videoId
   } = req.query;
 
-  const returnUrl = `http://${req.hostname}/session/player/check/${trainingUserId}/${courseId}/${courseListId}`;
+  const returnUrl = `http://${req.hostname}/session/player/check/${trainingUserId}/${courseId}/${courseListId}/${videoId}`;
   // const returnUrl = req.header('Referer');
   const bookmarkData = `http://${req.hostname}/session/player/log/${trainingUserId}/${courseId}/${courseListId}/${videoId}`;
 
