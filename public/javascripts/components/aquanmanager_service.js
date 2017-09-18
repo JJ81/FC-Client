@@ -52,7 +52,8 @@ window.define([
           course_id: this.options.courseId,
           course_list_id: this.options.courseListId,
           video_id: this.options.videoId,
-          video_status: this.options.videoStatus
+          video_status: this.options.videoStatus,
+          total_played_seconds: this.options.totalPlayedSeconds
         }
       })
       .then(function (res) {

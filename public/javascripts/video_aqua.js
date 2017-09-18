@@ -20,7 +20,8 @@ function ($, axios, AquaNManagerService) {
       courseId: playerContainer.data('course-id'),
       courseListId: playerContainer.data('course-list-id'),
       videoId: playerContainer.data('id'),
-      videoStatus: playerContainer.data('status')
+      videoStatus: playerContainer.data('status'),
+      totalPlayedSeconds: playerContainer.data('total-play')
     };
     AquaNManagerService = new AquaNManagerService(options);
 

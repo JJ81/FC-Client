@@ -213,7 +213,7 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
  * AquaPlayer의 bookmark data 를 처리할 route
  * 세션 유지 안됨
  */
-router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
+router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:video_id/:total_played_seconds', (req, res, next) => {
   const inputs = {
     user_id: parseInt(req.params.user_id),
     training_user_id: parseInt(req.params.training_user_id),
@@ -221,6 +221,7 @@ router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:
     played_seconds: parseInt(req.body.TM) / 1000, // 재생시작 이후 누적 재생시간 (예: 1.6 배속으로 10 초 재생시 16 으로 계산, ms 단위)
     video_duration: parseInt(req.body.cl) / 1000, // 컨텐츠의 총 길이
     currenttime: parseInt(req.body.pos) / 1000, // 재생중인 강의의 위치
+    total_played_seconds: parseInt(req.params.total_played_seconds), // 로그 직전 총 재생시간
     pos_type: req.body.pos_type
   };
 
