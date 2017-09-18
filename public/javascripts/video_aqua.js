@@ -117,10 +117,10 @@ function ($, axios, AquaNManagerService) {
 
       axios.all([ deleteVideoLog(), deleteSessionLog() ])
         .then(axios.spread(function (res1, res2) {
-          window.location.href('/session' +
+          window.location.href = '/session' +
             '/' + playerContainer.data('training-user-id') +
             '/' + playerContainer.data('course-id') +
-            '/' + playerContainer.data('course-list-id'));
+            '/' + playerContainer.data('course-list-id');
         }));
     }
   }
