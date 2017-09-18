@@ -179,9 +179,9 @@ router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id'
   const inputs = {
     training_user_id: req.query.training_user_id,
     video_id: req.query.video_id,
-    played_seconds: req.body.RT / 1000, // 순수 재생시간(배속을 고려하지 않음)
-    video_duration: req.body.CL / 1000, // 컨텐츠의 총 길이
-    currenttime: req.body.POS / 1000, // 재생중인 강의의 위치
+    played_seconds: parseInt(req.body.RT) / 1000, // 순수 재생시간(배속을 고려하지 않음)
+    video_duration: parseInt(req.body.CL) / 1000, // 컨텐츠의 총 길이
+    currenttime: parseInt(req.body.POS) / 1000, // 재생중인 강의의 위치
     device_id: req.body.mid,
     boomark_new: req.body.req,
     bookmark_del: req.body.del
