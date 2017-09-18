@@ -190,8 +190,12 @@ router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id'
   // console.log(req.params);
   // console.log('----------------');
 
-  if (inputs.pos_type !== 'reg' || inputs.pos_type !== 'del') {
+  if (inputs.pos_type !== 'reg' && inputs.pos_type !== 'del') {
     console.log(inputs);
+  } else if (inputs.pos_type === 'reg') {
+
+  } else if (inputs.pos_type === 'del') {
+
   }
 
   res.sendStatus(200);
