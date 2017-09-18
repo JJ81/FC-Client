@@ -177,8 +177,8 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
  */
 router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
   const inputs = {
-    training_user_id: req.params.training_user_id,
-    video_id: req.params.video_id,
+    training_user_id: parseInt(req.params.training_user_id),
+    video_id: parseInt(req.params.video_id),
     played_seconds: parseInt(req.body.RT) / 1000, // 순수 재생시간(배속을 고려하지 않음)
     video_duration: parseInt(req.body.cl) / 1000, // 컨텐츠의 총 길이
     currenttime: parseInt(req.body.pos) / 1000, // 재생중인 강의의 위치
@@ -190,8 +190,9 @@ router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id'
   // console.log(req.params);
   // console.log('----------------');
 
+  // req, del => 북마크 신규, 삭제
   if (inputs.pos_type !== 'reg' && inputs.pos_type !== 'del') {
-    console.log(inputs);
+    console.log(req.user.user_id, inputs);
   } else if (inputs.pos_type === 'reg') {
 
   } else if (inputs.pos_type === 'del') {
