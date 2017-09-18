@@ -168,7 +168,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
  * AquaPlayer의 bookmark data 를 받을 route
  */
 router.post('/aquaplayer/:training_user_id/:course_id/:course_list_id', (req, res, next) => {
-  console.log(req.body);
+  console.log(req.query);
   res.sendStatus(200);
 });
 
