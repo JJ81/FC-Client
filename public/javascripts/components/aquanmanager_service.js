@@ -47,7 +47,10 @@ window.define([
       axios.get('/api/v1/aquaplayer', {
         params: {
           device: deviceType,
-          video: this.options.videoUrl
+          video: this.options.videoUrl,
+          training_user_id: this.options.trainingUserId,
+          course_id: this.options.courseId,
+          course_list_id: this.options.courseListId
         }
       })
       .then(function (res) {

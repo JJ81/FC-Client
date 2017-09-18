@@ -437,7 +437,7 @@ QUERY.COURSE_LIST = {
   // 비디오 정보
   SEL_VIDEO:
     'SELECT v.`id` ' +
-    '      , v.`name` ' +
+    '     , v.`name` ' +
     '     , v.`url` ' +
     '     , LOWER(v.`type`) AS video_type ' +
     // '     , SUBSTRING_INDEX(v.`url`, \'/\', -1) AS video_id ' +

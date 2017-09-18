@@ -29,6 +29,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
   };
 
   let courseList;
+  let videoType; // vimeo, aqua
 
   async.series([
     // 강의정보 조회
@@ -46,6 +47,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
       switch (courseList.type) {
       case 'VIDEO':
         connection.query(QUERY.COURSE_LIST.SEL_VIDEO, [courseList.video_id], (err, data) => {
+          videoType = data[0].video_type;
           callback(err, data);
         });
         break;
@@ -120,7 +122,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         var currenttime = 0;
         if (results[3][0] != null) { currenttime = results[3][0].currenttime; }
 
-        returnData.current_path = 'video';
+        returnData.current_path = videoType;
         returnData.content = results[1][0];
         returnData.currenttime = currenttime;
         returnData.total_played_seconds = results[2][0].total_played_seconds;
@@ -131,7 +133,15 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         };
         returnData.header = courseList.title;
         returnData.next_url = nextUrl;
-        res.render('video', returnData);
+        returnData.training_user_id = trainingUserId;
+        returnData.course_id = courseId;
+        returnData.course_list_id = courseListId;
+
+        if (videoType === 'vimeo') {
+          res.render('video', returnData);
+        } else if (videoType === 'aqua') {
+          res.render('video_aqua', returnData);
+        }
       } else if (courseList.type === 'QUIZ' || courseList.type === 'FINAL') {
         var quizList = CourseService.makeQuizList(results[1]);
 
@@ -152,6 +162,14 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
       }
     }
   });
+});
+
+/**
+ * AquaPlayer의 bookmark data 를 받을 route
+ */
+router.post('/aquaplayer/:training_user_id/:course_id/:course_list_id', (req, res, next) => {
+  console.log(req.body);
+  res.sendStatus(200);
 });
 
 // 세션 시작일시를 기록한다.

@@ -5,8 +5,19 @@ const path = require('path');
 const qs = require('querystring');
 
 exports.getPlayer = (req, res, next) => {
-  const { device, video } = req.query;
+  const {
+    device,
+    video,
+    training_user_id: trainingUserId,
+    course_id: courseId,
+    course_list_id: courseListId
+  } = req.query;
+
   const returnUrl = req.header('Referer');
+  const bookmarkData = `http://${req.hostname}/session/aquaplayer/${trainingUserId}/${courseId}/${courseListId}`;
+
+  // console.log(bookmark_data);
+  // return res.sendStatus(200);
 
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
   const UserID = req.user !== undefined ? req.user.user_id : 'test_id';
@@ -69,6 +80,8 @@ exports.getPlayer = (req, res, next) => {
   param += '&wm_pos=' + '8';
   param += '&wm_text=' + UserID;
   param += '&url=' + res.locals.vodUrl + video;
+  param += '&progress=5';
+  param += '&bookmark_data=' + qs.escape(bookmarkData);
   // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
@@ -96,6 +109,11 @@ exports.getPlayer = (req, res, next) => {
       }
     }
   );
+};
+
+exports.getBookmarkData = (req, res, next) => {
+  console.log(req.body);
+  res.sendStatus(200);
 };
 
 exports.demo = (req, res, next) => {
