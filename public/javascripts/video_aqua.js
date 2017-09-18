@@ -2,16 +2,20 @@ window.requirejs(
   [
     'jquery',
     'axios',
-    'aquaNManagerService'
+    'aquaNManagerService',
+    'jqueryTimer'
   ],
 function ($, axios, AquaNManagerService) {
+  // element cache
   var playerContainer = $('.videoplayer');
   var btnPlayVideo = $('#btn_play_video');
-
-  // element cache
   var btnPlayNext = $('#btn_play_next');
   var nextUrl = btnPlayNext.parent().attr('href');
   var btnReplayVideo = $('#btn_replay_video');
+  var waitMessage = $('.wait-message');
+
+  var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머
+  var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
 
   $(function () {
     var options = {
@@ -26,7 +30,9 @@ function ($, axios, AquaNManagerService) {
     AquaNManagerService = new AquaNManagerService(options);
 
     if (playerContainer.data('confirm') == '1') {
-      window.alert('hahaha you must click next button right now!');
+      setTimeout(function () {
+        timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
+      }, 3000);
     }
     showPlayBtn();
   });
@@ -93,5 +99,56 @@ function ($, axios, AquaNManagerService) {
       btnPlayNext.removeClass('blind');
       btnReplayVideo.addClass('blind');
     }
+  }
+
+  /**
+   * 정해진 시간 내에 다음 버튼을 누르지 않을 경우
+   * 학습을 초기화 하는 타이머 컨트롤러
+   */
+  function waitingTimeLogger () {
+    timerWaitingSeconds -= 1;
+    waitMessage.html(' ( ' + timerWaitingSeconds + ' 초 이내 클릭 )');
+
+    // 세션과 비디오 로그를 삭제한다.
+    if (timerWaitingSeconds <= 0) {
+      timerWait.stop();
+      window.alert('비디오를 재시청 해주시기 바랍니다.');
+
+      axios.all([ deleteVideoLog(), deleteSessionLog() ])
+        .then(axios.spread(function (res1, res2) {
+          window.location.reload();
+        }));
+    }
+  }
+
+  /**
+   * 세션 비디오 로그를 삭제한다.
+   */
+  function deleteVideoLog () {
+    return axios.delete('/video/log', {
+      params: {
+        video_id: playerContainer.data('id')
+      }
+    })
+    .then(function (response) {
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+  }
+
+  // 세션 로그를 삭제한다.
+  function deleteSessionLog () {
+    return axios.delete('/session/log', {
+      params: {
+        training_user_id: playerContainer.data('training-user-id'),
+        course_list_id: playerContainer.data('course-list-id')
+      }
+    })
+    .then(function (response) {
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
   }
 });
