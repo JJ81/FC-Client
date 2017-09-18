@@ -68,7 +68,7 @@
   }
 }
 .skin-red-light #navigation{
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 250px;
@@ -154,7 +154,7 @@
   }
 }
 .skin-momstouch #navigation{
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 250px;
@@ -248,7 +248,7 @@
   }
 }
 .skin-yellow-light #navigation{
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 250px;
@@ -333,7 +333,7 @@
   }
 }
 .skin-green-light #navigation{
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 250px;
@@ -419,7 +419,7 @@
   }
 }
 .skin-homesfood #navigation{
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 250px;
