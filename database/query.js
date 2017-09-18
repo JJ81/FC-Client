@@ -579,8 +579,8 @@ QUERY.LOG_VIDEO = {
   INS_VIDEO:
     'INSERT INTO `log_user_video` (`user_id`, `training_user_id`, `video_id`, `start_dt`, `play_dt`) ' +
     'SELECT ?, ?, ?, NOW(), CURDATE() ' +
-    '  FROM dual ',
-    // ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_video` WHERE `training_user_id` = ? AND `video_id` = ? AND play_dt = CURDATE()); ',
+    '  FROM dual ' +
+    ' WHERE NOT EXISTS (SELECT \'X\' FROM `log_user_video` WHERE `training_user_id` = ? AND `video_id` = ? AND play_dt = CURDATE()); ',
 
   // 동일 비디오의 마지막 로그 아이디를 구한다.
   // AND `play_dt` = CURDATE() 조건은 제거하였다. 다음 날까지 걸쳐듣는 경우 이전 로그타임과 나누어며,
@@ -599,7 +599,7 @@ QUERY.LOG_VIDEO = {
   // 재생시간 갱신
   UPD_VIDEO_PLAYTIME2:
     'UPDATE `log_user_video` SET ' +
-    '       `play_seconds` = ? ' +
+    '       `play_seconds` = `play_seconds` + (`play_seconds` - ?) ' +
     '     , `duration` = ? ' +
     '     , `currenttime` = ? ' +
     ' WHERE `id` = ?; ',
