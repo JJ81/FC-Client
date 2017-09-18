@@ -178,6 +178,8 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
 router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
   console.log(req.body);
   console.log('----------------');
+  console.log(req.params);
+  console.log('----------------');
 
   const inputs = {
     training_user_id: req.param.training_user_id,
@@ -185,7 +187,7 @@ router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id'
     played_seconds: parseInt(req.body.RT) / 1000, // 순수 재생시간(배속을 고려하지 않음)
     video_duration: parseInt(req.body.cl) / 1000, // 컨텐츠의 총 길이
     currenttime: parseInt(req.body.pos) / 1000, // 재생중인 강의의 위치
-    post_type: req.body.post_type
+    pos_type: req.body.pos_type
   };
 
   console.log(inputs);
