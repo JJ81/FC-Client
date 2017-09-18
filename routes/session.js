@@ -189,7 +189,10 @@ router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id'
   // console.log('----------------');
   // console.log(req.params);
   // console.log('----------------');
-  console.log(inputs);
+
+  if (inputs.pos_type !== 'reg' || inputs.pos_type !== 'del') {
+    console.log(inputs);
+  }
 
   res.sendStatus(200);
 });
