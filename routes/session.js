@@ -12,7 +12,7 @@ const util = require('../util/util');
 /**
  * 세션 학습시작
  */
-router.get('/:training_user_id/:course_id/:course_list_id/:status?', util.isAuthenticated, util.getLogoInfo, (req, res) => {
+router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res) => {
   const {
     training_user_id: trainingUserId,
     course_id: courseId,
@@ -185,10 +185,10 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
 
     if (data.passive === true) {
       return res.redirect(
-        `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}/status=done`);
+        `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=done`);
     } else {
       return res.redirect(
-        `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}/status=progress`);
+        `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=progress`);
     }
   });
 });
