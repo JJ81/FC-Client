@@ -28,7 +28,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
     course_id: courseId,
     course_list_id: courseListId,
     status: req.query.status,
-    confirm: req.query.confirm === '1'
+    confirm: req.query.confirm === '1' ? '1' : '0'
   };
 
   let courseList;
@@ -218,7 +218,7 @@ router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:
     user_id: parseInt(req.params.user_id),
     training_user_id: parseInt(req.params.training_user_id),
     video_id: parseInt(req.params.video_id),
-    played_seconds: parseInt(req.body.RT) / 1000, // 순수 재생시간(배속을 고려하지 않음)
+    played_seconds: parseInt(req.body.TM) / 1000, // 재생시작 이후 누적 재생시간 (예: 1.6 배속으로 10 초 재생시 16 으로 계산, ms 단위)
     video_duration: parseInt(req.body.cl) / 1000, // 컨텐츠의 총 길이
     currenttime: parseInt(req.body.pos) / 1000, // 재생중인 강의의 위치
     pos_type: req.body.pos_type
