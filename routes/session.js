@@ -172,7 +172,7 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id', (req, r
 /**
  * AquaPlayer의 return url 요청을 처리할 route
  */
-router.get('/player/check/:training_user_id/:course_id/:course_list_id', (req, res, next) => {
+router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
   console.log(req.query);
   res.sendStatus(200);
 });
@@ -181,7 +181,7 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id', (req, r
  * AquaPlayer의 bookmark data 를 처리할 route
  */
 router.get('/player/log/:training_user_id/:course_id/:course_list_id', (req, res, next) => {
-  console.log(req.query);
+  console.log(req.body);
   res.sendStatus(200);
 });
 
