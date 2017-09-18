@@ -596,6 +596,14 @@ QUERY.LOG_VIDEO = {
     '     , `currenttime` = ? ' +
     ' WHERE `id` = ?; ',
 
+  // 재생시간 갱신
+  UPD_VIDEO_PLAYTIME2:
+    'UPDATE `log_user_video` SET ' +
+    '       `play_seconds` = ? ' +
+    '     , `duration` = ? ' +
+    '     , `currenttime` = ? ' +
+    ' WHERE `id` = ?; ',
+
   // 재생시간 획득
   SEL_TOTAL_VIDEO_PLAYTIME:
     'SELECT SUM(`play_seconds`) AS total_played_seconds ' +

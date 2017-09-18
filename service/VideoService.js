@@ -4,7 +4,7 @@ const async = require('async');
 
 exports.logPlayTime = (_data, _callback) => {
   let videoLogId = null; // log_user_video 테이블의 id
-  let totalPlayedSeconds = null; // 총 재생시간
+  // let totalPlayedSeconds = null; // 총 재생시간
 
   pool.getConnection((err, connection) => {
     if (err) throw err;
@@ -40,7 +40,7 @@ exports.logPlayTime = (_data, _callback) => {
           },
           callback => {
             // 재생시간을 수정한다.
-            connection.query(QUERY.LOG_VIDEO.UPD_VIDEO_PLAYTIME, [
+            connection.query(QUERY.LOG_VIDEO.UPD_VIDEO_PLAYTIME2, [
               _data.played_seconds,
               _data.video_duration,
               _data.currenttime,
