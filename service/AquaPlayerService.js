@@ -79,7 +79,7 @@ exports.getPlayer = (req, res, next) => {
   // if (req.query.device_type === 'iOS') {
   param += '&return_url=' + qs.escape(returnUrl);
   // }
-  param += '&wm_pos=' + '8';
+  param += '&wm_pos=' + '9';
   param += '&wm_text=' + UserID;
   param += '&url=' + res.locals.vodUrl + video;
   param += '&progress=5';
