@@ -84,7 +84,7 @@ function ($, axios, AquaNManagerService) {
    * 총 릴타임의 80% 이상을 시청한 경우 다음버튼을 활성화 한다.
    */
   function showPlayBtn () {
-    if (playerContainer.data('status') === 'progress') {
+    if (playerContainer.data('status') === 'done') {
       btnPlayNext.removeClass('blind');
       btnReplayVideo.addClass('blind');
     }

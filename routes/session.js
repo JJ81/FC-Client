@@ -139,6 +139,14 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.course_id = courseId;
         returnData.course_list_id = courseListId;
 
+        if (returnData.status === undefined) {
+          if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
+            returnData.status = 'done';
+          } else {
+            returnData.status = 'progress';
+          }
+        }
+
         if (videoType === 'vimeo') {
           res.render('video', returnData);
         } else if (videoType === 'aqua') {
