@@ -175,8 +175,9 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
 /**
  * AquaPlayer의 bookmark data 를 처리할 route
  */
-router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
+router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:video_id', (req, res, next) => {
   const inputs = {
+    user_id: parseInt(req.params.user_id),
     training_user_id: parseInt(req.params.training_user_id),
     video_id: parseInt(req.params.video_id),
     played_seconds: parseInt(req.body.RT) / 1000, // 순수 재생시간(배속을 고려하지 않음)
@@ -192,7 +193,7 @@ router.post('/player/log/:training_user_id/:course_id/:course_list_id/:video_id'
 
   // req, del => 북마크 신규, 삭제
   if (inputs.pos_type !== 'reg' && inputs.pos_type !== 'del') {
-    console.log(req.user.user_id, inputs);
+    console.log(inputs);
   } else if (inputs.pos_type === 'reg') {
 
   } else if (inputs.pos_type === 'del') {
