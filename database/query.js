@@ -599,7 +599,7 @@ QUERY.LOG_VIDEO = {
   // 재생시간 갱신
   UPD_VIDEO_PLAYTIME2:
     'UPDATE `log_user_video` SET ' +
-    '       `play_seconds` = `play_seconds` + (`play_seconds` - ?) ' +
+    '       `play_seconds` = ? ' +
     '     , `duration` = ? ' +
     '     , `currenttime` = ? ' +
     ' WHERE `id` = ?; ',
