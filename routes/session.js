@@ -27,7 +27,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
     training_user_id: trainingUserId,
     course_id: courseId,
     course_list_id: courseListId,
-    status: req.params.status
+    status: req.query.status
   };
 
   let courseList;

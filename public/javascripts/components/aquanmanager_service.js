@@ -58,7 +58,7 @@ window.define([
         console.log(res.data);
         if (deviceType === 'ios') {
           var time = (new Date()).getTime();
-          console.log(res.data.iosUrl);
+          // console.log(res.data.iosUrl);
           window.location.href = res.data.iosUrl;
 
           setTimeout(function () {
