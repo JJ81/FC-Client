@@ -15,9 +15,9 @@ exports.getPlayer = (req, res, next) => {
     video_status: videoStatus,
     total_played_seconds: totalPlayedSeconds
   } = req.query;
-  console.log(videoStatus, totalPlayedSeconds);
-  if (!videoStatus) videoStatus = 'progress';
-  if (!totalPlayedSeconds) totalPlayedSeconds = 0;
+
+  if (!videoStatus == null) videoStatus = 'progress';
+  if (!totalPlayedSeconds == null) totalPlayedSeconds = 0;
 
   const returnUrl = `http://${req.hostname}/session/player/check/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${videoStatus}`;
   // const returnUrl = req.header('Referer');
