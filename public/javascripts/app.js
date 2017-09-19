@@ -15,7 +15,8 @@ window.requirejs.config({
     'Vimeo': '/static/vendor/player.min',
     'axios': 'https://unpkg.com/axios/dist/axios.min',
     'bootstrap': ['/static/vendor/bootstrap.min'],
-    'aquaNManagerService': ['/static/javascripts/components/aquanmanager_service']
+    'aquaNManagerService': ['/static/javascripts/components/aquanmanager_service'],
+    'easyTimer': '/static/vendor/easytimer'
   },
   shim: {
     'jqueryCookie': {

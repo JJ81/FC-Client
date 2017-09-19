@@ -3,9 +3,10 @@ window.requirejs(
     'jquery',
     'axios',
     'aquaNManagerService',
+    'easyTimer',
     'jqueryTimer'
   ],
-function ($, axios, AquaNManagerService) {
+function ($, axios, AquaNManagerService, Timer) {
   // element cache
   var playerContainer = $('.videoplayer');
   var btnPlayVideo = $('#btn_play_video');
@@ -31,7 +32,23 @@ function ($, axios, AquaNManagerService) {
 
     if (playerContainer.data('confirm') == '1') {
       setTimeout(function () {
-        timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
+        // timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
+        var timer = new Timer();
+        timer.start({countdown: true, startValues: {seconds: 30}});
+
+        waitMessage.html(timer.getTimeValues().toString());
+
+        timer.addEventListener('secondsUpdated', function (e) {
+          waitMessage.html(timer.getTimeValues().toString());
+        });
+
+        timer.addEventListener('targetAchieved', function (e) {
+          waitMessage.html('학습을 초기화합니다..');
+
+          setTimeout(function () {
+            window.alert('뚜둥!');
+          }, 3000);
+        });
       }, 1000);
     }
     showPlayBtn();

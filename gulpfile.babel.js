@@ -54,7 +54,8 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'plugins/vimeo-player-js/dist/player.min.js',
     DIR.SRC + '/vendor/' + 'plugins/jquery_timer/jquery.timer.js',
     DIR.SRC + '/vendor/' + 'plugins/star-rating-svg/star-rating-svg.js',
-    DIR.SRC + '/vendor/' + 'bootstrap/js/bootstrap.min.js'
+    DIR.SRC + '/vendor/' + 'bootstrap/js/bootstrap.min.js',
+    DIR.SRC + '/vendor/' + 'easytimer.js'
   ])
   .pipe(uglify())
   .pipe(gulp.dest(DEST.VENDOR));
