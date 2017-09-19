@@ -23,13 +23,21 @@
 <!-- 다음으로 넘어갈 수 있을 조건이 충족될 경우 다음 아래의 버튼이 출력된다. -->
 <br /><br /><br />
 
-	<!-- 모든 문제에 답을 넣어야 정답확인 버튼이 활성화된다.-->
-  <a href="#">
-    <div id="btn_replay_video" class="btn_play btn-orange blind">
-      <span class="ico ico_play"></span>
-      <span class="txt">재시청하기</span>
+<div class="bootstrap-iso timer blind" style="padding: 10px;">
+  <div class="panel panel-danger lead">
+    <div class="text-center panel-body" id="countdown">
+      <div class="values"></div>
     </div>
-  </a>
+  </div>
+</div>
+
+<!-- 모든 문제에 답을 넣어야 정답확인 버튼이 활성화된다.-->
+<a href="#">
+  <div id="btn_replay_video" class="btn_play btn-orange blind">
+    <span class="ico ico_play"></span>
+    <span class="txt">재시청하기</span>
+  </div>
+</a>
 
 <a href="{{next_url}}">
   <div id="btn_play_next" class="btn_play btn-orange blind"
@@ -38,7 +46,7 @@
     data-course-list-id="{{course_list_id}}"
   >
     <span class="ico ico_play"></span>
-    <span class="txt">다음으로  <small class="wait-message"></small></span>
+    <span class="txt">다음으로</span>
   </div>
 </a>
 

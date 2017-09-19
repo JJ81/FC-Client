@@ -16,7 +16,7 @@ window.requirejs.config({
     'axios': 'https://unpkg.com/axios/dist/axios.min',
     'bootstrap': ['/static/vendor/bootstrap.min'],
     'aquaNManagerService': ['/static/javascripts/components/aquanmanager_service'],
-    'easyTimer': '/static/vendor/easytimer'
+    'easyTimer': '/static/vendor/easytimer' // http://albert-gonzalez.github.io/easytimer.js/
   },
   shim: {
     'jqueryCookie': {

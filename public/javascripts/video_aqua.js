@@ -14,6 +14,7 @@ function ($, axios, AquaNManagerService, Timer) {
   var nextUrl = btnPlayNext.parent().attr('href');
   var btnReplayVideo = $('#btn_replay_video');
   var waitMessage = $('#countdown .values'); // $('.wait-message');
+  var timer;
 
   // var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머
   // var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
@@ -35,7 +36,7 @@ function ($, axios, AquaNManagerService, Timer) {
 
       setTimeout(function () {
         // timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
-        var timer = new Timer();
+        timer = new Timer();
         timer.start({countdown: true, startValues: {seconds: 30}});
 
         waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
@@ -52,14 +53,7 @@ function ($, axios, AquaNManagerService, Timer) {
 
             axios.all([ deleteVideoLog(), deleteSessionLog() ])
             .then(axios.spread(function (acct, perms) {
-              console.log(acct);
-              var redirectUrl = '/session' +
-                  '/' + playerContainer.data('training-user-id') +
-                  '/' + playerContainer.data('course-id') +
-                  '/' + playerContainer.data('course-list-id');
-
-              console.log(redirectUrl);
-              window.location.href = redirectUrl;
+              window.location.reload();
             }));
           }, 3000);
         });

@@ -9,9 +9,10 @@ requirejs(
     'jquery',
     'axios',
     'Vimeo',
+    'easyTimer',
     'jqueryTimer'
   ],
-function ($, axios, Vimeo) {
+function ($, axios, Vimeo, Timer) {
   var player = null;
   var playerContainer = $('.videoplayer');
   var timerLoggingInterval = playerContainer.data('interval'); // log every 5 seconds
@@ -21,7 +22,7 @@ function ($, axios, Vimeo) {
   var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
   var passiveRate = playerContainer.data('passive-rate'); // 다음 버튼을 노출하는 시점
   var videoDuration = null; // 비디오 러닝타임
-  var waitMessage = $('.wait-message');
+  var waitMessage = $('#countdown .values'); // $('.wait-message');
   var sessionHasEnded = false;
   var videoCurrentTime; // 비디오 현재 시청시간
 
@@ -37,6 +38,8 @@ function ($, axios, Vimeo) {
   var trainingUserId = btnPlayNext.data('training-user-id');
   var courseId = btnPlayNext.data('course-id');
   var courseListId = btnPlayNext.data('course-list-id');
+
+  var timer;
 
 /**
  * entry point
@@ -338,8 +341,32 @@ function ($, axios, Vimeo) {
     // 세션 종료 시 대기 타이머 시작
     if (!sessionHasEnded) {
       setTimeout(function () {
-        timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
-      }, 3000);
+        // timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
+
+        $('.timer').removeClass('blind');
+
+        timer = new Timer();
+        timer.start({countdown: true, startValues: {seconds: 30}});
+
+        waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
+
+        timer.addEventListener('secondsUpdated', function (e) {
+          waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
+        });
+
+        timer.addEventListener('targetAchieved', function (e) {
+          waitMessage.html('학습 초기화 중입니다..');
+
+          setTimeout(function () {
+            window.alert('30초 동안 다음 버튼을 누르지 않아 학습을 초기화 하였습니다.\n\n재시청 해주시기 바랍니다.');
+
+            axios.all([ deleteVideoLog(), deleteSessionLog() ])
+            .then(axios.spread(function (res1, res2) {
+              window.location.reload();
+            }));
+          }, 3000);
+        });
+      }, 1000);
     }
   });
 
