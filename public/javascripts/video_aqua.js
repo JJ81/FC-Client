@@ -50,17 +50,17 @@ function ($, axios, AquaNManagerService, Timer) {
           setTimeout(function () {
             window.alert('30초 동안 다음 버튼을 누르지 않아 학습을 초기화 하였습니다.\n\n재시청 해주시기 바랍니다.');
 
-            // axios.all([ deleteVideoLog(), deleteSessionLog() ])
-            //   .then(axios.spread(function (acct, perms) {
-            //     console.log(acct);
-            //     var redirectUrl = '/session' +
-            //         '/' + playerContainer.data('training-user-id') +
-            //         '/' + playerContainer.data('course-id') +
-            //         '/' + playerContainer.data('course-list-id');
+            axios.all([ deleteVideoLog(), deleteSessionLog() ])
+            .then(axios.spread(function (acct, perms) {
+              console.log(acct);
+              var redirectUrl = '/session' +
+                  '/' + playerContainer.data('training-user-id') +
+                  '/' + playerContainer.data('course-id') +
+                  '/' + playerContainer.data('course-list-id');
 
-            //     console.log(redirectUrl);
-            //     window.location.href = redirectUrl;
-            //   }));
+              console.log(redirectUrl);
+              window.location.href = redirectUrl;
+            }));
           }, 3000);
         });
       }, 1000);
