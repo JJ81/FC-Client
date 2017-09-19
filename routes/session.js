@@ -201,24 +201,24 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
  * AquaPlayer의 return url 요청을 처리할 route
  * 세션 유지 됨
  */
-router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id/:video_status', (req, res, next) => {
-  const inputs = {
-    user_id: parseInt(req.user.user_id),
-    training_user_id: parseInt(req.params.training_user_id),
-    course_id: parseInt(req.params.course_id),
-    course_list_id: parseInt(req.params.course_list_id),
-    video_id: parseInt(req.params.video_id),
-    video_status: req.params.video_status
-  };
+// router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id/:video_status', (req, res, next) => {
+//   const inputs = {
+//     user_id: parseInt(req.user.user_id),
+//     training_user_id: parseInt(req.params.training_user_id),
+//     course_id: parseInt(req.params.course_id),
+//     course_list_id: parseInt(req.params.course_list_id),
+//     video_id: parseInt(req.params.video_id),
+//     video_status: req.params.video_status
+//   };
 
-  VideoService.CheckPlayTime(inputs, (err, data) => {
-    if (err) throw err;
-    if (data.passive === true) {
-      return res.redirect(
-        `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}`);
-    }
-  });
-});
+//   VideoService.CheckPlayTime(inputs, (err, data) => {
+//     if (err) throw err;
+//     if (data.passive === true) {
+//       return res.redirect(
+//         `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}`);
+//     }
+//   });
+// });
 
 /**
  * AquaPlayer의 bookmark data 를 처리할 route
