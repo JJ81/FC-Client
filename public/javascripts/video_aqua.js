@@ -31,15 +31,18 @@ function ($, axios, AquaNManagerService, Timer) {
     AquaNManagerService = new AquaNManagerService(options);
 
     if (playerContainer.data('confirm') == '1') {
+      $('.timer').removeClass('blind');
+
       setTimeout(function () {
         // timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
         var timer = new Timer();
+        var message = timer.getTimeValues().toString() + ' 후 학습이 초기화 됩니다. 다음 버튼을 눌러주세요.';
         timer.start({countdown: true, startValues: {seconds: 30}});
 
-        waitMessage.html(timer.getTimeValues().toString());
+        waitMessage.html(message);
 
         timer.addEventListener('secondsUpdated', function (e) {
-          waitMessage.html(timer.getTimeValues().toString());
+          waitMessage.html(message);
         });
 
         timer.addEventListener('targetAchieved', function (e) {
