@@ -67,7 +67,7 @@ window.define([
             setTimeout(function () {
               var now = (new Date()).getTime();
               if ((now - time) < 400) {
-                window.location.replace('https://itunes.apple.com/kr/app/aquanmanager/id1048325731');
+                window.location.href = 'https://itunes.apple.com/kr/app/aquanmanager/id1048325731';
               }
             }, 10);
           }, 300);
