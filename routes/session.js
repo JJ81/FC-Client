@@ -160,11 +160,13 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.status = 'progress';
         returnData.confirm = 0;
 
-        if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
-          returnData.status = 'done';
+        if (returnData.total_played_seconds > 0) {
+          if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
+            returnData.status = 'done';
 
-          if (results[4][0].start_dt === null && results[4][0].end_dt === null) {
-            returnData.confirm = 1;
+            if (results[4][0].start_dt === null && results[4][0].end_dt === null) {
+              returnData.confirm = 1;
+            }
           }
         }
 
