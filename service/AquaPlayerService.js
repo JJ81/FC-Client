@@ -20,7 +20,7 @@ exports.getPlayer = (req, res, next) => {
   // const returnUrl = req.header('Referer');
   const bookmarkData = `http://${req.hostname}/session/player/log/${req.user.user_id}/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${totalPlayedSeconds}`;
 
-  // console.log(bookmark_data);
+  console.log(returnUrl);
   // return res.sendStatus(200);
 
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.

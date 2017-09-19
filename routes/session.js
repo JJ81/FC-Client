@@ -13,6 +13,8 @@ const util = require('../util/util');
  * 세션 학습시작
  */
 router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res) => {
+  console.log(req.header('Referer'));
+
   const {
     training_user_id: trainingUserId,
     course_id: courseId,
@@ -26,9 +28,9 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
     loggedIn: req.user,
     training_user_id: trainingUserId,
     course_id: courseId,
-    course_list_id: courseListId,
-    status: req.query.status,
-    confirm: req.query.confirm === '1' ? '1' : '0'
+    course_list_id: courseListId
+    // status: req.query.status,
+    // confirm: req.query.confirm === '1' ? '1' : '0'
   };
 
   let courseList;
@@ -91,12 +93,27 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
     },
     // 비디오 마지막 재생시점을 가져온다.
     // results[3]
-    (callback) => {
+    callback => {
       if (courseList.type === 'VIDEO') {
         connection.query(QUERY.LOG_VIDEO.SEL_LAST_VIDEO_CURRENT_TIME, [
           req.user.user_id,
           trainingUserId,
           courseList.video_id
+        ], (err, data) => {
+          callback(err, data);
+        });
+      } else {
+        callback(null, null);
+      }
+    },
+    // 비디오 세션의 종료여부를 가져온다.
+    // results[4]
+    callback => {
+      if (courseList.type === 'VIDEO') {
+        connection.query(QUERY.LOG_COURSE_LIST.SEL_SESSION_PROGRESS, [
+          req.user.user_id,
+          trainingUserId,
+          courseListId
         ], (err, data) => {
           callback(err, data);
         });
@@ -140,14 +157,14 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.course_id = courseId;
         returnData.course_list_id = courseListId;
 
-        // console.log(results[2][0].max_duration);
-        // console.log(returnData.total_played_seconds);
+        returnData.status = 'progress';
+        returnData.confirm = 0;
 
-        if (returnData.status === undefined && returnData.total_played_seconds !== null) {
-          if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
-            returnData.status = 'done';
-          } else {
-            returnData.status = 'progress';
+        if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
+          returnData.status = 'done';
+
+          if (results[4][0].start_dt === null && results[4][0].end_dt === null) {
+            returnData.confirm = 1;
           }
         }
 
@@ -194,20 +211,9 @@ router.get('/player/check/:training_user_id/:course_id/:course_list_id/:video_id
 
   VideoService.CheckPlayTime(inputs, (err, data) => {
     if (err) throw err;
-    // console.log(data);
-
     if (data.passive === true) {
-      if (inputs.video_status === 'progress') {
-        // 과거 상태가 진행중이었을 경우 완료 시 30초 이내 클릭하도록 설정
-        return res.redirect(
-          `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=done&confirm=1`);
-      } else {
-        return res.redirect(
-          `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=done`);
-      }
-    } else {
       return res.redirect(
-        `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}?status=progress`);
+        `/session/${inputs.training_user_id}/${inputs.course_id}/${inputs.course_list_id}`);
     }
   });
 });

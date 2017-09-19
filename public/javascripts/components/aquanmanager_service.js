@@ -44,6 +44,8 @@ window.define([
     startPlayer: function () {
       var deviceType = self.getDeviceType();
 
+      console.log('haha', this.options.videoStatus);
+
       axios.get('/api/v1/aquaplayer', {
         params: {
           device: deviceType,
@@ -52,8 +54,8 @@ window.define([
           course_id: this.options.courseId,
           course_list_id: this.options.courseListId,
           video_id: this.options.videoId,
-          video_status: this.options.videoStatus !== undefined ? this.options.videoStatus : 'progress',
-          total_played_seconds: this.options.totalPlayedSeconds !== undefined ? this.options.totalPlayedSeconds : 0
+          video_status: this.options.videoStatus !== '' ? this.options.videoStatus : 'progress',
+          total_played_seconds: this.options.totalPlayedSeconds !== '' ? this.options.totalPlayedSeconds : 0
         }
       })
       .then(function (res) {
