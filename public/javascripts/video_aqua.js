@@ -41,7 +41,7 @@ function ($, axios, AquaNManagerService, Timer) {
         waitMessage.html(timer.getTimeValues().toString() + ' 후 학습 초기화');
 
         timer.addEventListener('secondsUpdated', function (e) {
-          waitMessage.html(timer.getTimeValues().toString()) + ' 후 학습 초기화';
+          waitMessage.html(timer.getTimeValues().toString() + ' 후 학습 초기화');
         });
 
         timer.addEventListener('targetAchieved', function (e) {
