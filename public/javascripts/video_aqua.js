@@ -38,17 +38,29 @@ function ($, axios, AquaNManagerService, Timer) {
         var timer = new Timer();
         timer.start({countdown: true, startValues: {seconds: 30}});
 
-        waitMessage.html(timer.getTimeValues().toString() + ' 초 후 학습 초기화');
+        waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 다음 버튼을 클릭해주세요.');
 
         timer.addEventListener('secondsUpdated', function (e) {
-          waitMessage.html(timer.getTimeValues().toString() + ' 초 후 학습 초기화');
+          waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 다음 버튼을 클릭해주세요.');
         });
 
         timer.addEventListener('targetAchieved', function (e) {
           waitMessage.html('학습 초기화 중입니다..');
 
           setTimeout(function () {
-            window.alert('뚜둥!');
+            window.alert('30초 동안 다음 버튼을 누르지 않아 학습을 초기화 하였습니다.\n 재시청 해주시기 바랍니다.');
+
+            // axios.all([ deleteVideoLog(), deleteSessionLog() ])
+            //   .then(axios.spread(function (acct, perms) {
+            //     console.log(acct);
+            //     var redirectUrl = '/session' +
+            //         '/' + playerContainer.data('training-user-id') +
+            //         '/' + playerContainer.data('course-id') +
+            //         '/' + playerContainer.data('course-list-id');
+
+            //     console.log(redirectUrl);
+            //     window.location.href = redirectUrl;
+            //   }));
           }, 3000);
         });
       }, 1000);
