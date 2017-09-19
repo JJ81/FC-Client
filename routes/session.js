@@ -13,7 +13,7 @@ const util = require('../util/util');
  * 세션 학습시작
  */
 router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res) => {
-  console.log(req.host);
+  console.log(req.url);
 
   const {
     training_user_id: trainingUserId,
