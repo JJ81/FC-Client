@@ -166,9 +166,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
               returnData.status = 'done';
 
               // 모바일 기기에서 전송된 경우
-              console.log(req.header('Referer'));
               if (req.header('Referer') === undefined) {
-                if (results[4][0].start_dt === null && results[4][0].end_dt === null) {
+                if (results[4][0].end_dt === null) {
                   returnData.confirm = 1;
                 }
               }
