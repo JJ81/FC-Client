@@ -41,7 +41,7 @@ function ($, axios, AquaNManagerService, Timer) {
         waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 다음 버튼을 클릭해주세요.');
 
         timer.addEventListener('secondsUpdated', function (e) {
-          waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 다음 버튼을 클릭해주세요.');
+          waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
         });
 
         timer.addEventListener('targetAchieved', function (e) {
