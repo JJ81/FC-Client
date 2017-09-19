@@ -48,7 +48,7 @@ function ($, axios, AquaNManagerService, Timer) {
           waitMessage.html('학습 초기화 중입니다..');
 
           setTimeout(function () {
-            window.alert('30초 동안 다음 버튼을 누르지 않아 학습을 초기화 하였습니다.\n 재시청 해주시기 바랍니다.');
+            window.alert('30초 동안 다음 버튼을 누르지 않아 학습을 초기화 하였습니다.\n\n재시청 해주시기 바랍니다.');
 
             // axios.all([ deleteVideoLog(), deleteSessionLog() ])
             //   .then(axios.spread(function (acct, perms) {
