@@ -62,7 +62,7 @@ function ($, axios, AquaNManagerService, Timer) {
   });
 
   btnPlayVideo.on('click', function () {
-    timer.reset();
+    timer.stop();
     sessionProgressStartLogger();
     AquaNManagerService.startPlayer();
   });

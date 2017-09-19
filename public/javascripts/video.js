@@ -346,7 +346,6 @@ function ($, axios, Vimeo, Timer) {
 
         $('.timer').removeClass('blind');
 
-        timer = new Timer();
         timer.start({countdown: true, startValues: {seconds: 30}});
 
         waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
