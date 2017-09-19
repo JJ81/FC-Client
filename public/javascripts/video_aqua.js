@@ -38,10 +38,10 @@ function ($, axios, AquaNManagerService, Timer) {
         var timer = new Timer();
         timer.start({countdown: true, startValues: {seconds: 30}});
 
-        waitMessage.html(timer.getTimeValues().toString() + ' 후 학습 초기화');
+        waitMessage.html(timer.getTimeValues().toString() + ' 초 후 학습 초기화');
 
         timer.addEventListener('secondsUpdated', function (e) {
-          waitMessage.html(timer.getTimeValues().toString() + ' 후 학습 초기화');
+          waitMessage.html(timer.getTimeValues().toString() + ' 초 후 학습 초기화');
         });
 
         timer.addEventListener('targetAchieved', function (e) {
