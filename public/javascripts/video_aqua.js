@@ -13,10 +13,10 @@ function ($, axios, AquaNManagerService, Timer) {
   var btnPlayNext = $('#btn_play_next');
   var nextUrl = btnPlayNext.parent().attr('href');
   var btnReplayVideo = $('#btn_replay_video');
-  var waitMessage = $('.wait-message');
+  var waitMessage = $('.countdown.values'); // $('.wait-message');
 
-  var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머
-  var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
+  // var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머
+  // var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
 
   $(function () {
     var options = {
@@ -43,7 +43,7 @@ function ($, axios, AquaNManagerService, Timer) {
         });
 
         timer.addEventListener('targetAchieved', function (e) {
-          waitMessage.html('학습을 초기화합니다..');
+          waitMessage.html('학습 초기화 중입니다..');
 
           setTimeout(function () {
             window.alert('뚜둥!');
