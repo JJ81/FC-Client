@@ -294,6 +294,8 @@ function ($, axios, Vimeo, Timer) {
  */
   btnPlayNext.on('click', function (event) {
     event.preventDefault();
+
+    timer.stop();
     // 세션 종료로그를 기록한다.
     sessionProgressEndLogger();
   });
