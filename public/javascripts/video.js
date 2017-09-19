@@ -39,7 +39,7 @@ function ($, axios, Vimeo, Timer) {
   var courseId = btnPlayNext.data('course-id');
   var courseListId = btnPlayNext.data('course-list-id');
 
-  var timer;
+  var timer = new Timer();
 
 /**
  * entry point
@@ -302,6 +302,7 @@ function ($, axios, Vimeo, Timer) {
    * Player 재생 시 발생
    */
   player.on('play', function (data) {
+    timer.reset();
     // 세션시작로그
     sessionProgressStartLogger();
     // 로깅 시간간격 설정
