@@ -13,8 +13,6 @@ const util = require('../util/util');
  * 세션 학습시작
  */
 router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res) => {
-  console.log(req.url);
-
   const {
     training_user_id: trainingUserId,
     course_id: courseId,
@@ -157,22 +155,24 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.course_id = courseId;
         returnData.course_list_id = courseListId;
 
-        returnData.status = 'progress';
-        returnData.confirm = 0;
-
-        if (returnData.total_played_seconds > 0) {
-          if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
-            returnData.status = 'done';
-
-            if (results[4][0].start_dt === null && results[4][0].end_dt === null) {
-              returnData.confirm = 1;
-            }
-          }
-        }
-
         if (videoType === 'vimeo') {
           res.render('video', returnData);
         } else if (videoType === 'aqua') {
+          returnData.status = 'progress';
+          returnData.confirm = 0;
+
+          if (returnData.total_played_seconds > 0) {
+            if (Math.floor(results[2][0].max_duration * 0.8) <= returnData.total_played_seconds) {
+              returnData.status = 'done';
+
+              // 모바일 기기에서 전송된 경우
+              if (req.header('Referer') === undefined) {
+                if (results[4][0].start_dt === null && results[4][0].end_dt === null) {
+                  returnData.confirm = 1;
+                }
+              }
+            }
+          }
           res.render('video_aqua', returnData);
         }
       } else if (courseList.type === 'QUIZ' || courseList.type === 'FINAL') {
