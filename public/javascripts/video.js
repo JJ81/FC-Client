@@ -39,7 +39,7 @@ function ($, axios, Vimeo, Timer) {
   var courseId = btnPlayNext.data('course-id');
   var courseListId = btnPlayNext.data('course-list-id');
 
-  var timer = new Timer();
+  var secondTimer = new Timer();
 
 /**
  * entry point
@@ -61,6 +61,8 @@ function ($, axios, Vimeo, Timer) {
       console.info('Player is ready.');
 
       player.getDuration().then(function (duration) {
+        console.log('duration : ', duration);
+
         videoDuration = duration; // 비디오 지속시간 구하기
         setPlayer();
       }).catch(function (error) {
@@ -126,6 +128,7 @@ function ($, axios, Vimeo, Timer) {
    * 시청시간 로깅
    */
   function videoPlayTimeLogger () {
+    console.log('logging...');
     timerLogPlayedSeconds += timerLoggingInterval;
 
     player.getCurrentTime().then(function (seconds) {
@@ -174,6 +177,7 @@ function ($, axios, Vimeo, Timer) {
    * 비디오 시청 종료시간 로깅
    */
   function videoEndTimeLogger () {
+    console.log('video log end');
     $.ajax({
       type: 'POST',
       url: '/video/log/endtime',
@@ -193,6 +197,7 @@ function ($, axios, Vimeo, Timer) {
    * 세션 시작일시 로깅
    */
   function sessionProgressStartLogger () {
+    console.log('session log start');
     $.ajax({
       type: 'POST',
       url: '/session/log/starttime',
@@ -217,6 +222,7 @@ function ($, axios, Vimeo, Timer) {
    * 세션 종료일시 로깅
    */
   function sessionProgressEndLogger () {
+    console.log('session log end');
     $.ajax({
       type: 'POST',
       url: '/session/log/endtime',
@@ -295,7 +301,7 @@ function ($, axios, Vimeo, Timer) {
   btnPlayNext.on('click', function (event) {
     event.preventDefault();
 
-    timer.stop();
+    secondTimer.stop();
     // 세션 종료로그를 기록한다.
     sessionProgressEndLogger();
   });
@@ -304,7 +310,7 @@ function ($, axios, Vimeo, Timer) {
    * Player 재생 시 발생
    */
   player.on('play', function (data) {
-    timer.reset();
+    // secondTimer.reset();
     // 세션시작로그
     sessionProgressStartLogger();
     // 로깅 시간간격 설정
@@ -348,15 +354,16 @@ function ($, axios, Vimeo, Timer) {
 
         $('.timer').removeClass('blind');
 
-        timer.start({countdown: true, startValues: {seconds: 30}});
+        console.log('second timer started');
+        secondTimer.start({countdown: true, startValues: {seconds: 30}});
 
-        waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
+        waitMessage.html(secondTimer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
 
-        timer.addEventListener('secondsUpdated', function (e) {
-          waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
+        secondTimer.addEventListener('secondsUpdated', function (e) {
+          waitMessage.html(secondTimer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
         });
 
-        timer.addEventListener('targetAchieved', function (e) {
+        secondTimer.addEventListener('targetAchieved', function (e) {
           waitMessage.html('학습 초기화 중입니다..');
 
           setTimeout(function () {
