@@ -846,6 +846,13 @@ textarea {
   line-height: 150%;
 }
 
+.alert a {
+  color: white;
+  font-size: 14px;
+  line-height: 150%;
+  text-decoration: underline;
+}
+
 /* The close button */
 .closebtn {
     margin-left: 15px;

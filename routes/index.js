@@ -12,7 +12,7 @@ const QUERY = require('../database/query');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const PointService = require('../service/PointService');
+// const PointService = require('../service/PointService');
 const pool = require('../commons/db_conn_pool');
 const util = require('../util/util');
 const validator = require('validator');
@@ -42,49 +42,47 @@ passport.use(new LocalStrategy({
       return done(null, false, { message: '오류가 발생하였습니다.' });
     } else {
       if (data.length === 1) {
+        if (!bcrypt.compareSync(password, data[0].password)) {
+          return done(null, false, { message: '잘못된 암호입니다.' });
+        }
+
         if (data[0].fc_active === 0) {
           return done(null, false, { message: '접속할 수 없는 계정입니다.' });
         }
-        if (!bcrypt.compareSync(password, data[0].password)) {
-          return done(null, false, { message: '잘못된 암호입니다.' });
-        } else {
-          if (data[0].active === 0) {
-            return done(null, false, { message: '접속할 수 없는 계정입니다.' });
-          }
-          if (process.env.NODE_ENV === 'production') {
-            const { mobile_url: mobileUrl } = data[0];
 
-            if (mobileUrl !== req.headers.host) {
-              return done(null, false, { message: '등록되지 않은 핸드폰 번호입니다.' });
-            }
-          }
+        if (process.env.NODE_ENV === 'production') {
+          const { mobile_url: mobileUrl } = data[0];
 
-          if (data[0].active !== 1) {
-            return done(null, false, { message: '일치하는 정보가 없습니다.' });
+          if (mobileUrl !== req.headers.host) {
+            return done(null, false, { message: '등록되지 않은 핸드폰 번호입니다.' });
           }
+        }
 
-          // 사용자 포인트 조회
-          // let userPoint = 0;
-          let userInfo = {
-            'user_id': data[0].id,
-            'fc_id': data[0].fc_id,
-            'name': data[0].name,
-            'branch': data[0].branch_name,
-            'duty': data[0].duty_name,
-            'email': data[0].email,
-            // 'point': data.point_total,
-            'terms_approved': data[0].terms_approved,
-            'isdemo': data[0].isdemo
-          };
+        if (data[0].active !== 1) {
+          return done(null, false, { message: '일치하는 정보가 없습니다.' });
+        }
+
+        // 사용자 포인트 조회
+        // let userPoint = 0;
+        let userInfo = {
+          'user_id': data[0].id,
+          'fc_id': data[0].fc_id,
+          'name': data[0].name,
+          'branch': data[0].branch_name,
+          'duty': data[0].duty_name,
+          'email': data[0].email,
+          // 'point': data.point_total,
+          'terms_approved': data[0].terms_approved,
+          'isdemo': data[0].isdemo
+        };
 
           // 교육생 포인트를 사이드탭에 표시하기 위함.
-          return done(null, userInfo);
+        return done(null, userInfo);
           // PointService.userpoint(connection, { user_id: data[0].id, fc_id: data[0].fc_id }, (err, data) => {
           //   if (err) throw err;
           //   userInfo.point = data.point_total;
           //   return done(null, userInfo);
           // });
-        }
       } else {
         return done(null, false, { message: '등록되지 않은 핸드폰 번호입니다.' });
       }
