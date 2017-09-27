@@ -42,9 +42,15 @@ passport.use(new LocalStrategy({
       return done(null, false, { message: '오류가 발생하였습니다.' });
     } else {
       if (data.length === 1) {
+        if (data[0].fc_active === 0) {
+          return done(null, false, { message: '접속할 수 없는 계정입니다.' });
+        }
         if (!bcrypt.compareSync(password, data[0].password)) {
           return done(null, false, { message: '잘못된 암호입니다.' });
         } else {
+          if (data[0].active === 0) {
+            return done(null, false, { message: '접속할 수 없는 계정입니다.' });
+          }
           if (process.env.NODE_ENV === 'production') {
             const { mobile_url: mobileUrl } = data[0];
 

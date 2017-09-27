@@ -14,6 +14,7 @@ QUERY.AUTH = {
     '     , d.name AS duty_name ' +
     '     , u.terms_approved ' +
     '     , f.isdemo ' +
+    '     , f.`active` as fc_active ' +
     '  FROM `users` AS u ' +
     ' INNER JOIN `fc` AS f ' +
     '    ON u.`fc_id` = f.`id` ' +
