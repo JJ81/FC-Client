@@ -20,7 +20,7 @@ exports.getPlayer = (req, res, next) => {
   // const returnUrl = req.header('Referer');
   const bookmarkData = `http://${req.hostname}/session/player/log/${req.user.user_id}/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${totalPlayedSeconds}`;
 
-  console.log(returnUrl);
+  // console.log(returnUrl);
   // return res.sendStatus(200);
 
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
@@ -90,7 +90,7 @@ exports.getPlayer = (req, res, next) => {
   // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
-  // console.log(param);
+  console.log('param : ', param);
 
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
@@ -104,10 +104,12 @@ exports.getPlayer = (req, res, next) => {
       const androidUrl = 'intent://cddr_dnp/webstream?param=' + stdout + '#Intent;scheme=cdnmp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.cdn.aquanmanager;end';
 
       if (device === 'ios') {
+        console.log(iosUrl);
         return res.send({
           iosUrl: iosUrl
         });
       } else if (device === 'android') {
+        console.log(androidUrl);
         return res.send({
           androidUrl: androidUrl
         });
