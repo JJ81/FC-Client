@@ -45,9 +45,10 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
       [
         (callback) => {
           if (query) {
-            connection.query(query,
+            let q = connection.query(query,
               [ req.user.user_id, req.user.user_id ],
               (err, rows) => {
+                // console.log(q.sql);
                 if (err) {
                   callback(err, null);
                 } else {

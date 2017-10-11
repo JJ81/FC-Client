@@ -69,6 +69,10 @@
         {{/if}}
       {{/ifCond}}
       <span class="info">
+        <div class="bootstrap-iso">
+          <span class="label label-default">Default</span>
+        </div>
+        <br>
         {{#ifCond can_replay '==' 1}}
         <span class="tit">{{ edu_name }} | {{course_name}}</span>
         {{else}}
@@ -103,13 +107,37 @@
       <img src="/uploads/{{thumbnail}}" alt="" width="100" class="img_list" />
       {{/if}}
       <span class="info">
+        <div class="progress-status">
+          <div class="bootstrap-iso">
+            {{#if (isEquals completed_rate 0)}}
+            <span class="label label-default">미수강</span>
+            {{else}}
+              {{#if (isEquals completed_rate 100)}}
+              <span class="label label-success">완료</span>
+              {{else}}
+              <span class="label label-warning">진행중</span>
+              {{/if}}
+            {{/if}}
+            <span class="pull-right author">
+              {{#if teacher_name}}<i class="fa fa-user-circle" aria-hidden="true"></i>{{/if}}
+              {{teacher_name}}
+            </span>
+            <div class="clearfix"></div>
+          </div>
+        </div>
         <span class="tit">{{ edu_name }} | {{course_name}}</span>
-        <span class="author">{{teacher_name }}</span>
         <span class="progress_bg">
           <span class="progress" style="width: {{completed_rate}}%"></span>
         </span>
-        <span class="achievement">{{completed_rate}}% {{#if course_end_dt}}({{ stime course_end_dt}} 완료){{/if}}</span>
-        <span class="author">{{start_dt}} ~ {{end_dt}}</span>
+        <span class="achievement alignleft">
+          {{#if course_end_dt}}
+            {{stime course_end_dt}}
+          {{else}}
+            {{completed_rate}}%
+          {{/if}}
+        </span>
+        <span class="author alignright">{{dateformat start_dt 'yy.m.d'}} ~ {{dateformat end_dt 'yy.m.d'}}</span>
+        <div style="clear: both;"></div>
       </span>
       </a>
     </li>
