@@ -1,6 +1,6 @@
 {{> header}}
 
-<div class="list_section">
+<span class="list_section">
   <ol>
     <li class="item_wrap">
       {{#if course.thumbnail}}
@@ -10,12 +10,37 @@
         <span class="list_item no_img_list">
         {{/if}}
           <span class="info">
+            <div class="progress-status">
+              <div class="bootstrap-iso">
+                {{#if (isEquals course.completed_rate 0)}}
+                <span class="label label-default">미수강</span>
+                {{else}}
+                  {{#if (isEquals course.completed_rate 100)}}
+                  <span class="label label-success">완료</span>
+                  {{else}}
+                  <span class="label label-warning">진행중</span>
+                  {{/if}}
+                {{/if}}
+                <span class="pull-right author">
+                  {{#if course.teacher_name}}<i class="fa fa-user-circle" aria-hidden="true"></i>{{/if}}
+                  {{course.teacher_name}}
+                </span>
+                <div class="clearfix"></div>
+              </div>
+            </div>
             <span class="tit">{{ edu_name }} | {{course.course_name}}</span>
-            <span class="author">{{course.teacher_name}}</span>
             <span class="progress_bg">
               <span class="progress" style="width: {{course.completed_rate}}%"></span>
             </span>
-            <span class="achievement">{{course.completed_rate}}% {{#if course.course_end_dt}}({{ stime course.course_end_dt}} 완료){{/if}}</span>
+            <span class="achievement alignleft">
+              {{#if course.course_end_dt}}
+                {{stime course.course_end_dt}}
+              {{else}}
+                {{course.completed_rate}}%
+              {{/if}}
+            </span>
+            <span class="author alignright">{{dateformat start_dt 'yy.m.d'}} ~ {{dateformat end_dt 'yy.m.d'}}</span>
+            <div style="clear: both;"></div>
           </span>
         </span>
       </span>
