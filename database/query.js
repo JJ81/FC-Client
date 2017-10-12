@@ -211,7 +211,7 @@ QUERY.EDU = {
     '    ON lae.`training_edu_id` = te.`id` ' +
     '   AND te.`active` = 1 ' +
     ' WHERE u.`id` = ? ' +
-    '   AND NOW() > lae.`end_dt` ' +
+    // '   AND NOW() > lae.`end_dt` ' +
     ' GROUP BY yearmonth ' +
     ' ORDER BY yearmonth DESC '
 

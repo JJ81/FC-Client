@@ -171,6 +171,7 @@
   {{/if}}
 </div>
 
+{{#if (isEquals current_path 'passed')}}
 {{#if courses}}
 <div class="center">
   <div class="pagination">
@@ -185,6 +186,7 @@
     {{/paginate}}
   </div>
 </div>
+{{/if}}
 {{/if}}
 
 <br /><br /><br />
@@ -212,4 +214,3 @@
 	</div>
 </a>
 {{/ifCond}}
-<!--{{> search}}-->
