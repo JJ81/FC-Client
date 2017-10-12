@@ -171,7 +171,7 @@
 	display: block;
 	margin-top: 10px;
 	font-weight: bold;
-	font-size: 16px;
+	font-size: 15px;
 }
 
 .list_item .tit,
@@ -595,7 +595,7 @@
 
 .search_link{
 	position: absolute;
-	top: 10px;
+	top: 5px;
 	width: 30px;
 	height: 30px;
   right: 0px;
@@ -720,6 +720,10 @@
   color: #dd4b39 !important;
 }
 
+.text-deactivated {
+  color: #ddd !important;
+}
+
 .img-container {
     position: absolute;
     overflow: hidden;
@@ -753,6 +757,18 @@
   border-radius: 0px; /* iOS 둥근모서리 제거 */
   -webkit-appearance: none; /* 네이티브 외형 감추기 */
   -moz-appearance: none;
+}
+
+.search_input {
+    background-image: url('../images/searchicon.png'); /* Add a search icon to input */
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    width: 100%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-top: 5px; /* Add some space below the input */
+    margin-bottom: 5px; /* Add some space below the input */
 }
 
 select {
@@ -938,7 +954,7 @@ textarea {
 }
 
 .not-active {
-   /*pointer-events: none;*/
+   pointer-events: none;
    cursor: default;
 }
 
@@ -977,4 +993,34 @@ textarea {
 }
 .alignright:after {
   clear: both;
+}
+
+.pagination {
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.yearmonth {
+  font-size: 22px;
+  border-bottom: 1px solid;
+  margin: 20px 20px;
 }

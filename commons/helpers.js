@@ -3,6 +3,8 @@ var hbs = require('hbs');
 var currencyFormatter = require('currency-formatter');
 var dateFormat = require('dateformat');
 
+hbs.registerHelper('paginate', require('handlebars-paginate'));
+
 hbs.registerHelper('isEquals', function (a, b) {
   return (a === b);
 });

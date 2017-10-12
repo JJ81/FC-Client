@@ -109,10 +109,10 @@ QUERY.EDU = {
     ' ORDER BY completed_rate, e.id, cg.`order`; ',
 
   // 지난 교육과정
-  SEL_PASSED: (searchBy, searchText) => {
-    console.log(searchBy, searchText);
+  SEL_PASSED: (searchBy, searchText, page = 1, count = 10) => {
+    // console.log(searchBy, searchText);
     let sql =
-    'SELECT DATE_FORMAT(ut.`start_dt`, \'%Y-%m-%d\') AS `start_dt` ' +
+    'SELECT SQL_CALC_FOUND_ROWS DATE_FORMAT(ut.`start_dt`, \'%Y-%m-%d\') AS `start_dt` ' +
     '     , DATE_FORMAT(ut.`end_dt`, \'%Y-%m-%d\') AS `end_dt` ' +
     '     , cg.`group_id` AS course_group_id ' +
     '     , cg.`order` AS course_group_order ' +
@@ -155,13 +155,17 @@ QUERY.EDU = {
     '    ON cg.`course_id` = c.`id` ' +
     // ' INNER JOIN `teacher` AS t ' +
     // '    ON c.`teacher_id` = t.`id` ' +
-    ' WHERE NOW() > ut.`end_dt` ';
+    ' WHERE 1=1 ';
+    // ' WHERE NOW() > ut.`end_dt` ';
     if (searchBy === 'course') {
-      sql += 'AND c.`name` LIKE \'%' + searchText + '%\'';
+      sql += 'AND CONCAT(e.`name`, c.`name`) LIKE \'%' + searchText + '%\'';
     } else if (searchBy === 'month') {
-      sql += 'AND DATE_FORMAT(ut.`end_dt`, \'%Y-%m\') = \'' + searchText + '\'';
+      sql += 'AND DATE_FORMAT(ut.`start_dt`, \'%Y-%m\') = \'' + searchText + '\'';
     }
-    sql += ' ORDER BY `end_dt` DESC, e.`id`, cg.`order`; ';
+    sql += ' ORDER BY ut.`start_dt` DESC, c.`name` ';
+    sql += ' LIMIT ' + (page - 1) * count + ', ' + count + '; ';
+    // sql += ' ORDER BY DATE_FORMAT(ut.`start_dt`, \'%Y-%m\') DESC, c.`name`; ';
+    // sql += ' ORDER BY `end_dt` DESC, e.`id`, cg.`order`; ';
 
     return sql;
   },

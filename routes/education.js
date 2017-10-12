@@ -9,7 +9,7 @@ const util = require('../util/util');
 
 // 이달의/지난 교육과정
 router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, util.getLogoInfo, (req, res, next) => {
-  const {searchby, searchtext} = req.query;
+  const {searchby, searchtext, page = 1} = req.query;
   // 이달/지난 교육의 경로를 세션에 저장한다.
   req.user.root_path = req.originalUrl;
 
@@ -32,10 +32,11 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
     // query = QUERY.EDU.SEL_PASSED();
     // query = QUERY.EDU.SEL_PASSED('course', '운영');
     // query = QUERY.EDU.SEL_PASSED('month', '2017-03');
-    header = '지난 교육과정';
+    header = '교육과정 검색';
+    // header = '지난 교육과정';
     currentPath = 'passed';
     if (searchby != null && searchtext != null) {
-      query = QUERY.EDU.SEL_PASSED(searchby, searchtext);
+      query = QUERY.EDU.SEL_PASSED(searchby, searchtext, page, 10);
     }
   }
 
@@ -83,17 +84,21 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
             callback(null, null);
           }
         },
+        callback => { // results[1]
+          connection.query('SELECT FOUND_ROWS() AS row_count; ',
+            [],
+            (err, data) => {
+              callback(err, data);
+            }
+          );
+        },
         // 지난 교육과정일 경우 검색을 위한 배정월 목록을 가져온다.
-        (callback) => {
+        callback => {
           if (currentPath === 'passed') {
             connection.query(QUERY.EDU.SEL_PASSED_EDU_MONTH,
                 [ req.user.user_id ],
                 (err, rows) => {
-                  if (err) {
-                    callback(err, null);
-                  } else {
-                    callback(null, rows);
-                  }
+                  callback(err, rows);
                 }
               );
           } else {
@@ -107,7 +112,13 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
           console.error(err);
           throw new Error(err);
         } else {
-          // console.log(req.user);
+          let pagination = {
+            page: page,
+            pageCount: Math.ceil(results[1][0].row_count / 10)
+          };
+
+          console.log(pagination);
+
           res.render('education', {
             group_path: 'education',
             current_path: currentPath,
@@ -116,10 +127,14 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
             loggedIn: req.user,
             header: header,
             courses: courses,
-            month_list: results[1],
+            month_list: results[2],
             next_training_user_id: nextTrainingUserId,
             next_course_id: nextCourseId,
-            count_course_done: courseDoneCount
+            count_course_done: courseDoneCount,
+            pagination: pagination,
+            page: page,
+            searchby: searchby,
+            searchtext: searchtext
           });
         }
       });

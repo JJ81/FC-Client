@@ -2,19 +2,22 @@
 
 {{#ifCond (isEquals group_path 'education') '&&' (isEquals current_path 'passed') }}
 <div class="search_section">
+  <input type="hidden" id="searchby" value="{{searchby}}">
+  <input type="hidden" id="searchtext" value="{{searchtext}}">
+
   <div class="not-select">
     <div class="radio">
       <label>
         <input type="radio"
           name="optradio"
           id="radio-course-title"
-          checked="true">  강의명
+          checked="true">  교육과정명 또는 강의명
         </label>
     </div>
     <input
       type="search"
       name="course-title" id="inputCourse"
-      placeholder="강의명을 입력하세요"
+      placeholder="검색어를 입력하세요"
       class="search_section_input"
       autofocus autocomplete="off"
     />
@@ -29,12 +32,13 @@
       </label>
   </div>
   <select name="assign-month" id="selectAssignMonth" class="">
+    <option selected="true" disabled="disabled">기간을 선택하세요</option>
     {{#each month_list}}
     <option value="{{yearmonth}}">{{yearmonth}}</option>
     {{/each}}
   </select>
   <br /><br />
-  <button type="button" class="btn_login" id="btnSearchCourse" data-redirect="/education/{{current_path}}">검색</button>
+  <button type="button" class="btn_login blind" id="btnSearchCourse" data-redirect="/education/{{current_path}}">검색</button>
 </div>
 {{/ifCond}}
 
@@ -43,7 +47,7 @@
 	<ol>
 	{{#each courses}}
     {{#if (isEquals ../current_path 'passed')}}
-    <li class="item_wrap">
+    <li class="item_wrap" data-yearmonth="{{dateformat start_dt 'yyyy년 m월'}}">
       {{#ifCond can_replay '==' 1}}
         {{#if thumbnail}}
           {{#if (isEquals ../../../loggedIn.isdemo 0)}}
@@ -90,7 +94,7 @@
         {{#ifCond can_replay '==' 1}}
         <span class="tit">{{ edu_name }} | {{course_name}}</span>
         {{else}}
-        <span class="tit text-red">{{ edu_name }} | {{course_name}}</span>
+        <span class="tit text-deactivated">{{ edu_name }} | {{course_name}}</span>
         {{/ifCond}}
         <span class="progress_bg">
           <span class="progress" style="width: {{completed_rate}}%"></span>
@@ -108,7 +112,7 @@
       </a>
     </li>
     {{else}}
-    <li class="item_wrap">
+    <li class="item_wrap" data-yearmonth="{{dateformat start_dt 'yyyy년 m월'}}">
       {{#if thumbnail}}
       {{#if (isEquals ../../../loggedIn.isdemo 0)}}
       <a href="/course/{{training_user_id}}/{{course_id}}" class="list_item" data-training-user-id="{{training_user_id}}" data-course-id="{{course_id}}">
@@ -167,6 +171,22 @@
   {{/if}}
 </div>
 
+{{#if courses}}
+<div class="center">
+  <div class="pagination">
+    {{#paginate pagination type="previous"}}
+    <a {{#if disabled}}class="not-active"{{/if}} data-page="{{n}}" href="#">&laquo;</a>
+    {{/paginate}}
+    {{#paginate pagination type="middle"}}
+    <a {{#if active}}class="active"{{/if}} data-page="{{n}}" href="#">{{n}}</a>
+    {{/paginate}}
+    {{#paginate pagination type="next"}}
+    <a {{#if disabled}}class="not-active"{{/if}} data-page="{{n}}" href="#">&raquo;</a>
+    {{/paginate}}
+  </div>
+</div>
+{{/if}}
+
 <br /><br /><br />
 {{#ifCond courses.length '>' 0}}
 {{#if (isEquals ../loggedIn.isdemo 0)}}
@@ -192,5 +212,4 @@
 	</div>
 </a>
 {{/ifCond}}
-
 <!--{{> search}}-->
