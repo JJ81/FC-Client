@@ -53,6 +53,8 @@ passport.use(new LocalStrategy({
         if (process.env.NODE_ENV === 'production') {
           const { mobile_url: mobileUrl } = data[0];
 
+          console.log(mobileUrl, req.headers.host);
+
           if (mobileUrl !== req.headers.host) {
             return done(null, false, { message: '등록되지 않은 핸드폰 번호입니다.' });
           }
