@@ -18,4 +18,9 @@
     <img src="/static/images/img_exit.png" alt="강의페이지로 이동" width="25" class="ico_exit" />
   </a>
   {{/if}}
+  {{#if (isEquals current_path 'quickicon')}}
+  <a href="javascript:history.go(-1);" class="back_link">
+    <img src="/static/images/img_exit.png" alt="이전 페이지" width="25" class="ico_exit" />
+  </a>
+  {{/if}}
 </header>

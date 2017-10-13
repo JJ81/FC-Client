@@ -26,7 +26,7 @@ exports.getLogoInfo = (req, res, next) => {
     break;
 
   case 'm.homesfood.edu1004.kr':
-    logoImageName = 'homesfood-dark.png';
+    logoImageName = 'homesfood-dark2.png';
     logoName = '홈스푸드';
     theme = 'skin-homesfood';
     vodUrl = 'http://mst.aquan.homesfood.edu1004.kr/orangenamu/homesfood/';
@@ -34,7 +34,7 @@ exports.getLogoInfo = (req, res, next) => {
 
   case 'm.dev.edu1004.kr':
   default:
-    logoImageName = 'orangenamu.png';
+    logoImageName = 'homesfood-dark2.png';
     logoName = '오렌지나무시스템';
     theme = 'skin-yellow-light';
     vodUrl = 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/';

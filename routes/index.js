@@ -50,7 +50,7 @@ passport.use(new LocalStrategy({
           return done(null, false, { message: '접속할 수 없는 계정입니다.' });
         }
 
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env_production.NODE_ENV === 'production') {
           const { mobile_url: mobileUrl } = data[0];
 
           if (mobileUrl !== req.headers.host) {

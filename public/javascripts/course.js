@@ -61,7 +61,8 @@ requirejs([
     $('ol li').click(function (e) {
       if ($(this).hasClass('disabled')) {
         e.preventDefault();
-        alert('아직 완료하지 않은 세션이 존재합니다. 학습(이어)하기 버튼을 눌러주세요.');
+        alert('학습하기 버튼을 클릭하세요.');
+        // alert('아직 완료하지 않은 세션이 존재합니다. 학습(이어)하기 버튼을 눌러주세요.');
       }
     });
   }

@@ -736,7 +736,7 @@
     /*left: 0;*/
     /*top: 0;*/
     width: 100%;
-    max-width: 80%;
+    max-width: 40%;
     height: auto;
     /*padding: 10px 10px 10px 10px;*/
     opacity: 0.6;
@@ -855,12 +855,12 @@ textarea {
   border: 1px solid #ddd;
 }
 
-.alert{
-  /*margin: 10px;*/
+.alert-message {
+  margin: 15px 10px;
   padding: 10px 10px;
   background-color: #FE8484;
   color: white;
-  margin: 15px 0;
+  /*margin: 15px 0;*/
   font-size: 13px;
   line-height: 150%;
 }
