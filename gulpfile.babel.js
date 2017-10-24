@@ -6,9 +6,9 @@ import uglify from 'gulp-uglify';
 import cleanCSS from 'gulp-clean-css';
 import htmlmin from 'gulp-htmlmin';
 import imagemin from 'gulp-imagemin';
-import del from 'del';
 import sourcemaps from 'gulp-sourcemaps';
 import babel from 'gulp-babel';
+import del from 'del';
 
 const DIR = {
   SRC: 'public',
@@ -35,13 +35,13 @@ const DEST = {
 
 gulp.task('js', () => {
   return gulp.src(SRC.JS, { base: './public/javascripts' })
-      .pipe(uglify())
-      .pipe(sourcemaps.init())
-      .pipe(babel())
-      .pipe(uglify({ output: { max_line_len: 0 } }))
-      .pipe(sourcemaps.write('../maps'))
-      .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
-      .pipe(gulp.dest(DEST.JS));
+    // .pipe(uglify())
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(uglify({ output: { max_line_len: 0 } }))
+    .pipe(sourcemaps.write('../maps'))
+    .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+    .pipe(gulp.dest(DEST.JS));
 });
 
 // SRC.VENDOR, { base: './public/vendor' }
@@ -55,9 +55,14 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'plugins/jquery_timer/jquery.timer.js',
     DIR.SRC + '/vendor/' + 'plugins/star-rating-svg/star-rating-svg.js',
     DIR.SRC + '/vendor/' + 'bootstrap/js/bootstrap.min.js',
-    DIR.SRC + '/vendor/' + 'easytimer.js'
+    DIR.SRC + '/vendor/' + 'easytimer.js',
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer.js',
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_ui.js',
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/cdnproxy.js',
+    DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_conf.js'
   ])
   .pipe(uglify())
+  .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
   .pipe(gulp.dest(DEST.VENDOR));
 });
 
@@ -73,29 +78,31 @@ gulp.task('copy-css', () => {
   return gulp.src([
     DIR.SRC + '/vendor/' + 'plugins/star-rating-svg/star-rating-svg.css',
     DIR.SRC + '/vendor/' + 'font-awesome-4.7.0/css/font-awesome.min.css',
-    DIR.SRC + '/vendor/' + 'bootstrap/css/bootstrap-iso.css'
+    DIR.SRC + '/vendor/' + 'bootstrap/css/bootstrap-iso.css',
+    DIR.SRC + '/vendor/' + 'aquaplayer/css/nplayer.css',
+    DIR.SRC + '/vendor/' + 'aquaplayer/css/nplayer_res.css'
     // DIR.SRC + '/vendor/' + 'bootstrap/css/bootstrap.min.css'
   ])
-  .pipe(cleanCSS({compatibility: 'ie8'}))
+  .pipe(cleanCSS({compatibility: 'ie8', rebase: false, debug: true}))
   .pipe(gulp.dest(DIR.DEST + '/stylesheets/'));
 });
 
 gulp.task('css', () => {
   return gulp.src(SRC.CSS)
-          .pipe(cleanCSS({compatibility: 'ie8'}))
-          .pipe(gulp.dest(DEST.CSS));
+    .pipe(cleanCSS({compatibility: 'ie8'}))
+    .pipe(gulp.dest(DEST.CSS));
 });
 
 gulp.task('html', () => {
   return gulp.src(SRC.HTML)
-        .pipe(htmlmin({collapseWhitespace: true}))
-        .pipe(gulp.dest(DEST.HTML));
+    .pipe(htmlmin({collapseWhitespace: true}))
+    .pipe(gulp.dest(DEST.HTML));
 });
 
 gulp.task('images', () => {
   return gulp.src(SRC.IMAGES, { base: './public/images' })
-        .pipe(imagemin())
-        .pipe(gulp.dest(DEST.IMAGES));
+    .pipe(imagemin())
+    .pipe(gulp.dest(DEST.IMAGES));
 });
 
 gulp.task('clean', () => {

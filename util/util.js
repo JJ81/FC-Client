@@ -34,7 +34,7 @@ exports.getLogoInfo = (req, res, next) => {
 
   case 'm.dev.edu1004.kr':
   default:
-    logoImageName = 'homesfood-dark2.png';
+    logoImageName = 'orangenamu.png';
     logoName = '오렌지나무시스템';
     theme = 'skin-yellow-light';
     vodUrl = 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/';

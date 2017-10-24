@@ -16,7 +16,12 @@ window.requirejs.config({
     'axios': 'https://unpkg.com/axios/dist/axios.min',
     'bootstrap': ['/static/vendor/bootstrap.min'],
     'aquaNManagerService': ['/static/javascripts/components/aquanmanager_service'],
-    'easyTimer': '/static/vendor/easytimer' // http://albert-gonzalez.github.io/easytimer.js/
+    'easyTimer': '/static/vendor/easytimer',
+    'nplayer_conf': '/static/vendor/nplayer_conf.js?20170104131',
+    'nplayer': '/static/vendor/nplayer.js?20170104131',
+    'nplayer_ui': '/static/vendor/nplayer_ui.js?20170104131',
+    'cdnproxy': '/static/vendor/cdnproxy',
+    'aquaPlayerService': ['/static/javascripts/components/aquaplayer_service']
   },
   shim: {
     'jqueryCookie': {
@@ -30,6 +35,15 @@ window.requirejs.config({
     },
     'jqueryTimer': {
       deps: ['jquery']
+    },
+    'nplayer': {
+      'deps': ['jquery']
+    },
+    'nplayer_ui': {
+      'deps': ['jquery']
+    },
+    'cdnproxy': {
+      'deps': ['nplayer_conf']
     }
   }
 });

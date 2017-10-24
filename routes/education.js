@@ -46,10 +46,10 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
       [
         (callback) => {
           if (query) {
-            connection.query(query,
+            let q = connection.query(query,
               [ req.user.user_id, req.user.user_id ],
               (err, rows) => {
-                console.log(rows);
+                console.log(q.sql);
                 if (err) {
                   callback(err, null);
                 } else {
@@ -117,7 +117,7 @@ router.get(['/current', '/passed'], util.isAuthenticated, util.isTermsApproved, 
             pageCount: Math.ceil(results[1][0].row_count / 10)
           };
 
-          console.log(pagination);
+          // console.log(pagination);
 
           res.render('education', {
             group_path: 'education',
