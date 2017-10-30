@@ -34,7 +34,7 @@
 	cursor: pointer;
 }
 
-.skin-red-light .logo_section{
+.skin-blue-light .logo_section{
 	border-bottom: 1px solid #1e2832;
 	padding: 10px 10px 10px 14px;
 	background: #3c8dbc;
@@ -43,7 +43,7 @@
   display: table;
   width: 226px;
 }
-.skin-red-light .btn_login{
+.skin-blue-light .btn_login{
 	background: #3c8dbc;
 	text-align: center;
 	color: #fff;

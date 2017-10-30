@@ -43,7 +43,7 @@ exports.getLogoInfo = (req, res, next) => {
   default:
     logoImageName = 'orangenamu.png';
     logoName = '오렌지나무시스템';
-    theme = 'skin-yellow-light';
+    theme = 'skin-blue-light';
     vodUrl = 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/';
     break;
   }
