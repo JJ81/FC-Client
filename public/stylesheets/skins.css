@@ -1,4 +1,90 @@
 /*
+ * Skin: Blue
+ * ----------
+ */
+.skin-blue-light #hd{
+	height: 45px;
+	background: #3c8dbc;
+	position: relative;
+	z-index: 999;
+}
+.skin-blue-light .list_item .progress{
+	display: block;
+	height: 5px;
+	background: #3c8dbc;
+}
+.skin-blue-light .btn_play{
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background: #3c8dbc;
+	font-size: 16px;
+	text-align: center;
+	height: 60px;
+	color :#fff;
+	cursor: pointer;
+  z-index: 9999;
+}
+.skin-blue-light .btn_submit{
+	line-height: 40px;
+	text-align: center;
+	background: #3c8dbc;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.skin-red-light .logo_section{
+	border-bottom: 1px solid #1e2832;
+	padding: 10px 10px 10px 14px;
+	background: #3c8dbc;
+	position: relative;
+	height: 80px;
+  display: table;
+  width: 226px;
+}
+.skin-red-light .btn_login{
+	background: #3c8dbc;
+	text-align: center;
+	color: #fff;
+	font-size: 16px;
+	width: 100%;
+	line-height: 45px;
+	border-radius: 5px;
+}
+@media (min-width:1281px) {
+  .skin-blue-light .btn_play{
+    position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #3c8dbc;
+    font-size: 16px;
+    text-align: center;
+    height: 60px;
+    color :#fff;
+    cursor: pointer;
+    z-index: 9999;
+  }
+}
+.skin-blue-light #navigation{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 250px;
+	height: 100%;
+	z-index: 999999;
+	background: #F5ECDA;
+}
+.skin-blue-light .nav_list a{
+	color :#3E3E3E;
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	padding-left: 30px;
+}
+
+/*
  * Skin: Red
  * ----------
  */
