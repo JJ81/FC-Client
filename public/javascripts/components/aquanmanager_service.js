@@ -30,7 +30,7 @@ window.define([
     },
     // 컴포넌트 초기화
     init: function () {
-      console.log('init');
+      // console.log('init');
     },
     getDeviceType: function () {
       if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i))) {

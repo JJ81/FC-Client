@@ -7,7 +7,7 @@ window.requirejs(
     'jqueryTimer'
   ],
 function ($, axios, AquaNManagerService, Timer) {
-  // element cache
+  // element cache1
   var playerContainer = $('.videoplayer');
   var btnPlayVideo = $('#btn_play_video');
   var btnPlayNext = $('#btn_play_next');
