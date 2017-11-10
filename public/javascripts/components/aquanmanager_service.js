@@ -44,7 +44,7 @@ window.define([
     startPlayer: function () {
       var deviceType = self.getDeviceType();
 
-      console.log('haha', this.options.videoStatus);
+      // console.log('haha', this.options.videoStatus);
 
       axios.get('/api/v1/aquaplayer', {
         params: {
