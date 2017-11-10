@@ -139,7 +139,6 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
       if (courseList.type === 'VIDEO') {
         var currenttime = 0;
         if (results[3][0] != null) { currenttime = results[3][0].currenttime; }
-
         returnData.current_path = videoType;
         returnData.content = results[1][0];
         returnData.currenttime = currenttime;
@@ -158,6 +157,9 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         if (videoType === 'vimeo') {
           res.render('video', returnData);
         } else if (videoType === 'aqua') {
+          const { autoplay = true } = req.query;
+
+          returnData.autoplay = autoplay; // 비디오 자동 재생
           returnData.status = 'progress';
           returnData.confirm = 0;
 

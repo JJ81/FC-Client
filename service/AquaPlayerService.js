@@ -16,7 +16,7 @@ exports.getPlayer = (req, res, next) => {
     total_played_seconds: totalPlayedSeconds
   } = req.query;
 
-  const returnUrl = `http://${req.hostname}/session/${trainingUserId}/${courseId}/${courseListId}`;
+  const returnUrl = `http://${req.hostname}/session/${trainingUserId}/${courseId}/${courseListId}?autoplay=false`;
   // const returnUrl = req.header('Referer');
   const bookmarkData = `http://${req.hostname}/session/player/log/${req.user.user_id}/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${totalPlayedSeconds}`;
 

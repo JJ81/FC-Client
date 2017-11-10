@@ -15,6 +15,7 @@ function ($, axios, AquaNManagerService, Timer) {
   var btnReplayVideo = $('#btn_replay_video');
   var waitMessage = $('#countdown .values'); // $('.wait-message');
   var timer = new Timer();
+  var autoplay = playerContainer.data('autoplay'); // 보안플레이어 자동 실행
 
   // var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머
   // var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
@@ -59,12 +60,16 @@ function ($, axios, AquaNManagerService, Timer) {
       }, 1000);
     }
     showPlayBtn();
-  });
 
-  btnPlayVideo.on('click', function () {
-    timer.stop();
-    sessionProgressStartLogger();
-    AquaNManagerService.startPlayer();
+    btnPlayVideo.on('click', function () {
+      timer.stop();
+      sessionProgressStartLogger();
+      AquaNManagerService.startPlayer();
+    });
+
+    if (autoplay) {
+      btnPlayVideo.click();
+    }
   });
 
   /**
