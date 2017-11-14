@@ -21,7 +21,10 @@ window.requirejs.config({
     'nplayer': '/static/vendor/nplayer.js?20170104131',
     'nplayer_ui': '/static/vendor/nplayer_ui.js?20170104131',
     'cdnproxy': '/static/vendor/cdnproxy',
-    'aquaPlayerService': ['/static/javascripts/components/aquaplayer_service']
+    'aquaPlayerService': ['/static/javascripts/components/aquaplayer_service'],
+    'axplugin': ['/static/javascripts/components/axplugin'],
+    'common': '/static/javascripts/common'
+
   },
   shim: {
     'jqueryCookie': {

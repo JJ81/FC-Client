@@ -76,7 +76,7 @@ window.define([
           window.mygentAuthCall(function (genkey) {
             window.setMediaInfo(self.options.fileUrl, genkey);
 
-            var url = window.getMediaURL(false);
+            var url = window.getMediaURL(true);
             player.open({
               'URL': window.encodeURI(url)
             });
