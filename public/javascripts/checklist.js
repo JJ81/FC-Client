@@ -1,9 +1,10 @@
 'use strict';
 
 window.requirejs([
-  'jquery'
+  'common'
 ],
-function ($) {
+function (Util) {
+  var $ = $ || window.$;
   var $btnSumitAnswers = $('#btn_submit_answers'); // 제출하기 버튼
   var $btnPlay = $('#btn_play_next');
   var trainingUserId = $btnPlay.data('training-user-id');

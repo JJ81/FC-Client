@@ -1,5 +1,13 @@
 'use strict';
-window.define([], function () {
+window.define([
+  'jquery',
+  'axios',
+  'es6-promise'
+], function ($, axios) {
+  window.axios = axios;
+  // https://github.com/stefanpenner/es6-promise 참고
+  require('es6-promise').polyfill();
+
   return {
     getAllUrlParams: function (url) {
       // get query string from url (optional) or window

@@ -13,12 +13,12 @@
  */
 
 requirejs([
-  'jquery'
+  'common'
 ],
-  function (jQuery) {
+  function (Util) {
     'use strict';
 
-    var $ = jQuery;
+    var $ = $ || window.$;
     var btn_more = $('.btn_more');
     var full_desc = $('#full_desc'); // 전체 설명
     var btn_play = $('#btn_play_next'); // 학습시작버튼

@@ -1,11 +1,8 @@
 'use strict';
 window.requirejs(
-  ['jquery', 'axios'],
-  function ($, axios) {
-    $(function () {
-    });
-
-    $('#start-player').on('click', function () {
+  ['common'],
+  function (Util) {
+    window.$('#start-player').on('click', function () {
       console.log('start!');
       startPlayer();
     });
@@ -23,7 +20,7 @@ window.requirejs(
     function startPlayer () {
       var deviceType = getDeviceType();
 
-      axios.get('/api/v1/aquaplayer', {
+      window.axios.get('/api/v1/aquaplayer', {
         params: {
           userid: 123,
           device_type: deviceType

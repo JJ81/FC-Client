@@ -1,14 +1,13 @@
 window.requirejs(
   [
-    'jquery',
-    'axios',
-    'aquaNManagerService',
     'common',
+    'aquaNManagerService',
     'easyTimer',
     'jqueryTimer'
   ],
-function ($, axios, AquaNManagerService, Util, Timer) {
+function (Util, AquaNManagerService, Timer) {
   // element cache1
+  var $ = $ || window.$;
   var playerContainer = $('.videoplayer');
   var btnPlayVideo = $('#btn_play_video');
   var btnPlayNext = $('#btn_play_next');

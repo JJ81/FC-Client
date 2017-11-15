@@ -23,8 +23,8 @@ window.requirejs.config({
     'cdnproxy': '/static/vendor/cdnproxy',
     'aquaPlayerService': ['/static/javascripts/components/aquaplayer_service'],
     'axplugin': ['/static/javascripts/components/axplugin'],
-    'common': '/static/javascripts/common'
-
+    'common': '/static/javascripts/common',
+    'es6-promise': '/static/vendor/es6-promise.min'
   },
   shim: {
     'jqueryCookie': {

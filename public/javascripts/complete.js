@@ -1,10 +1,10 @@
 'use strict';
 
 requirejs([
-  'jquery'
+  'common'
 ],
-  function (jQuery) {
-    var $ = jQuery;
+  function (Util) {
+    var $ = $ || window.$;
     var btnNextCourse = $('#btn_next_course');
     var nextCourseUrl = btnNextCourse.attr('href'); // 다음강의보기
     var btnCompleteCourse = $('#btn_complete_course');

@@ -9,10 +9,10 @@
 'use strict';
 
 requirejs([
-  'jquery',
+  'common',
   'jqueryRating'
-], function (jQuery) {
-  var $ = jQuery,
+], function (Util) {
+  var $ = $ || window.$,
     btn_submit = $('.btn_submit'), // 평가 제출하기
     next_url = btn_submit.parent().attr('href'),
     course_id = btn_submit.data('course-id'),

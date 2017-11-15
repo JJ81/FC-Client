@@ -4,11 +4,11 @@
 'use strict';
 requirejs(
   [
-    'jquery',
+    'common',
     'jqueryCookie'
   ],
-function (jQuery) {
-  var $ = jQuery;
+function (Util) {
+  var $ = $ || window.$;
   var password = $('#password');  // 암호
   var phone = $('#phone'); // 핸드폰 번호
   var remember = $('#remember'); // 핸드폰 저장유무

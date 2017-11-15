@@ -7,10 +7,10 @@
 'use strict';
 
 requirejs([
-  'jquery'
+  'common'
 ],
-function (jQuery) {
-  var $ = jQuery;
+function (Util) {
+  var $ = $ || window.$;
   var phone = $('#phone');
   var btnModifyPhone = $('#btn_modify_phone');
   var email = $('#email');

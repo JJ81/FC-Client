@@ -2,13 +2,13 @@
 
 window.requirejs(
   [
-    'jquery',
-    'axios',
+    'common',
     'Vimeo',
     'easyTimer',
     'jqueryTimer'
   ],
-function ($, axios, Vimeo, Timer) {
+function (Util, Vimeo, Timer) {
+  var $ = $ || window.$;
   var player = null;
   var playerContainer = $('.videoplayer');
   var timerLoggingInterval = playerContainer.data('interval'); // log every 5 seconds

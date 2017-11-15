@@ -1,7 +1,7 @@
 'use strict';
 window.define([
-  'axios'
-], function (axios) {
+  'common'
+], function (Util) {
   var self = null;
 
   function AquaNManagerService (options) {
@@ -46,7 +46,7 @@ window.define([
 
       // console.log('haha', this.options.videoStatus);
 
-      axios.get('/api/v1/aquaplayer', {
+      window.axios.get('/api/v1/aquaplayer', {
         params: {
           device: deviceType,
           video: this.options.videoUrl,

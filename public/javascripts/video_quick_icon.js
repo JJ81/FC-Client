@@ -3,10 +3,11 @@
 
 window.requirejs(
   [
-    'jquery',
+    'common',
     'Vimeo'
   ],
-function ($, Vimeo) {
+function (Util, Vimeo) {
+  var $ = $ || window.$;
   var playerAndroid;
   var playerIphone;
 

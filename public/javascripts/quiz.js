@@ -7,10 +7,10 @@
 'use strict';
 
 requirejs([
-  'jquery'
+  'common'
 ],
-  function (jQuery) {
-    var $ = jQuery;
+  function (Util) {
+    var $ = $ || window.$;
     var btn_play = $('#btn_play_next');
     var btn_check_answer = $('#btn_check_answers');
     var quiz_inputs = $('.answer_quiz_input');

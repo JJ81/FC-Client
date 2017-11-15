@@ -1,9 +1,8 @@
 window.requirejs([
-  'jquery',
-  'axios',
+  'common',
   'bootstrap'
 ],
-function (jQuery, axios) {
+function (Util) {
   'use strict';
 
   var $ = $ || window.$;
@@ -145,7 +144,7 @@ function (jQuery, axios) {
 
     var url = $(this).attr('href');
 
-    axios.get('/course/check', {
+    window.axios.get('/course/check', {
       params: {
         training_user_id: $(this).data('training-user-id'),
         course_id: $(this).data('course-id')

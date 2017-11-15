@@ -7,10 +7,10 @@
 
 requirejs(
   [
-    'jquery'
+    'common'
   ],
-function (jQuery) {
-  var $ = jQuery;
+function (Util) {
+  var $ = $ || window.$;
   var sidenav = $('#navigation');
   var sideNavToggle = $('.nav_link');
   var exitToCourse = $('.exit_link'); // 강의보기 페이지로 이동
