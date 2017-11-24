@@ -1,5 +1,14 @@
 @charset "utf-8";
 
+/* .wrapper {
+  -webkit-animation-duration: 2s;
+  animation-duration: 2s;
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+} */
+
 /* common */
 .center{
 	text-align: center;

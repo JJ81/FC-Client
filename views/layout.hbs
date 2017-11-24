@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/static/stylesheets/skins.css" />
     <link rel="stylesheet" href="/static/stylesheets/star-rating-svg.css" />
     <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
 
     <!-- favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicon/apple-touch-icon.png">
@@ -44,6 +45,7 @@
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false"
   class="body_bg_01 {{theme}}">
 
+  <div class="wrapper animated fadeIn">
   {{#if (isEquals current_path 'login')}}
     {{{body}}}
   {{else if (isEquals current_path 'quickicon')}}
@@ -52,6 +54,7 @@
     {{> left_nav}}
     {{{body}}}
   {{/if}}
+  </div>
 
   <script src="/static/vendor/require.2.3.2.js"></script>
   <script src="/static/javascripts/app.js"></script>
