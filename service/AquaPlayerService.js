@@ -85,13 +85,13 @@ exports.getPlayer = (req, res, next) => {
   param += '&wm_text=' + UserID;
   param += '&url=' + res.locals.vodUrl + video;
   param += '&progress=5';
-  // param += '&bookmark_url=' + qs.escape(bookmarkData);
+  param += '&bookmark_url=' + qs.escape(bookmarkData);
   param += '&bookmark_data=' + qs.escape(bookmarkData);
   // param += '&bookmark_data=' + qs.escape('a=b');
   // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
-  // console.log('param : ', param);
+  console.log('param : ', param);
 
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
