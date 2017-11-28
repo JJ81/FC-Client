@@ -18,7 +18,7 @@ exports.getPlayer = (req, res, next) => {
 
   const returnUrl = `http://${req.hostname}/session/${trainingUserId}/${courseId}/${courseListId}?autoplay=false`;
   // const returnUrl = req.header('Referer');
-  const bookmarkData = `http://${req.hostname}/session/player/log/${req.user.user_id}/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${totalPlayedSeconds}`;
+  const bookmarkData = `http://${req.hostname}/session/player/log/${req.user.user_id}/${trainingUserId}/${courseId}/${courseListId}/${videoId}/${totalPlayedSeconds}?a=b`;
 
   // console.log(returnUrl);
   // return res.sendStatus(200);
@@ -85,8 +85,8 @@ exports.getPlayer = (req, res, next) => {
   param += '&wm_text=' + UserID;
   param += '&url=' + res.locals.vodUrl + video;
   param += '&progress=5';
-  param += '&bookmark_url='; // + qs.escape(bookmarkData);
-  param += '&bookmark_data=' + qs.escape(bookmarkData); // qs.escape('a=b');
+  param += '&bookmark_url=' + qs.escape(bookmarkData);
+  param += '&bookmark_data=' + qs.escape('a=b');
   // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
