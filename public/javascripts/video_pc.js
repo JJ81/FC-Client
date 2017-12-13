@@ -34,6 +34,8 @@ function (Util, Vimeo, Timer) {
   var trainingUserId = btnPlayNext.data('training-user-id');
   var courseId = btnPlayNext.data('course-id');
   var courseListId = btnPlayNext.data('course-list-id');
+  var aquaHtml5 = $('#aqua_html5');
+  var aquaWindow = $('#aqua_html5');
 
   var secondTimer = new Timer();
 
@@ -41,7 +43,15 @@ function (Util, Vimeo, Timer) {
  * entry point
  */
   $(function () {
-    initPlayer();
+    // initPlayer();
+
+    var os = Util.getOSName;
+
+    if (os === 'Windows') {
+      aquaHtml5.show();
+    } else {
+      aquaWindow.show();
+    }
   });
 
   /**
