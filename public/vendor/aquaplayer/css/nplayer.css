@@ -76,8 +76,8 @@ A { -moz-outline-style:none; }
 .btn_common {display:block;background:url(../images/aquaplayer/bg_common.png) no-repeat;*background:url(../images/aquaplayer/bg_common.gif) no-repeat;cursor:pointer;}
 a.btn_seek{ width:18px; height:18px;background-position:0 -240px;}
 a:hover.btn_seek{ background-position:-20px -240px;}
-a.btn_play{ width:17px; height:20px;background-position:0 -200px}
-a:hover.btn_play{ background-position:-20px -200px;}
+a.np_btn_play{ width:17px; height:20px;background-position:0 -200px}
+a:hover.np_btn_play{ background-position:-20px -200px;}
 a.btn_repeatSet{ width:13px; height:9px;background-position:0 -650px}
 a:hover.btn_repeatSet{ background-position:-20px -650px;}
 a.btn_pause{width:17px; height:20px;background-position:-40px -200px;}
@@ -285,4 +285,5 @@ ul.playList li a:active, ul.playList li a.pl_current{ background:url(../images/a
   background-image:url('../images/aquaplayer/logo_nplayer.png');
   background-repeat:no-repeat;
   background-position:center;
+  max-height: 397px;
 }
