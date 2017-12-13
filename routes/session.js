@@ -157,6 +157,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
 
         returnData.content = results[1][0];
         returnData.currenttime = currenttime;
+        returnData.video_url = res.locals.vodPcUrl + returnData.content.url;
+        returnData.watermark = req.user.user_id;
         returnData.total_played_seconds = results[2][0].total_played_seconds;
         returnData.setting = {
           interval: 5, // playtime 로깅 간격

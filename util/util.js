@@ -4,6 +4,7 @@ exports.getLogoInfo = (req, res, next) => {
   let logoName;
   let theme;
   let vodUrl;
+  let vodPcUrl;
 
   switch (req.headers.host) {
   // case 'm.vodaeyewear.orangenamu.net':
@@ -16,6 +17,7 @@ exports.getLogoInfo = (req, res, next) => {
     logoName = '와플대학';
     theme = 'skin-red-light';
     vodUrl = 'http://mst.aquan.waffle.edu1004.kr/orangenamu/waffle/';
+    vodPcUrl = 'http://pcst.aquan.waffle.edu1004.kr/orangenamu/waffle/';
     break;
 
   case 'm.momstouch.edu1004.kr':
@@ -23,6 +25,7 @@ exports.getLogoInfo = (req, res, next) => {
     logoName = '맘스터치';
     theme = 'skin-momstouch';
     vodUrl = 'http://mst.aquan.momstouch.edu1004.kr/orangenamu/momstouch/';
+    vodPcUrl = 'http://pcst.aquan.momstouch.edu1004.kr/orangenamu/momstouch/';
     break;
 
   case 'm.homesfood.edu1004.kr':
@@ -30,6 +33,7 @@ exports.getLogoInfo = (req, res, next) => {
     logoName = '홈스푸드';
     theme = 'skin-homesfood';
     vodUrl = 'http://mst.aquan.homesfood.edu1004.kr/orangenamu/homesfood/';
+    vodPcUrl = 'http://pcst.aquan.homesfood.edu1004.kr/orangenamu/homesfood/';
     break;
 
   case 'm.artandheart.edu1004.kr':
@@ -37,6 +41,7 @@ exports.getLogoInfo = (req, res, next) => {
     logoName = '아트앤하트';
     theme = 'skin-blue-light';
     vodUrl = 'http://mst.aquan.artandheart.edu1004.kr/orangenamu/artandheart/';
+    vodPcUrl = 'http://pcst.aquan.artandheart.edu1004.kr/orangenamu/artandheart/';
     break;
 
   case 'm.dev.edu1004.kr':
@@ -45,12 +50,14 @@ exports.getLogoInfo = (req, res, next) => {
     logoName = '오렌지나무시스템';
     theme = 'skin-yellow-light';
     vodUrl = 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/';
+    vodPcUrl = 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/';
     break;
   }
   res.locals.logoImageName = logoImageName;
   res.locals.logoName = logoName;
   res.locals.theme = theme;
   res.locals.vodUrl = vodUrl;
+  res.locals.vodPcUrl = vodPcUrl;
 
   return next();
 };
