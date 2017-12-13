@@ -16,7 +16,7 @@ function initNPlayerUI (x) {
     jQuery(this).css('-khtml-user-select', 'none');
     jQuery(this).css('-webkit-user-select', 'none');
   });
-  jQuery('.btn_play').click(j);
+  jQuery('.np_btn_play').click(j);
   jQuery('.btn_sound').click(w);
   jQuery('.btn_soundMute').click(w);
   jQuery('.btn_fullScr').click(C);
@@ -373,13 +373,13 @@ function initNPlayerUI (x) {
   function q (D) {
     switch (D) {
     case NPlayer.PlayState.Playing:
-      jQuery('.control_play > .btn_play').removeClass('btn_play').addClass('btn_pause');
+      jQuery('.control_play > .np_btn_play').removeClass('np_btn_play').addClass('btn_pause');
       break;
     case NPlayer.PlayState.Paused:
-      jQuery('.control_play > .btn_pause').removeClass('btn_pause').addClass('btn_play');
+      jQuery('.control_play > .btn_pause').removeClass('btn_pause').addClass('np_btn_play');
       break;
     case NPlayer.PlayState.Stopped:
-      jQuery('.control_play > .btn_pause').removeClass('btn_pause').addClass('btn_play');
+      jQuery('.control_play > .btn_pause').removeClass('btn_pause').addClass('np_btn_play');
       r(x.getBeginPlaybackPosition() >= 0 ? x.getBeginPlaybackPosition() : 0);
       break;
     }
