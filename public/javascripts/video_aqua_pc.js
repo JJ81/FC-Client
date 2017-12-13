@@ -17,6 +17,8 @@ function (Util, AquaPlayerService, Timer) {
   var timer = new Timer();
   var autoplay = playerContainer.data('autoplay'); // 보안플레이어 자동 실행
   var osName = Util.getOSName();
+  var aquaHtml5 = $('#aqua_html5');
+  var aquaWindow = $('#aqua_html5');
 
   // var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머
   // var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
@@ -32,6 +34,12 @@ function (Util, AquaPlayerService, Timer) {
     //   totalPlayedSeconds: playerContainer.data('total-play')
     // };
     // AquaNManagerService = new AquaNManagerService(options);
+
+    if (osName === 'Windows') {
+      aquaHtml5.show();
+    } else {
+      aquaWindow.show();
+    }
 
     var options = {
       fileUrl: $('#video').data('url'),
