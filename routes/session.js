@@ -27,12 +27,10 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
     training_user_id: trainingUserId,
     course_id: courseId,
     course_list_id: courseListId
-    // status: req.query.status,
-    // confirm: req.query.confirm === '1' ? '1' : '0'
   };
 
   let courseList;
-  let videoType; // vimeo, aqua
+  let videoType; // vimeo / aqua(pc, mobile)
 
   async.series([
     // 강의정보 조회
@@ -54,6 +52,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
           callback(err, data);
         });
         break;
+
       case 'CHECKLIST':
         connection.query(QUERY.COURSE_LIST.GetChecklistByCourseListId, [courseList.id], (err, data) => {
           if (data.length > 0) {
@@ -138,8 +137,24 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
       // 비디오뷰 출력
       if (courseList.type === 'VIDEO') {
         var currenttime = 0;
+        var deviceType = req.device.type.toUpperCase();
+
         if (results[3][0] != null) { currenttime = results[3][0].currenttime; }
-        returnData.current_path = videoType;
+
+        switch (videoType) {
+        case 'aqua':
+          if (deviceType === 'PHONE') {
+            returnData.current_path = 'aqua-mobile';
+          } else if (deviceType === 'DESKTOP') {
+            returnData.current_path = 'aqua-desktop';
+          }
+          break;
+
+        default:
+          returnData.current_path = videoType;
+          break;
+        }
+
         returnData.content = results[1][0];
         returnData.currenttime = currenttime;
         returnData.total_played_seconds = results[2][0].total_played_seconds;
@@ -175,7 +190,19 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
               }
             }
           }
-          res.render('video_aqua', returnData);
+
+          switch (req.device.type.toUpperCase()) {
+          case 'DESKTOP':
+            res.render('video_pc', returnData);
+            break;
+
+          case 'PHONE':
+            res.render('video_aqua', returnData);
+            break;
+
+          default:
+            break;
+          }
         }
       } else if (courseList.type === 'QUIZ' || courseList.type === 'FINAL') {
         var quizList = CourseService.makeQuizList(results[1]);

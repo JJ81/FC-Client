@@ -15,7 +15,7 @@
     "dateformat": "^2.0.0",
     "debug": "~2.2.0",
     "es6-promise": "^4.1.1",
-    "express": "~4.13.1",
+    "express": "^4.13.4",
     "express-csv": "^0.6.0",
     "express-device": "^0.4.2",
     "handlebars-paginate": "^0.1.0",
