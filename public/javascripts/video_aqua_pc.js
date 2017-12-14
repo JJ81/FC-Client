@@ -54,8 +54,6 @@ function (Util, AquaPlayerService, Timer) {
 
   function initPlayer () {
     player.setVolume(0.5);
-    videoDuration = player.getDuration();
-    setPlayer();
 
     if (videoLastPlayedTime < videoDuration - 5) {
       if (window.confirm('마지막 재생시점으로 이동하시겠습니까?')) {
@@ -75,6 +73,9 @@ function (Util, AquaPlayerService, Timer) {
       switch (state) {
       case window.NPlayer.PlayState.Playing:
         console.info('player: playing');
+
+        videoDuration = player.getDuration();
+        setPlayer();
 
         // 세션시작로그
         sessionProgressStartLogger();
@@ -148,7 +149,7 @@ function (Util, AquaPlayerService, Timer) {
       timerLog.stop();
       checkVideoDuration();
     } else {
-      console.error('재생시간을 확인할 수 없습니다.');
+      console.error('을 확인할 수 없습니다.');
     }
   }
 
