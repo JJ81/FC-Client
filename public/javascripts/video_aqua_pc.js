@@ -69,7 +69,7 @@ function (Util, AquaPlayerService, Timer) {
         if (videoLastPlayedTime < videoDuration - 5) {
           if (window.confirm('마지막 재생시점으로 이동하시겠습니까?')) {
             player.setCurrentPlaybackTime(videoLastPlayedTime);
-            player.pause();
+            // player.pause();
           }
         }
 
@@ -87,6 +87,8 @@ function (Util, AquaPlayerService, Timer) {
       case window.NPlayer.PlayState.Playing:
         // 세션시작로그
         sessionProgressStartLogger();
+
+        checkVideoDuration();
 
         // 로깅 시간간격 설정
         timerLog.reset(1000 * timerLoggingInterval);
