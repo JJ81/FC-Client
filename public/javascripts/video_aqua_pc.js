@@ -68,11 +68,8 @@ function (Util, AquaPlayerService, Timer) {
 
         if (videoLastPlayedTime < videoDuration - 5) {
           if (window.confirm('마지막 재생시점으로 이동하시겠습니까?')) {
-            player.setCurrentPlaybackTime(videoLastPlayedTime).then(function (seconds) {
-              player.pause();
-            }).catch(function (error) {
-              console.error(error);
-            });
+            player.setCurrentPlaybackTime(videoLastPlayedTime);
+            player.pause();
           }
         }
 
