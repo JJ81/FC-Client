@@ -54,7 +54,7 @@
 }
 @media (min-width:1281px) {
   .skin-blue-light .btn_play{
-    position: relative;
+    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -140,7 +140,7 @@
 }
 @media (min-width:1281px) {
   .skin-red-light .btn_play{
-    position: relative;
+    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -226,7 +226,7 @@
 }
 @media (min-width:1281px) {
   .skin-momstouch .btn_play{
-    position: relative;
+    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -320,7 +320,7 @@
 }
 @media (min-width:1281px) {
   .skin-yellow-light .btn_play{
-    position: relative;
+    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
