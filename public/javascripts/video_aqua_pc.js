@@ -6,25 +6,31 @@ window.requirejs(
     'jqueryTimer'
   ],
 function (Util, AquaPlayerService, Timer) {
-  // element cache1
   var $ = $ || window.$;
   var axios = axios || window.axios;
-
-  var playerContainer = $('.videoplayer');
-  var btnPlayVideo = $('#btn_play_video');
-  var btnPlayNext = $('#btn_play_next');
-  var nextUrl = btnPlayNext.parent().attr('href');
-  var btnReplayVideo = $('#btn_replay_video');
-  var waitMessage = $('#countdown .values'); // $('.wait-message');
-  var timer = new Timer();
-  var autoplay = playerContainer.data('autoplay'); // 보안플레이어 자동 실행
   var osName = Util.getOSName();
+
+  var player = null;
+  var playerContainer = $('.videoplayer');
   var aquaHtml5 = $('#aqua_html5');
   var aquaWindow = $('#aqua_html5');
-  var aquaPlayer;
+  var btnPlayNext = $('#btn_play_next');
+  var btnReplayVideo = $('#btn_replay_video');
 
-  // var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머
-  // var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
+  var timerLoggingInterval = playerContainer.data('interval'); // log every 5 seconds
+  var timerLog = null;
+  var timerLogPlayedSeconds = 0; // 시청시간(초)
+  var secondTimer = new Timer();
+
+  var waitMessage = $('#countdown .values'); // $('.wait-message');
+  var sessionHasEnded = false;
+  var nextUrl = btnPlayNext.parent().attr('href');
+  var videoDuration = null; // 비디오 러닝타임
+  var videoCurrentTime; // 비디오 현재 시청시간
+  var videoId = playerContainer.data('id'); // video 테이블의 id
+  var videoTotalPlayedSeconds = playerContainer.data('total-play'); // 비디오 총 시청시간
+  var videoLastPlayedTime = playerContainer.data('current-time'); // 마지막 재생시점
+  var trainingUserId = btnPlayNext.data('training-user-id');
 
   $(function () {
     if (osName === 'Windows') {
@@ -36,55 +42,192 @@ function (Util, AquaPlayerService, Timer) {
     var options = {
       fileUrl: $('#video').data('url'),
       watermark: $('#video').data('watermark'),
-      callback: function (player) {
-        aquaPlayer = player;
-        console.log(aquaPlayer);
+      callback: function (obj) {
+        if (obj) {
+          player = obj;
+          initPlayer();
+        }
       }
     };
-
     AquaPlayerService = new AquaPlayerService(options);
+  });
 
-    if (playerContainer.data('confirm') === '1') {
-      $('.timer').removeClass('blind');
+  function initPlayer () {
+    player.setVolume(0.5);
+    videoDuration = player.getDuration();
+    setPlayer();
 
-      setTimeout(function () {
-        // timerWait = $.timer(1000 * 1, waitingTimeLogger, true);
-        timer.start({countdown: true, startValues: {seconds: 30}});
-
-        waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
-
-        timer.addEventListener('secondsUpdated', function (e) {
-          waitMessage.html(timer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
+    if (videoLastPlayedTime < videoDuration - 5) {
+      if (window.confirm('마지막 재생시점으로 이동하시겠습니까?')) {
+        player.setCurrentPlaybackTime(videoLastPlayedTime).then(function (seconds) {
+          player.pause();
+        }).catch(function (error) {
+          console.error(error);
         });
-
-        timer.addEventListener('targetAchieved', function (e) {
-          waitMessage.html('학습 초기화 중입니다..');
-
-          setTimeout(function () {
-            window.alert('30초 동안 다음 버튼을 누르지 않아 학습을 초기화 하였습니다.\n\n재시청 해주시기 바랍니다.');
-
-            axios.all([ deleteVideoLog(), deleteSessionLog() ])
-            .then(axios.spread(function (acct, perms) {
-              window.location.reload();
-            }));
-          }, 3000);
-        });
-      }, 1000);
+      }
     }
-    showPlayBtn();
 
-    console.log(osName);
-
-    btnPlayVideo.on('click', function () {
-      timer.stop();
-      sessionProgressStartLogger();
-      AquaNManagerService.startPlayer();
+    player.bindEvent('Error', function (ec, msg) {
+      console.error(msg);
     });
 
-    if (autoplay) {
-      btnPlayVideo.click();
+    player.bindEvent('PlayStateChanged', function (state) {
+      switch (state) {
+      case window.NPlayer.PlayState.Playing:
+        console.info('player: playing');
+
+        // 세션시작로그
+        sessionProgressStartLogger();
+
+        // 로깅 시간간격 설정
+        timerLog.reset(1000 * timerLoggingInterval);
+        break;
+
+      case window.NPlayer.PlayState.Stopped: // 정지
+      case window.NPlayer.PlayState.Paused:  // 일시정지
+        console.info('player: stop/pause');
+
+        // 로깅 일시정지
+        timerLog.pause();
+
+        // 비디오 시청 종료일시 기록
+        videoEndTimeLogger();
+        break;
+      }
+    });
+
+    player.bindEvent('PlaybackCompleted', function () {
+      console.info('player: ended');
+
+      // 로깅 일시정지
+      timerLog.pause();
+
+      // 총 시청시간에 따라 다음 버튼 표시
+      showPlayBtn(videoTotalPlayedSeconds + timerLoggingInterval);
+
+      // 비디오 시청 종료일시 기록
+      videoEndTimeLogger();
+
+      // 세션 종료 시 대기 타이머 시작
+      if (!sessionHasEnded) {
+        setTimeout(function () {
+          $('.timer').removeClass('blind');
+
+          console.log('second timer started');
+          secondTimer.start({countdown: true, startValues: {seconds: 30}});
+
+          waitMessage.html(secondTimer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
+
+          secondTimer.addEventListener('secondsUpdated', function (e) {
+            waitMessage.html(secondTimer.getTimeValues().toString() + ' 초 이내 <b>다음</b> 버튼을 클릭해주세요.');
+          });
+
+          secondTimer.addEventListener('targetAchieved', function (e) {
+            waitMessage.html('학습 초기화 중입니다..');
+
+            setTimeout(function () {
+              window.alert('30초 동안 다음 버튼을 누르지 않아 학습을 초기화 하였습니다.\n\n재시청 해주시기 바랍니다.');
+
+              axios.all([ deleteVideoLog(), deleteSessionLog() ])
+              .then(axios.spread(function (res1, res2) {
+                window.location.reload();
+              }));
+            }, 3000);
+          });
+        }, 1000);
+      }
+    });
+  }
+
+  /**
+   * Player 를 셋팅한다.
+   */
+  function setPlayer () {
+    if (videoDuration) {
+      timerLog = $.timer(1000 * timerLoggingInterval, videoPlayTimeLogger, true);
+      timerLog.stop();
+      checkVideoDuration();
+    } else {
+      console.error('재생시간을 확인할 수 없습니다.');
     }
-  });
+  }
+
+  /**
+   * 비디오 재생시간이 존재하는지 여부 체크
+   */
+  function checkVideoDuration () {
+    // 총 릴타임의 80% 이상을 시청한 경우 다음버튼을 활성화 한다.
+    showPlayBtn(videoTotalPlayedSeconds);
+  }
+
+    /**
+   * 시청시간 로깅
+   */
+  function videoPlayTimeLogger () {
+    console.log('logging...');
+    timerLogPlayedSeconds += timerLoggingInterval;
+
+    var seconds = player.getCurrentPlaybackTime();
+
+    if ((videoCurrentTime > 0) && videoCurrentTime === seconds) {
+      player.pause().then(function () {
+        console.log('비디오가 중지되었습니다.');
+        btnReplayVideo.removeClass('blind');
+      }).catch(function (error) {
+        console.error(error);
+      });
+      return;
+    }
+
+    videoCurrentTime = seconds;
+
+    $.ajax({
+      type: 'POST',
+      url: '/video/log/playtime',
+      data: {
+        training_user_id: trainingUserId,
+        video_id: videoId,
+        played_seconds: timerLogPlayedSeconds,
+        video_duration: videoDuration,
+        currenttime: seconds
+      }
+    }).done(function (res) {
+      if (!res.success) {
+        console.error(res.msg);
+
+        // 오류 발생 시 타이머와 비디오 재생을 멈춘다.
+        player.pause().then(function () {
+        }).catch(function (error) {
+          console.error(error);
+        });
+      } else {
+        timerLogPlayedSeconds = 0;
+        // 총 릴타임의 80% 이상을 시청한 경우 다음버튼을 활성화 한다.
+        videoTotalPlayedSeconds = res.total_played_seconds;
+        showPlayBtn(videoTotalPlayedSeconds);
+      }
+    });
+  }
+
+  /**
+   * 비디오 시청 종료시간 로깅
+   */
+  function videoEndTimeLogger () {
+    console.log('video log end');
+    $.ajax({
+      type: 'POST',
+      url: '/video/log/endtime',
+      data: {
+        video_id: videoId
+      }
+    }).done(function (res) {
+      if (!res.success) {
+        console.error(res.msg);
+      } else {
+      // console.info('종료시간 기록!');
+      }
+    });
+  }
 
   /**
    * 세션 시작일시 로깅
@@ -105,12 +248,12 @@ function (Util, AquaPlayerService, Timer) {
     });
   }
 
-  /**
-  * 다음버튼 클릭 시 발생 이벤트
-  */
+/**
+ * 다음버튼 클릭 시 발생 이벤트
+ */
   btnPlayNext.on('click', function (event) {
     event.preventDefault();
-    timer.stop();
+    secondTimer.stop();
     // 세션 종료로그를 기록한다.
     sessionProgressEndLogger();
   });
@@ -147,36 +290,6 @@ function (Util, AquaPlayerService, Timer) {
   }
 
   /**
-   * 정해진 시간 내에 다음 버튼을 누르지 않을 경우
-   * 학습을 초기화 하는 타이머 컨트롤러
-   */
-  function waitingTimeLogger () {
-    waitMessage.html(' ( ' + timerWaitingSeconds + ' 초 이내 클릭 )');
-
-    // 세션과 비디오 로그를 삭제한다.
-    if (timerWaitingSeconds <= 0) {
-      timerWait.stop();
-      window.alert('비디오를 재시청 해주시기 바랍니다.');
-
-      axios.all([ deleteVideoLog(), deleteSessionLog() ])
-        .then(axios.spread(function (acct, perms) {
-          console.log(acct);
-          // if (acct.data.success) {
-          var redirectUrl = '/session' +
-              '/' + playerContainer.data('training-user-id') +
-              '/' + playerContainer.data('course-id') +
-              '/' + playerContainer.data('course-list-id');
-
-          console.log(redirectUrl);
-          window.location.href = redirectUrl;
-          // }
-        }));
-    }
-
-    timerWaitingSeconds -= 1;
-  }
-
-  /**
    * 세션 비디오 로그를 삭제한다.
    */
   function deleteVideoLog () {
@@ -206,4 +319,13 @@ function (Util, AquaPlayerService, Timer) {
       console.error(error);
     });
   }
+
+  // btnReplayVideo.on('click', function (e) {
+  //   e.preventDefault();
+  //   player.unload().then(function () {
+  //     btnReplayVideo.addClass('blind');
+  //   }).catch(function (error) {
+  //     console.log(error);
+  //   });
+  // });
 });

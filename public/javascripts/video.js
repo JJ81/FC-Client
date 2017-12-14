@@ -61,7 +61,7 @@ function (Util, Vimeo, Timer) {
       console.info('Player is ready.');
 
       player.getDuration().then(function (duration) {
-        console.log('duration : ', duration);
+        // console.log('duration : ', duration);
 
         videoDuration = duration; // 비디오 지속시간 구하기
         setPlayer();
@@ -81,15 +81,6 @@ function (Util, Vimeo, Timer) {
     }).catch(function (error) {
       console.error(error);
     });
-
-    // player.enableTextTrack('ko').then(function (track) {
-    //   track.language = 'kr';
-    //   track.kind = 'subtitles';
-    //   track.label = 'hahaha';
-    // })
-    // .catch(function (error) {
-    //   console.log('track : ' + error);
-    // });
   }
 
   /**

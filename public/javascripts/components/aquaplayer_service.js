@@ -81,6 +81,7 @@ window.define([
               'URL': window.encodeURI(url)
             });
 
+            // 외부 모듈에서 플레이어 이벤트를 감지하기 위한 용도
             self.options.callback(player);
           }, encodedParam);
         }, window.indicateInstall, window.indicateUpdate);
@@ -151,6 +152,9 @@ window.define([
         player.open({
           'URL': window.encodeURI(self.options.fileUrl)
         });
+
+        // 외부 모듈에서 플레이어 이벤트를 감지하기 위한 용도
+        self.options.callback(player);
       });
 
       player.bindEvent('OpenStateChanged', function (state) {
