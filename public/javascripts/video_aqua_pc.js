@@ -69,9 +69,9 @@ function (Util, AquaPlayerService, Timer) {
       console.error(msg);
     });
 
-    player.bindEvent('PlayStateChanged', function (state) {
+    player.bindEvent('OpenStateChanged', function (state) {
       switch (state) {
-      case window.NPlayer.PlayState.Playing:
+      case window.NPlayer.OpenState.Opened:
         console.info('player: playing');
 
         videoDuration = player.getDuration();
@@ -83,6 +83,28 @@ function (Util, AquaPlayerService, Timer) {
         // 로깅 시간간격 설정
         timerLog.reset(1000 * timerLoggingInterval);
         break;
+
+      case window.NPlayer.OpenState.Closed:
+        console.log('closed');
+        break;
+      }
+    });
+
+    player.bindEvent('PlayStateChanged', function (state) {
+      switch (state) {
+      case window.NPlayer.PlayState.Playing:
+        break;
+        // console.info('player: playing');
+
+        // videoDuration = player.getDuration();
+        // setPlayer();
+
+        // // 세션시작로그
+        // sessionProgressStartLogger();
+
+        // // 로깅 시간간격 설정
+        // timerLog.reset(1000 * timerLoggingInterval);
+        // break;
 
       case window.NPlayer.PlayState.Stopped: // 정지
       case window.NPlayer.PlayState.Paused:  // 일시정지
