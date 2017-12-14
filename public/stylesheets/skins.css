@@ -14,7 +14,7 @@
 	background: #3c8dbc;
 }
 .skin-blue-light .btn_play{
-	position: fixed;
+	position: relative;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -54,7 +54,7 @@
 }
 @media (min-width:1281px) {
   .skin-blue-light .btn_play{
-    position: fixed;
+    position: relative;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -100,7 +100,7 @@
 	background: #FF7A7B;
 }
 .skin-red-light .btn_play{
-	position: fixed;
+	position: relative;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -140,7 +140,7 @@
 }
 @media (min-width:1281px) {
   .skin-red-light .btn_play{
-    position: fixed;
+    position: relative;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -186,7 +186,7 @@
 	background: #FF7A7B;
 }
 .skin-momstouch .btn_play{
-	position: fixed;
+	position: relative;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -226,7 +226,7 @@
 }
 @media (min-width:1281px) {
   .skin-momstouch .btn_play{
-    position: fixed;
+    position: relative;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -280,7 +280,7 @@
 	background: #FFB774;
 }
 .skin-yellow-light .btn_play{
-	position: fixed;
+	position: relative;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -320,7 +320,7 @@
 }
 @media (min-width:1281px) {
   .skin-yellow-light .btn_play{
-    position: fixed;
+    position: relative;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -366,7 +366,7 @@
 	background: #42b24c;
 }
 .skin-green-light .btn_play{
-	position: fixed;
+	position: relative;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -451,7 +451,7 @@
 	background: #FF7A7B;
 }
 .skin-homesfood .btn_play{
-	position: fixed;
+	position: relative;
 	left: 0;
 	bottom: 0;
 	width: 100%;

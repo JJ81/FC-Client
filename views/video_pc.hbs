@@ -1,45 +1,47 @@
 {{> header}}
 
-<section id="video_section">
-  <div class="videoplayer"
-    id="videoplayer"
-    data-id="{{content.id}}"
-    data-url="{{content.url}}"
-    data-total-play="{{total_played_seconds}}"
-    data-current-time="{{currenttime}}"
-    data-training-user-id="{{training_user_id}}"
-    data-course-id="{{course_id}}"
-    data-course-list-id="{{course_list_id}}"
-    data-wait-seconds="{{setting.waiting_seconds}}"
-    data-passive-rate="{{setting.passive_rate}}"
-    data-interval="{{setting.interval}}"
-    class="">
-      <small class="text-red">
-        &nbsp;* 비디오 재생시간의 {{setting.passive_rate}}% 이상 시청 시 다음 버튼 활성화<br>
-        &nbsp;* 비디오 종료 후 {{setting.waiting_seconds}}초 이내에 다음 버튼 클릭
-      </small>
+<div class="content">
+  <div class="content-inside">
+    <div class="videoplayer"
+      id="videoplayer"
+      data-id="{{content.id}}"
+      data-url="{{content.url}}"
+      data-total-play="{{total_played_seconds}}"
+      data-current-time="{{currenttime}}"
+      data-training-user-id="{{training_user_id}}"
+      data-course-id="{{course_id}}"
+      data-course-list-id="{{course_list_id}}"
+      data-wait-seconds="{{setting.waiting_seconds}}"
+      data-passive-rate="{{setting.passive_rate}}"
+      data-interval="{{setting.interval}}"
+      class="">
+        <small class="text-red">
+          &nbsp;* 비디오 재생시간의 {{setting.passive_rate}}% 이상 시청 시 다음 버튼 활성화<br>
+          &nbsp;* 비디오 종료 후 {{setting.waiting_seconds}}초 이내에 다음 버튼 클릭
+        </small>
 
-      <br><br>
+        <br><br>
 
-      <div id="aqua_html5" style="position:relative; overflow:hidden; display: none;">
-        {{> win_aquaplayer_html5}}
+        <div id="aqua_html5" style="position:relative; overflow:hidden; display: none;">
+          {{> win_aquaplayer_html5}}
+        </div>
+        <div id="aqua_window" style="position:relative; overflow:hidden; display: none;">
+          {{> win_aquaplayer_window}}
+        </div>
+    <div>
+  </div>
+
+  <div class="bootstrap-iso timer blind" style="padding: 10px;">
+    <div class="panel panel-danger lead">
+      <div class="text-center panel-body" id="countdown">
+        <div class="values"></div>
       </div>
-      <div id="aqua_window" style="position:relative; overflow:hidden; display: none;">
-        {{> win_aquaplayer_window}}
-      </div>
-  <div>
-</section>
-
-<div class="bootstrap-iso timer blind" style="padding: 10px;">
-  <div class="panel panel-danger lead">
-    <div class="text-center panel-body" id="countdown">
-      <div class="values"></div>
     </div>
   </div>
 </div>
 
-<!-- 다음으로 넘어갈 수 있을 조건이 충족될 경우 다음 아래의 버튼이 출력된다. -->
-<br /><br /><br />
+<div class="footer">
+  <!-- 다음으로 넘어갈 수 있을 조건이 충족될 경우 다음 아래의 버튼이 출력된다. -->
 	<!-- 모든 문제에 답을 넣어야 정답확인 버튼이 활성화된다.-->
   <a href="#">
     <div id="btn_replay_video" class="btn_play btn-orange blind">
@@ -48,13 +50,14 @@
     </div>
   </a>
 
-<a href="{{next_url}}">
-  <div id="btn_play_next" class="btn_play btn-orange blind"
-    data-training-user-id="{{training_user_id}}"
-    data-course-id="{{course_id}}"
-    data-course-list-id="{{course_list_id}}"
-  >
-    <span class="ico ico_play"></span>
-    <span class="txt">다음으로</span>
-  </div>
-</a>
+  <a href="{{next_url}}">
+    <div id="btn_play_next" class="btn_play btn-orange blind"
+      data-training-user-id="{{training_user_id}}"
+      data-course-id="{{course_id}}"
+      data-course-list-id="{{course_list_id}}"
+    >
+      <span class="ico ico_play"></span>
+      <span class="txt">다음으로</span>
+    </div>
+  </a>
+</div>
