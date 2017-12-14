@@ -23,6 +23,7 @@ function (Util, AquaPlayerService, Timer) {
   var secondTimer = new Timer();
 
   var waitMessage = $('#countdown .values'); // $('.wait-message');
+  var passiveRate = playerContainer.data('passive-rate'); // 다음 버튼을 노출하는 시점
   var sessionHasEnded = false;
   var nextUrl = btnPlayNext.parent().attr('href');
   var videoDuration = null; // 비디오 러닝타임
@@ -87,8 +88,6 @@ function (Util, AquaPlayerService, Timer) {
       case window.NPlayer.PlayState.Playing:
         // 세션시작로그
         sessionProgressStartLogger();
-
-        checkVideoDuration();
 
         // 로깅 시간간격 설정
         timerLog.reset(1000 * timerLoggingInterval);
@@ -175,7 +174,7 @@ function (Util, AquaPlayerService, Timer) {
    * 시청시간 로깅
    */
   function videoPlayTimeLogger () {
-    console.log('logging...');
+    console.log('video played time logging...');
     timerLogPlayedSeconds += timerLoggingInterval;
 
     var seconds = player.getCurrentPlaybackTime();
@@ -295,7 +294,7 @@ function (Util, AquaPlayerService, Timer) {
    * 총 릴타임의 80% 이상을 시청한 경우 다음버튼을 활성화 한다.
    */
   function showPlayBtn () {
-    if (playerContainer.data('status') === 'done') {
+    if (Math.floor(videoDuration * (passiveRate / 100)) <= videoTotalPlayedSeconds) {
       btnPlayNext.removeClass('blind');
       btnReplayVideo.addClass('blind');
     }
