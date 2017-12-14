@@ -254,6 +254,7 @@ function (Util, AquaPlayerService, Timer) {
         timerLog.stop();
         player.stop();
       } else {
+        console.log('has end?', res.hasEnded);
         sessionHasEnded = res.hasEnded; // 세션 종료여부
       }
     });
