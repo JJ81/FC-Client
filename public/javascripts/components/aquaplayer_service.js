@@ -80,6 +80,8 @@ window.define([
             player.open({
               'URL': window.encodeURI(url)
             });
+
+            self.options.callback(player);
           }, encodedParam);
         }, window.indicateInstall, window.indicateUpdate);
       });

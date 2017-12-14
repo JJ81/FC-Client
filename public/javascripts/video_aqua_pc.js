@@ -8,6 +8,8 @@ window.requirejs(
 function (Util, AquaPlayerService, Timer) {
   // element cache1
   var $ = $ || window.$;
+  var axios = axios || window.axios;
+
   var playerContainer = $('.videoplayer');
   var btnPlayVideo = $('#btn_play_video');
   var btnPlayNext = $('#btn_play_next');
@@ -19,22 +21,12 @@ function (Util, AquaPlayerService, Timer) {
   var osName = Util.getOSName();
   var aquaHtml5 = $('#aqua_html5');
   var aquaWindow = $('#aqua_html5');
+  var aquaPlayer;
 
   // var timerWait = null; // 비디오 시청 종료 후 다음 버튼을 누르도록 강요하는 타이머
   // var timerWaitingSeconds = playerContainer.data('wait-seconds'); // 다음버튼을 노출하는데 까지 대기하는 시간
 
   $(function () {
-    // var options = {
-    //   videoUrl: playerContainer.data('url'),
-    //   trainingUserId: playerContainer.data('training-user-id'),
-    //   courseId: playerContainer.data('course-id'),
-    //   courseListId: playerContainer.data('course-list-id'),
-    //   videoId: playerContainer.data('id'),
-    //   videoStatus: playerContainer.data('status'),
-    //   totalPlayedSeconds: playerContainer.data('total-play')
-    // };
-    // AquaNManagerService = new AquaNManagerService(options);
-
     if (osName === 'Windows') {
       aquaHtml5.show();
     } else {
@@ -44,14 +36,15 @@ function (Util, AquaPlayerService, Timer) {
     var options = {
       fileUrl: $('#video').data('url'),
       watermark: $('#video').data('watermark'),
-      callback: function () {
-        // console.log('aqua service intialized');
+      callback: function (player) {
+        aquaPlayer = player;
+        console.log(aquaPlayer);
       }
     };
 
     AquaPlayerService = new AquaPlayerService(options);
 
-    if (playerContainer.data('confirm') == '1') {
+    if (playerContainer.data('confirm') === '1') {
       $('.timer').removeClass('blind');
 
       setTimeout(function () {
