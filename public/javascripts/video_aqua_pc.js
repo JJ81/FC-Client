@@ -55,16 +55,6 @@ function (Util, AquaPlayerService, Timer) {
   function initPlayer () {
     player.setVolume(0.5);
 
-    if (videoLastPlayedTime < videoDuration - 5) {
-      if (window.confirm('마지막 재생시점으로 이동하시겠습니까?')) {
-        player.setCurrentPlaybackTime(videoLastPlayedTime).then(function (seconds) {
-          player.pause();
-        }).catch(function (error) {
-          console.error(error);
-        });
-      }
-    }
-
     player.bindEvent('Error', function (ec, msg) {
       console.error(msg);
     });
@@ -75,6 +65,17 @@ function (Util, AquaPlayerService, Timer) {
         console.info('player: playing');
 
         videoDuration = player.getDuration();
+
+        if (videoLastPlayedTime < videoDuration - 5) {
+          if (window.confirm('마지막 재생시점으로 이동하시겠습니까?')) {
+            player.setCurrentPlaybackTime(videoLastPlayedTime).then(function (seconds) {
+              player.pause();
+            }).catch(function (error) {
+              console.error(error);
+            });
+          }
+        }
+
         setPlayer();
         break;
 
@@ -251,6 +252,11 @@ function (Util, AquaPlayerService, Timer) {
     }).done(function (res) {
       if (!res.success) {
         console.error(res.msg);
+        // 오류 발생 시 타이머와 비디오 재생을 멈춘다.
+        timerLog.stop();
+        player.stop();
+      } else {
+        sessionHasEnded = res.hasEnded; // 세션 종료여부
       }
     });
   }
