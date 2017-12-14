@@ -707,8 +707,8 @@
     max-width: 750px;
   }
 
-  .btn_play{
-    position: relative;
+  .btn_play {
+    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
