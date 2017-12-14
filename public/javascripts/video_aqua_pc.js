@@ -171,12 +171,8 @@ function (Util, AquaPlayerService, Timer) {
     var seconds = player.getCurrentPlaybackTime();
 
     if ((videoCurrentTime > 0) && videoCurrentTime === seconds) {
-      player.pause().then(function () {
-        console.log('비디오가 중지되었습니다.');
-        btnReplayVideo.removeClass('blind');
-      }).catch(function (error) {
-        console.error(error);
-      });
+      player.pause();
+      btnReplayVideo.removeClass('blind');
       return;
     }
 
@@ -321,12 +317,10 @@ function (Util, AquaPlayerService, Timer) {
     });
   }
 
-  // btnReplayVideo.on('click', function (e) {
-  //   e.preventDefault();
-  //   player.unload().then(function () {
-  //     btnReplayVideo.addClass('blind');
-  //   }).catch(function (error) {
-  //     console.log(error);
-  //   });
-  // });
+  btnReplayVideo.on('click', function (e) {
+    e.preventDefault();
+
+    player.play();
+    btnReplayVideo.addClass('blind');
+  });
 });
