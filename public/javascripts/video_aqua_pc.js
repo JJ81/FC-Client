@@ -76,12 +76,6 @@ function (Util, AquaPlayerService, Timer) {
 
         videoDuration = player.getDuration();
         setPlayer();
-
-        // 세션시작로그
-        sessionProgressStartLogger();
-
-        // 로깅 시간간격 설정
-        timerLog.reset(1000 * timerLoggingInterval);
         break;
 
       case window.NPlayer.OpenState.Closed:
@@ -93,18 +87,12 @@ function (Util, AquaPlayerService, Timer) {
     player.bindEvent('PlayStateChanged', function (state) {
       switch (state) {
       case window.NPlayer.PlayState.Playing:
+        // 세션시작로그
+        sessionProgressStartLogger();
+
+        // 로깅 시간간격 설정
+        timerLog.reset(1000 * timerLoggingInterval);
         break;
-        // console.info('player: playing');
-
-        // videoDuration = player.getDuration();
-        // setPlayer();
-
-        // // 세션시작로그
-        // sessionProgressStartLogger();
-
-        // // 로깅 시간간격 설정
-        // timerLog.reset(1000 * timerLoggingInterval);
-        // break;
 
       case window.NPlayer.PlayState.Stopped: // 정지
       case window.NPlayer.PlayState.Paused:  // 일시정지
