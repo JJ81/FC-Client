@@ -236,4 +236,84 @@ router.post('/terms', util.isAuthenticated, (req, res, next) => {
   });
 });
 
+router.get('/notice', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.query(QUERY.BOARD.Select, [ req.user.fc_id ], (err, result) => {
+      connection.release();
+
+      if (err) {
+        console.log(err);
+        res.status(500).json({
+          success: false,
+          msg: err
+        });
+      } else {
+        res.render('notice', {
+          current_path: 'notice',
+          header: '공지사항',
+          loggedIn: req.user,
+          list: result
+        });
+      }
+    });
+  });
+});
+
+router.get('/notice/:id', util.isAuthenticated, (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.query(QUERY.BOARD.SelectDetail, [ req.params.id ], (err, result) => {
+      connection.release();
+
+      if (err) {
+        console.log(err);
+        res.status(500).json({
+          success: false,
+          msg: err
+        });
+      } else {
+        const notice = result[0];
+        const key = notice.file_name.substring(notice.file_name.lastIndexOf('/') + 1);
+
+        notice.url = `/api/v1/s3-download?key=${key}`;
+
+        res.render('notice-detail', {
+          current_path: 'notice',
+          header: '공지사항',
+          loggedIn: req.user,
+          notice: notice
+        });
+      }
+    });
+  });
+});
+
+router.get('/notice', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.query(QUERY.BOARD.Select, [ req.user.fc_id ], (err, result) => {
+      connection.release();
+
+      if (err) {
+        console.log(err);
+        res.status(500).json({
+          success: false,
+          msg: err
+        });
+      } else {
+        res.render('notice', {
+          current_path: 'notice',
+          header: '공지사항',
+          loggedIn: req.user,
+          list: result
+        });
+      }
+    });
+  });
+});
+
 module.exports = router;

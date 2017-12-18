@@ -46,7 +46,6 @@
 
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false"
   class="body_bg_01 {{theme}}">
-
   <div class="wrapper">
   {{#if (isEquals current_path 'login')}}
     {{{body}}}
@@ -54,6 +53,10 @@
     {{{body}}}
   {{else}}
     {{> left_nav}}
+    {{#if (isEquals group_path 'education') }}
+    <ul class="marquee" style="display: none;">
+    </ul>
+    {{/if}}
     {{{body}}}
   {{/if}}
   </div>

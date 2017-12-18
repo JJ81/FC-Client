@@ -1,0 +1,55 @@
+{
+  "_from": "jquery.marquee",
+  "_id": "jquery.marquee@1.5.0",
+  "_inBundle": false,
+  "_integrity": "sha1-LWXiq7K5JABUETvE1nbMuY7qXqI=",
+  "_location": "/jquery.marquee",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "jquery.marquee",
+    "name": "jquery.marquee",
+    "escapedName": "jquery.marquee",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/jquery.marquee/-/jquery.marquee-1.5.0.tgz",
+  "_shasum": "2d65e2abb2b9240054113bc4d676ccb98eea5ea2",
+  "_spec": "jquery.marquee",
+  "_where": "/Users/parkseokje/FC-mobile",
+  "author": {
+    "name": "aamirafridi@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/aamirafridi/jQuery.Marquee/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "jQuery plugin to scroll the text like the old traditional marquee http://aamirafridi.com/jquery/jquery-marquee-plugin — Edit",
+  "homepage": "https://github.com/aamirafridi/jQuery.Marquee#readme",
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "jquery",
+    "marquee",
+    "css3",
+    "animation"
+  ],
+  "license": "ISC",
+  "main": "jquery.marquee.min",
+  "name": "jquery.marquee",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aamirafridi/jQuery.Marquee.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.5.0"
+}

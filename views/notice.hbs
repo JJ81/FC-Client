@@ -1,0 +1,18 @@
+{{> page_header}}
+
+<div class="list_section">
+  <ol>
+    {{#each list}}
+    <li class="item_wrap point_list_item no_img_list">
+      <a href="/notice/{{id}}">
+      <span class="info">
+        <span class="tit">{{ title }}</span>
+        <span class="point">{{creator_name}}</span>
+        <span class="period">{{stime created_date}}</span>
+        <div style="clear: both;"></div>
+      </span>
+      </a>
+    </li>
+    {{/each}}
+  </ol>
+</div>

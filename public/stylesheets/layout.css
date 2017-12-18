@@ -433,7 +433,7 @@ body {
 	color :#fff;
 	cursor: pointer;
   border-radius: 5px;
-  
+
 	/*background: #FF9200;
 	text-align: center;
 	color: #fff;
@@ -691,6 +691,11 @@ body {
   display: table-cell;
   vertical-align: middle;
   padding: 0px 5px;
+}
+
+.logo_section {
+  padding-bottom: 10px;
+  background: #000;
 }
 
 .centered {
@@ -1049,4 +1054,46 @@ textarea {
   font-size: 22px;
   border-bottom: 1px solid;
   margin: 20px 20px;
+}
+
+.notice {
+  padding: 10px;
+}
+
+.marquee {
+  width: 100%;
+  height: 40px;
+  /* margin: 25px auto; */
+  overflow: hidden;
+  /* background: black; */
+}
+
+/* .marquee a {
+  color: rgb(202, 255, 195);
+} */
+
+ul.marquee li {
+  padding: 5px 0px 5px 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid rgb(255, 217, 0);
+  font-size: 14px;
+  display: block;
+}
+
+ul.marquee li:last-child {
+  border-bottom: 0px;
+}
+
+ul.marquee li:before {
+  content: "\f0a2";
+  padding-right: 10px;
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  /* vertical-align: middle; */
+  /* padding: 0px 5px 6px 0px; */
 }

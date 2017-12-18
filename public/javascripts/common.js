@@ -2,11 +2,42 @@
 window.define([
   'jquery',
   'axios',
-  'es6-promise'
+  'es6-promise',
+  'jqueryMarquee'
 ], function ($, axios) {
   window.axios = axios;
   // https://github.com/stefanpenner/es6-promise 참고
   require('es6-promise').polyfill();
+
+  $(function () {
+    // 공지사항 조회
+    axios.get('/api/v1/notices')
+      .then(function (res) {
+        // console.log(res.data.list);
+        if (res.data.list.length > 0) {
+          $('.marquee').show();
+
+          res.data.list.forEach(notice => {
+            $('.marquee').append('<li><a href="/notice/' + notice.id + '">' + notice.title + '</a></li>');
+          });
+
+          $('.marquee').marquee({
+            // duration in milliseconds of the marquee
+            duration: 5000,
+            // gap in pixels between the tickers
+            gap: 50,
+            // 'left' or 'right'
+            direction: 'up',
+            // true or false - should the marquee be duplicated to show an effect of continues flow
+            duplicated: true,
+            pauseOnHover: true
+          });
+        }
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
+  });
 
   return {
     getAllUrlParams: function (url) {

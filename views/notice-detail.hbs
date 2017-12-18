@@ -1,0 +1,13 @@
+{{> page_header}}
+
+<div class="notice">
+  <h3>{{notice.title}}</h3>
+  {{{notice.contents}}}
+
+  <br>
+  <label>첨부파일:</label>
+  <br>
+  <a href="{{notice.url}}" id="notice-file"
+    style="text-decoration: initial;"
+  >{{{notice.file_name}}}</a>
+</div>

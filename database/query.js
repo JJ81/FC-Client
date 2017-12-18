@@ -856,4 +856,36 @@ QUERY.POINT = {
 
 };
 
+QUERY.BOARD = {
+  Select: `
+    SELECT b.id
+         , b.parent_id
+         , b.title
+         , b.contents
+         , b.hits
+         , b.creator_id
+         , b.creator_name
+         , b.created_date
+         , b.file_name
+      FROM board AS b
+     WHERE b.fc_id = ?
+     ORDER BY b.created_date DESC
+     LIMIT 3;
+  `,
+
+  SelectDetail: `
+    SELECT b.id
+        , b.parent_id
+        , b.title
+        , b.contents
+        , b.hits
+        , b.creator_id
+        , b.creator_name
+        , b.created_date
+        , b.file_name
+      FROM board AS b
+    WHERE b.id = ?
+    ORDER BY b.created_date DESC;
+  `
+};
 module.exports = QUERY;

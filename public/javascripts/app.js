@@ -11,6 +11,7 @@ window.requirejs.config({
     'jqueryCookie': '/static/vendor/jquery.cookie.1.4.1',
     'jqueryRating': '/static/vendor/star-rating-svg',
     'jqueryTimer': '/static/vendor/jquery.timer',
+    'jqueryMarquee': '/static/vendor/jquery.marquee.min',
     'plyr': '/static/vendor/plyr',
     'Vimeo': '/static/vendor/player.min',
     'axios': 'https://unpkg.com/axios/dist/axios.min',
@@ -28,6 +29,9 @@ window.requirejs.config({
   },
   shim: {
     'jqueryCookie': {
+      deps: ['jquery']
+    },
+    'jqueryMarquee': {
       deps: ['jquery']
     },
     'bootstrap': {
