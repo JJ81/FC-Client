@@ -25,7 +25,8 @@ window.requirejs.config({
     'aquaPlayerService': ['/static/javascripts/components/aquaplayer_service'],
     'axplugin': ['/static/javascripts/components/axplugin'],
     'common': '/static/javascripts/common',
-    'es6-promise': '/static/vendor/es6-promise.min'
+    'es6-promise': '/static/vendor/es6-promise.min',
+    'download': '/static/vendor/download.min'
   },
   shim: {
     'jqueryCookie': {

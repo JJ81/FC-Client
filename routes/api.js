@@ -38,9 +38,8 @@ router.get('/notices', util.isAuthenticated, (req, res, next) => {
   });
 });
 
-router.get('/s3-download', (req, res, next) => {
-  console.log(req.query);
-  const { key } = req.query;
+router.post('/s3-download', (req, res, next) => {
+  const { key } = req.body;
   const params = {
     Bucket: 'orange-learning',
     Key: key

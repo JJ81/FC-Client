@@ -2,9 +2,10 @@
 window.define([
   'jquery',
   'axios',
+  'download',
   'es6-promise',
   'jqueryMarquee'
-], function ($, axios) {
+], function ($, axios, download) {
   window.axios = axios;
   // https://github.com/stefanpenner/es6-promise 참고
   require('es6-promise').polyfill();
@@ -37,6 +38,25 @@ window.define([
       .catch(function (err) {
         console.error(err);
       });
+  });
+
+  $('#notice-file').on('click', function (event) {
+    event.preventDefault();
+
+    const filename = $(event.currentTarget).data('filename');
+
+    axios({
+      method: 'post',
+      url: '/api/v1/s3-download',
+      data: {
+        key: $(event.currentTarget).data('url')
+      },
+      responseType: 'blob'
+    })
+      .then(response => {
+        download(response.data, filename);
+      })
+      .catch(err => console.log(err));
   });
 
   return {
