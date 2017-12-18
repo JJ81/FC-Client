@@ -7,7 +7,7 @@ const pool = mysql.createPool({
   password: config.password,
   database: config.database,
   connectionLimit: 1,
-  waitForConnections: false
+  waitForConnections: true
 });
 
 module.exports = pool;
