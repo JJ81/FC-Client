@@ -12,7 +12,7 @@ router.get('/aquademo', AquaPlayerService.demo);
 router.get('/player/encparam', AquaPlayerService.getEncodedParam);
 
 const aws = require('aws-sdk');
-aws.config.loadFromPath('./secret/aws-config.json');
+aws.config.loadFromPath('./secret/aws_config.json');
 
 // /api/v1/notices
 router.get('/notices', util.isAuthenticated, (req, res, next) => {
