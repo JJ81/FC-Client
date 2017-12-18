@@ -1097,3 +1097,15 @@ ul.marquee li:before {
   /* vertical-align: middle; */
   /* padding: 0px 5px 6px 0px; */
 }
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 17px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 4px;
+}

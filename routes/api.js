@@ -12,7 +12,7 @@ router.get('/aquademo', AquaPlayerService.demo);
 router.get('/player/encparam', AquaPlayerService.getEncodedParam);
 
 const aws = require('aws-sdk');
-aws.config.loadFromPath('./secret/aws_config.json');
+aws.config.loadFromPath('./secret/aws_config.json'); // 서버 배포시 root 폴더/secret/ 에 위치해야 한다.
 
 // /api/v1/notices
 router.get('/notices', util.isAuthenticated, (req, res, next) => {
