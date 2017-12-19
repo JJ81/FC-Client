@@ -13,14 +13,12 @@
     <img src="/static/images/search.png" alt="검색" width="25" class="ico_exit" />
   </a>
     <div class="banner">
-      <div class="one">
+      <div class="banner-item">
         <i class="fa fa-bell-o"></i>
         공지사항
-        </div>
-      <div class="two">
-        <ul class="marquee" style="display: none; float: right;">
-        </ul>
       </div>
+      <ul class="marquee banner-item" style="display: none; float: right;">
+      </ul>
     </div>
   {{/ifCond}}
   {{#if (isEquals group_path 'contents') }}

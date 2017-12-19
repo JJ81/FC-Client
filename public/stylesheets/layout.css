@@ -1110,27 +1110,15 @@ ul.marquee li:last-child {
 }
 
 .banner {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-gap: 2px;
-  grid-auto-rows: minmax(20px, auto);
-  padding: 0 5px;
+  /* display: block; */
+  padding: 5px 5px;
 }
 
-.banner > div {
+.banner .banner-item {
   /* border: 1px solid rgb(233,171,88); */
   /* border-radius: 5px; */
   /* background-color: rgba(233,171,88,.5); */
   border-bottom: 1px solid rgb(233,171,88);
-  padding: 0.2em;
+  padding-bottom: 0.2em;
   color: #d9480f;
-}
-
-.banner.one {
-  grid-column: 1;
-  grid-row: 1;
-}
-.banner two {
-  grid-column: 2 / 4;
-  grid-row: 1;
 }
