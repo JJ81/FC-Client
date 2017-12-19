@@ -188,7 +188,7 @@ exports.getBasePlayer = (req, res, next) => {
   // }
   param += '&wm_pos=' + '9';
   param += '&wm_text=' + UserID;
-  param += '&url=' + res.locals.vodUrl + video;
+  param += '&url=' + video;
   param += '&progress=5';
 
   console.log('param : ', param);
