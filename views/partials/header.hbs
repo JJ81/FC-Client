@@ -12,6 +12,13 @@
   <a href="/education/passed" class="search_link">
     <img src="/static/images/search.png" alt="검색" width="25" class="ico_exit" />
   </a>
+    <div class="notice">
+      <div><i class="fa fa-bell-o"></i> 공지사항</div>
+      <div>
+        <ul class="marquee" style="display: none; float: right;">
+        </ul>
+      </div>
+    </div>
   {{/ifCond}}
   {{#if (isEquals group_path 'contents') }}
   <a href="/course/{{training_user_id}}/{{course_id}}" class="exit_link">

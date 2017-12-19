@@ -261,7 +261,7 @@ router.get('/notice', util.isAuthenticated, util.getLogoInfo, (req, res, next) =
   });
 });
 
-router.get('/notice/:id', util.isAuthenticated, (req, res, next) => {
+router.get('/notice/:id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err;
 
