@@ -2,6 +2,7 @@
 'use strict';
 window.requirejs.config({
   paths: {
+    'axios': '/static/vendor/axios.min',
     'jquery': ['/static/vendor/jquery-2.2.3.min'],
     'jquery-private': ['/static/vendor/jquery-private'],
     map: {
@@ -14,7 +15,6 @@ window.requirejs.config({
     'jqueryMarquee': '/static/vendor/jquery.marquee.min',
     'plyr': '/static/vendor/plyr',
     'Vimeo': '/static/vendor/player.min',
-    'axios': 'https://unpkg.com/axios/dist/axios.min',
     'bootstrap': ['/static/vendor/bootstrap.min'],
     'aquaNManagerService': ['/static/javascripts/components/aquanmanager_service'],
     'easyTimer': '/static/vendor/easytimer',

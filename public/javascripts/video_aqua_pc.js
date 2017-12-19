@@ -13,7 +13,7 @@ function (Util, AquaPlayerService, Timer) {
   var player = null;
   var playerContainer = $('.videoplayer');
   var aquaHtml5 = $('#aqua_html5');
-  var aquaWindow = $('#aqua_html5');
+  var aquaWindow = $('#aqua_window');
   var btnPlayNext = $('#btn_play_next');
   var btnReplayVideo = $('#btn_replay_video');
 
@@ -35,9 +35,9 @@ function (Util, AquaPlayerService, Timer) {
 
   $(function () {
     if (osName === 'Windows') {
-      aquaHtml5.show();
-    } else {
       aquaWindow.show();
+    } else {
+      aquaHtml5.show();
     }
 
     var options = {

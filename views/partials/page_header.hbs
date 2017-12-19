@@ -11,4 +11,9 @@
       <img src="/static/images/img_exit.png" alt="이전 페이지" width="25" class="ico_exit" />
     </a>
     {{/ifCond}}
+    {{#ifCond current_path '||' 'help'}}
+    <a href="javascript:history.go(-1);" class="back_link">
+      <img src="/static/images/img_exit.png" alt="이전 페이지" width="25" class="ico_exit" />
+    </a>
+    {{/ifCond}}
 </header>

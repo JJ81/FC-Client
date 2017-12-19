@@ -1,0 +1,19 @@
+{{> page_header}}
+
+<div class="content">
+  <div class="content-inside">
+    {{#if (isEquals device_type 'PHONE')}}
+    <div id="btn_play_video" class="btn_login btn-orange">
+      <span class="ico ico_play"></span>
+      <span class="txt">보안플레이어 실행</span>
+    </div>
+    {{else}}
+    <div id="aqua_html5" style="position:relative; overflow:hidden; display: none;">
+      {{> win_aquaplayer_html5}}
+    </div>
+    <div id="aqua_window" style="position:relative; overflow:hidden; display: none;">
+      {{> win_aquaplayer_window}}
+    </div>
+    {{/if}}
+  </div>
+</div>

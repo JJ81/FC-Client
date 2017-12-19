@@ -317,4 +317,17 @@ router.get('/notice', util.isAuthenticated, util.getLogoInfo, (req, res, next) =
   });
 });
 
+router.get('/help', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
+  const deviceType = req.device.type.toUpperCase();
+
+  res.render('help', {
+    header: '도움말',
+    loggedIn: req.user,
+    current_path: 'help',
+    video_url: 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/onm_orange_user.mp4',
+    watermark: req.user.user_id,
+    device_type: deviceType
+  });
+});
+
 module.exports = router;
