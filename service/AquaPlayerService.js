@@ -125,7 +125,8 @@ exports.getBasePlayer = (req, res, next) => {
     return_url: returnUrl
   } = req.query;
 
-  console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
+  // console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
+  console.log(returnUrl);
 
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
   const UserID = req.user !== undefined ? req.user.user_id : 'test_id';

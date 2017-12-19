@@ -16,7 +16,7 @@ window.requirejs([
     var os = Util.getOSName;
     var options = {};
 
-    if (deviceType === 'DESKTOP') {
+    if (deviceType === 'DESKTOP1') {
       if (os === 'Windows') {
         aquaWindow.show();
       } else {

@@ -319,12 +319,19 @@ router.get('/notice', util.isAuthenticated, util.getLogoInfo, (req, res, next) =
 
 router.get('/help', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   const deviceType = req.device.type.toUpperCase();
+  let videoUrl;
+
+  if (deviceType === 'DEKTOP') {
+    videoUrl = `${res.locals.vodPcUrl}onm_orange_user.mp4`;
+  } else {
+    videoUrl = `${res.locals.vodUrl}onm_orange_user.mp4`;
+  }
 
   res.render('help', {
     header: '도움말',
     loggedIn: req.user,
     current_path: 'help',
-    video_url: 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/onm_orange_user.mp4',
+    video_url: videoUrl,
     watermark: req.user.user_id,
     device_type: deviceType
   });
