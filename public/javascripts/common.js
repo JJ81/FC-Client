@@ -19,7 +19,7 @@ window.define([
           $('.marquee').show();
 
           res.data.list.forEach(notice => {
-            $('.marquee').append('<li><a href="/notice/' + notice.id + '">' + 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod quia nisi eum quasi? Enim rerum neque odit doloremque quas facere, alias repellendus adipisci recusandae ipsa et explicabo maiores magni hic!' + '</a></li>');
+            $('.marquee').append('<li><a href="/notice/' + notice.id + '">' + notice.title + '</a></li>');
           });
 
           $('.marquee').marquee({
