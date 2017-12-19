@@ -81,6 +81,40 @@ window.define([
       .catch(function (err) {
         console.log(err);
       });
+    },
+    startBasePlayer: function () {
+      var deviceType = self.getDeviceType();
+
+            // console.log('haha', this.options.videoStatus);
+
+      window.axios.get('/api/v1/aquaplayer-base', {
+        params: {
+          device: deviceType,
+          video: this.options.videoUrl,
+          return_url: this.options.returnUrl
+        }
+      })
+      .then(function (res) {
+        if (deviceType === 'ios') {
+          var time = (new Date()).getTime();
+
+          window.location.href = res.data.iosUrl;
+
+          setTimeout(function () {
+            setTimeout(function () {
+              var now = (new Date()).getTime();
+              if ((now - time) < 400) {
+                window.location.href = 'https://itunes.apple.com/kr/app/aquanmanager/id1048325731';
+              }
+            }, 10);
+          }, 300);
+        } else if (deviceType === 'android') {
+          window.location.href = res.data.androidUrl;
+        }
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
     }
   };
 
