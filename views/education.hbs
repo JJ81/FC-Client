@@ -1,5 +1,14 @@
 {{> header}}
 
+<div class="banner">
+  <div class="banner-item">
+    <i class="fa fa-bell-o"></i>
+    공지사항
+  </div>
+  <ul class="marquee banner-item" style="display: none; float: right;">
+  </ul>
+</div>
+
 {{#ifCond (isEquals group_path 'education') '&&' (isEquals current_path 'passed') }}
 <div class="search_section">
   <input type="hidden" id="searchby" value="{{searchby}}">
