@@ -276,9 +276,12 @@ router.get('/notice/:id', util.isAuthenticated, util.getLogoInfo, (req, res, nex
         });
       } else {
         const notice = result[0];
-        const key = notice.file_name.substring(notice.file_name.lastIndexOf('/') + 1);
 
-        notice.url = key;
+        if (notice.file_name) {
+          const key = notice.file_name.substring(notice.file_name.lastIndexOf('/') + 1);
+          notice.url = key;
+        }
+
         // notice.url = `/api/v1/s3-download?key=${key}`;
 
         res.render('notice-detail', {

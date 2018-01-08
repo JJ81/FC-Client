@@ -4,6 +4,7 @@
   <h3>{{notice.title}}</h3>
   {{{notice.contents}}}
 
+{{#if notice.file_name}}
   <br>
   <label>첨부파일:</label>
   <br>
@@ -13,6 +14,7 @@
     id="notice-file"
     style="text-decoration: initial;"
   >{{{notice.file_name}}}</a>
+{{/if}}
   <br><br>
   <a class="button" href="/notice">목록보기</a>
 </div>
