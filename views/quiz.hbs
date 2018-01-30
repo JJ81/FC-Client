@@ -15,11 +15,12 @@
       <ol class="selection option">
       {{#each options}}
         <li data-option-id="{{id}}" data-iscorrect="{{iscorrect}}">
-          <a href="#" class="link">
-            <i class="ico ico_unchecked"></i>
-            <span class="answer">{{option}}</span>
+          <a href="#" class="radio">
+            <i class="input ico ico_unchecked"></i>
+            <span class="label">{{option}}</span>
           </a>
         </li>
+        <div class="clear"></div>
       {{/each}}
       </ol>
       <div id="alert" class="result_quiz blind">{{answer}}</div>

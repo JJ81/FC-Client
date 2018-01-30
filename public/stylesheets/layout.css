@@ -533,15 +533,33 @@ body {
 
 .quiz_select .question{
 	font-size: 15px;
-	color: #000;
+  color: #000;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .quiz_select .selection .link {
 	display: block;
-	height: 20px;
-	padding-top: 5px;
+	/* height: 20px; */
+	/* padding-top: 5px;
 	padding-bottom: 5px;
-	overflow: hidden;
+	overflow: hidden; */
+}
+
+.radio {
+  float:left;
+}
+.radio input {
+  vertical-align:middle;
+}
+.label {
+  font-size: 15px;
+	margin-left: 35px;
+	line-height: 32px;
+  float:left;
+}
+.clear {
+  clear:both;
 }
 
 .ico_unchecked{
@@ -553,11 +571,11 @@ body {
 }
 
 
-.quiz_select .selection .answer{
+/* .quiz_select .selection .answer{
 	font-size: 15px;
 	margin-left: 35px;
 	line-height: 35px;
-}
+} */
 
 .quiz_select{
 	margin-bottom: 30px;
