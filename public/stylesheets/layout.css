@@ -552,7 +552,7 @@ body {
 .radio input {
   vertical-align:middle;
 }
-.label {
+.quiz-label {
   font-size: 15px;
 	margin-left: 35px;
 	line-height: 32px;
