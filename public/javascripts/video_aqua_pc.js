@@ -37,7 +37,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
 
   $(function () {
     var data = {
-      video_url: playerContainer.data('url'),
+      video_url: playerContainer.data('video-url'),
       watermark: playerContainer.data('watermark')
     };
 
