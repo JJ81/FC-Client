@@ -49,9 +49,11 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
     AquaPlayerService = new AquaPlayerService(options);
 
     var data = {
-      url: playerContainer.data('url'),
+      video_url: playerContainer.data('url'),
       watermark: playerContainer.data('watermark')
     };
+
+    // console.log(playerContainer.data('watermark'));
 
     var content;
 
