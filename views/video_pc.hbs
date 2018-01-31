@@ -6,6 +6,7 @@
       id="videoplayer"
       data-id="{{content.id}}"
       data-url="{{content.url}}"
+      data-watermark="{{content.watermark}}"
       data-total-play="{{total_played_seconds}}"
       data-current-time="{{currenttime}}"
       data-training-user-id="{{training_user_id}}"
@@ -21,11 +22,7 @@
         &nbsp;* 비디오 종료 후 {{setting.waiting_seconds}}초 이내에 다음 버튼 클릭
       </small>
       <br><br>
-      <div id="aqua-html5" style="position:relative; overflow:hidden; display: none;">
-        {{> win_aquaplayer_html5}}
-      </div>
-      <div id="aqua-window" style="position:relative; overflow:hidden; display: none;">
-        {{> win_aquaplayer_window}}
+      <div id="aqua-player" style="position:relative; overflow:hidden;">
       </div>
     </div>
 

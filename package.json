@@ -21,6 +21,7 @@
     "express": "^4.13.4",
     "express-csv": "^0.6.0",
     "express-device": "^0.4.2",
+    "handlebar": "^1.0.0",
     "handlebars-paginate": "^0.1.0",
     "hbs": "~3.1.0",
     "helmet": "3.4.1",
@@ -29,6 +30,7 @@
     "jquery.marquee": "^1.5.0",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
+    "text": "github:requirejs/text",
     "urlencode": "^1.1.0",
     "validator": "7.0.0"
   },

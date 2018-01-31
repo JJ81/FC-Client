@@ -3,9 +3,11 @@ window.requirejs(
     'common',
     'aquaPlayerService',
     'easyTimer',
-    'jqueryTimer'
+    // 'jqueryTimer',
+    'text!/win_aquaplayer_html5.html',
+    'text!/win_aquaplayer_window.html'
   ],
-function (Util, AquaPlayerService, Timer) {
+function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
   var $ = $ || window.$;
   var axios = axios || window.axios;
   var osName = Util.getOSName();
@@ -46,13 +48,24 @@ function (Util, AquaPlayerService, Timer) {
     };
     AquaPlayerService = new AquaPlayerService(options);
 
+    var data = {
+      url: playerContainer.data('url'),
+      watermark: playerContainer.data('watermark')
+    };
+
+    var content;
+
     if (osName === 'Windows') {
       // aquaHtml5.remove();
-      aquaWindow.show();
+      // aquaWindow.show();
+      content = window.Handlebars.compile(templateWindow);
     } else {
       // aquaWindow.remove();
-      aquaHtml5.show();
+      // aquaHtml5.show();
+      content = window.Handlebars.compile(templateHTML5);
     }
+
+    $('#aqua-player').append(content(data));
   });
 
   function initPlayer () {

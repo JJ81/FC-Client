@@ -63,7 +63,9 @@ gulp.task('vendor', () => {
     DIR.SRC + '/vendor/' + 'aquaplayer/js/nplayer_conf.js',
     DIR.SRC + '/vendor/' + 'plugins/jquery.marquee/jquery.marquee.min.js',
     DIR.SRC + '/vendor/' + 'plugins/downloadjs/download.min.js',
-    DIR.SRC + '/vendor/' + 'axios/dist/axios.min.js'
+    DIR.SRC + '/vendor/' + 'axios/dist/axios.min.js',
+    DIR.SRC + '/vendor/' + 'handlebars/dist/handlebars.min.js',
+    DIR.SRC + '/vendor/' + 'text/text.js'
   ])
   .pipe(uglify())
   .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })

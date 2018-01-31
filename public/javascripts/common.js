@@ -3,12 +3,14 @@ window.define([
   'jquery',
   'axios',
   'download',
+  'handlebars',
   'es6-promise',
   'jqueryMarquee'
-], function ($, axios, download) {
+], function ($, axios, download, Handlebars) {
   window.axios = axios;
   // https://github.com/stefanpenner/es6-promise 참고
   require('es6-promise').polyfill();
+  window.Handlebars = Handlebars;
 
   $(function () {
     // 공지사항 조회
