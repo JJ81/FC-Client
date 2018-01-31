@@ -47,10 +47,10 @@ function (Util, AquaPlayerService, Timer) {
     AquaPlayerService = new AquaPlayerService(options);
 
     if (osName === 'Windows') {
-      aquaHtml5.remove();
+      // aquaHtml5.remove();
       aquaWindow.show();
     } else {
-      aquaWindow.remove();
+      // aquaWindow.remove();
       aquaHtml5.show();
     }
   });
