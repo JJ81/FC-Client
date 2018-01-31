@@ -48,8 +48,10 @@ function (Util, AquaPlayerService, Timer) {
 
     if (osName === 'Windows') {
       aquaHtml5.remove();
+      aquaWindow.show();
     } else {
       aquaWindow.remove();
+      aquaHtml5.show();
     }
   });
 
