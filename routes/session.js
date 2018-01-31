@@ -195,6 +195,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
             }
           }
 
+          // console.log(returnData);
+
           switch (req.device.type.toUpperCase()) {
           case 'DESKTOP':
             res.render('video_pc', returnData);

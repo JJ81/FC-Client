@@ -55,6 +55,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
 
     // console.log(playerContainer.data('watermark'));
 
+    console.log(data);
     var content;
 
     if (osName === 'Windows') {
