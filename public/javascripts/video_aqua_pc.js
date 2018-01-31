@@ -49,7 +49,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
     if (osName === 'Windows') {
       content = window.Handlebars.compile(templateWindow);
     } else {
-      content = window.Handlebars.compile(templateWindow);
+      content = window.Handlebars.compile(templateHTML5);
     }
 
     // console.log(content(data));
