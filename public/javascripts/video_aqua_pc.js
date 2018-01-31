@@ -47,7 +47,6 @@ function (Util, AquaPlayerService, Timer) {
     AquaPlayerService = new AquaPlayerService(options);
 
     if (osName === 'Windows') {
-      console.log('Windows player');
       aquaWindow.show();
     } else {
       aquaHtml5.show();
