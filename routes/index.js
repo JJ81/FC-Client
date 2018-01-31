@@ -325,9 +325,9 @@ router.get('/help', util.isAuthenticated, util.getLogoInfo, (req, res, next) => 
   let videoUrl;
 
   if (deviceType === 'DEKTOP') {
-    videoUrl = 'http://pcst.aquan.dev.edu1004.kr/orangenamu/onm_orange_user.mp4';
+    videoUrl = 'http://pcst.aquan.dev.edu1004.kr/orangenamu/dev/onm_orange_user.mp4';
   } else {
-    videoUrl = 'http://mst.aquan.dev.edu1004.kr/orangenamu/onm_orange_user.mp4';
+    videoUrl = 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/onm_orange_user.mp4';
   }
 
   res.render('help', {
