@@ -36,6 +36,26 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
   var trainingUserId = btnPlayNext.data('training-user-id');
 
   $(function () {
+    var data = {
+      video_url: playerContainer.data('url'),
+      watermark: playerContainer.data('watermark')
+    };
+
+    // console.log(playerContainer.data('watermark'));
+
+    // console.log(data);
+    var content;
+
+    if (osName === 'Windows') {
+      content = window.Handlebars.compile(templateWindow);
+    } else {
+      content = window.Handlebars.compile(templateWindow);
+    }
+
+    // console.log(content(data));
+
+    $('#aqua-player').append(content(data));
+
     var options = {
       fileUrl: $('#video').data('url'),
       watermark: $('#video').data('watermark'),
@@ -47,24 +67,6 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
       }
     };
     AquaPlayerService = new AquaPlayerService(options);
-
-    var data = {
-      video_url: playerContainer.data('url'),
-      watermark: playerContainer.data('watermark')
-    };
-
-    // console.log(playerContainer.data('watermark'));
-
-    console.log(data);
-    var content;
-
-    if (osName === 'Windows') {
-      content = window.Handlebars.compile(templateWindow);
-    } else {
-      content = window.Handlebars.compile(templateWindow);
-    }
-
-    $('#aqua-player').append(content(data));
   });
 
   function initPlayer () {
