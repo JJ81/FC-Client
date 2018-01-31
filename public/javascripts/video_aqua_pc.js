@@ -14,8 +14,8 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
 
   var player = null;
   var playerContainer = $('.videoplayer');
-  var aquaHtml5 = $('#aqua-html5');
-  var aquaWindow = $('#aqua-window');
+  // var aquaHtml5 = $('#aqua-html5');
+  // var aquaWindow = $('#aqua-window');
   var btnPlayNext = $('#btn_play_next');
   var btnReplayVideo = $('#btn_replay_video');
 
@@ -56,13 +56,9 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
     var content;
 
     if (osName === 'Windows') {
-      // aquaHtml5.remove();
-      // aquaWindow.show();
       content = window.Handlebars.compile(templateWindow);
     } else {
-      // aquaWindow.remove();
-      // aquaHtml5.show();
-      content = window.Handlebars.compile(templateHTML5);
+      content = window.Handlebars.compile(templateWindow);
     }
 
     $('#aqua-player').append(content(data));

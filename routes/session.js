@@ -39,6 +39,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
       connection.query(QUERY.COURSE_LIST.SEL_INDEX, [trainingUserId, courseListId], (err, data) => {
         // console.log(data);
         courseList = data[0];
+
+        console.log('courseList ::', courseList);
         callback(err, data);
       });
     },
