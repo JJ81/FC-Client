@@ -34,6 +34,7 @@ function (Util, AquaPlayerService, Timer) {
   var trainingUserId = btnPlayNext.data('training-user-id');
 
   $(function () {
+    console.log(osName);
     if (osName === 'Windows') {
       aquaWindow.show();
     } else {
