@@ -12,8 +12,8 @@ function (Util, AquaPlayerService, Timer) {
 
   var player = null;
   var playerContainer = $('.videoplayer');
-  var aquaHtml5 = $('#aqua_html5');
-  var aquaWindow = $('#aqua_window');
+  var aquaHtml5 = $('#aqua-html5');
+  var aquaWindow = $('#aqua-window');
   var btnPlayNext = $('#btn_play_next');
   var btnReplayVideo = $('#btn_replay_video');
 
