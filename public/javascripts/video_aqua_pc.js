@@ -34,13 +34,6 @@ function (Util, AquaPlayerService, Timer) {
   var trainingUserId = btnPlayNext.data('training-user-id');
 
   $(function () {
-    console.log(osName);
-    if (osName === 'Windows') {
-      aquaWindow.show();
-    } else {
-      aquaHtml5.show();
-    }
-
     var options = {
       fileUrl: $('#video').data('url'),
       watermark: $('#video').data('watermark'),
@@ -52,6 +45,13 @@ function (Util, AquaPlayerService, Timer) {
       }
     };
     AquaPlayerService = new AquaPlayerService(options);
+
+    if (osName === 'Windows') {
+      console.log('Windows player');
+      aquaWindow.show();
+    } else {
+      aquaHtml5.show();
+    }
   });
 
   function initPlayer () {
