@@ -57,8 +57,10 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
     $('#aqua-player').append(content(data));
 
     var options = {
-      fileUrl: $('#video').data('url'),
-      watermark: $('#video').data('watermark'),
+      // fileUrl: $('#video').data('url'),
+      // watermark: $('#video').data('watermark'),
+      fileUrl: data.video_url,
+      watermark: data.watermark,
       callback: function (obj) {
         if (obj) {
           player = obj;
