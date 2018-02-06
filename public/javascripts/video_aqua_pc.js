@@ -3,9 +3,9 @@ window.requirejs(
     'common',
     'aquaPlayerService',
     'easyTimer',
-    // 'jqueryTimer',
     'text!/win_aquaplayer_html5.html',
-    'text!/win_aquaplayer_window.html'
+    'text!/win_aquaplayer_window.html',
+    'jqueryTimer'
   ],
 function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
   var $ = $ || window.$;
