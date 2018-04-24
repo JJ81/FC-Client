@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./bin/www nodemon",
+    "dev": "nodemon bin/www",
     "client": "nodemon ./bin/www nodemon -e hbs",
     "test": "DEBUG=ams-holdemclub:* npm start"
   },
