@@ -15,6 +15,7 @@ const util = require('../util/util');
 router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   console.log('req.params:', req.params);
 
+  // IE의 경우 nplayer_control.html 로드 시 본 라우트가 다시 호출된다. 이를 방지하기 위함
   if (isNaN(parseInt(req.params.course_list_id))) {
     return res.sendStatus(200);
   }

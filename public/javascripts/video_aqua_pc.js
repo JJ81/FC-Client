@@ -32,7 +32,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
   var videoCurrentTime; // 비디오 현재 시청시간
   var videoId = playerContainer.data('id'); // video 테이블의 id
   var videoTotalPlayedSeconds = playerContainer.data('total-play'); // 비디오 총 시청시간
-  var videoLastPlayedTime = playerContainer.data('current-time'); // 마지막 재생시점
+  // var videoLastPlayedTime = playerContainer.data('current-time'); // 마지막 재생시점
   var trainingUserId = btnPlayNext.data('training-user-id');
 
   function logger (message) {
@@ -327,6 +327,10 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
    */
   function showPlayBtn () {
     logger('showPlayBtn');
+    logger('videoDuration:' + videoDuration);
+    logger('passiveRate:' + videoDuration);
+    logger('videoTotalPlayedSeconds:' + videoTotalPlayedSeconds);
+
     if (Math.floor(videoDuration * (passiveRate / 100)) <= videoTotalPlayedSeconds) {
       btnPlayNext.removeClass('blind');
       btnReplayVideo.addClass('blind');
