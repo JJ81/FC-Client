@@ -13,7 +13,7 @@ const util = require('../util/util');
  * 세션 학습시작
  */
 router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
-  console.log('req.params:', req.params);
+  // console.log('req.params:', req.params);
 
   // IE의 경우 nplayer_control.html 로드 시 본 라우트가 다시 호출된다. 이를 방지하기 위함
   if (isNaN(parseInt(req.params.course_list_id))) {
@@ -306,7 +306,7 @@ router.post('/player/log/:user_id/:training_user_id/:course_id/:course_list_id/:
 // 세션 시작일시를 기록한다.
 // url: /api/v1/log/session/starttime
 router.post('/log/starttime', util.isAuthenticated, (req, res) => {
-  console.log('req.body:', req.body);
+  // console.log('req.body:', req.body);
   const inputs = {
     user_id: req.user.user_id,
     training_user_id: parseInt(req.body.training_user_id),
