@@ -77,9 +77,9 @@ function setpageunloaccallback () {
       if (document.addEventListener) {
           document.addEventListener('pagehide', exitFunction, false);
           document.addEventListener('unload', exitFunction, false);
-        } else if (window.attachEvent) {
-          document.attachEvent('pagehide', exitFunction);
-          document.attachEvent('unload', exitFunction);
+        } else if (window.addEventListener) {
+          document.addEventListener('pagehide', exitFunction);
+          document.addEventListener('unload', exitFunction);
         }
     } else if (binfo.name === 'firefox') {
         // alert("Browser FireFox");
