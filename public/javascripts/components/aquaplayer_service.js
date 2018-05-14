@@ -59,7 +59,7 @@ window.define([
         mode: 'html5'
       });
 
-      window.player = player;
+      // player = player;
 
       window.initNPlayerUI(player);
 
@@ -136,7 +136,7 @@ window.define([
       });
       var setAxPlugin = false;
 
-      window.player = player;
+      player = player;
       self.testWatermark();
 
       window.initNPlayerUI(player);
@@ -256,7 +256,7 @@ window.define([
     resize: function () {
       $(window).resize(function () {
         $('#video').height($(window).height() - $('.wrapper_foot').height());
-        // if (window.player && !window.player.getFullscreen()) {
+        // if (player && !player.getFullscreen()) {
         //   console.log('resized-1');
         //   $('#video').height($(window).height());
         // } else {
@@ -266,39 +266,39 @@ window.define([
       });
     },
     testWatermark () {
-      window.player.setWatermarkText(self.options.watermark);
-      window.player.setWatermarkSize(15);
-      window.player.setWatermarkColor(255, 0, 0, 0.5);
-      window.player.setWatermarkInterval(5);
-      window.player.setWatermarkLocation(22);
+      player.setWatermarkText(self.options.watermark);
+      player.setWatermarkSize(15);
+      player.setWatermarkColor(255, 0, 0, 0.5);
+      player.setWatermarkInterval(5);
+      player.setWatermarkLocation(22);
     },
     testSubtitle: function () {
       self.testSubtitle1();
     },
     testSubtitle1: function () {
       window.setTimeout(function () {
-        window.player.setSubtitleFont('궁서', 25);
-        window.player.setSubtitleColor(255, 0, 0, 0.5);
-        window.player.setSubtitlePosition(100, 100);
-        window.player.setSubtitleText('Hello, World - 테스트 1');
+        player.setSubtitleFont('궁서', 25);
+        player.setSubtitleColor(255, 0, 0, 0.5);
+        player.setSubtitlePosition(100, 100);
+        player.setSubtitleText('Hello, World - 테스트 1');
         self.testSubtitle2();
       }, 1000);
     },
     testSubtitle2: function () {
       window.setTimeout(function () {
-        window.player.setSubtitleFont('Malgun Gothic', 15);
-        window.player.setSubtitleColor(0, 255, 0, 1);
-        window.player.setSubtitlePosition(200, 50);
-        window.player.setSubtitleText('Hello, World - 테스트 2');
+        player.setSubtitleFont('Malgun Gothic', 15);
+        player.setSubtitleColor(0, 255, 0, 1);
+        player.setSubtitlePosition(200, 50);
+        player.setSubtitleText('Hello, World - 테스트 2');
         self.testSubtitle3();
       }, 1000);
     },
     testSubtitle3 () {
       window.setTimeout(function () {
-        window.player.setSubtitleFont('굴림', 35);
-        window.player.setSubtitleColor(0, 0, 255, 0.7);
-        window.player.setSubtitlePosition(50, 200);
-        window.player.setSubtitleText('Hello, World - 테스트 3');
+        player.setSubtitleFont('굴림', 35);
+        player.setSubtitleColor(0, 0, 255, 0.7);
+        player.setSubtitlePosition(50, 200);
+        player.setSubtitleText('Hello, World - 테스트 3');
         self.testSubtitle1();
       }, 1000);
     }
