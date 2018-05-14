@@ -328,7 +328,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
   function showPlayBtn () {
     logger('showPlayBtn');
     logger('videoDuration:' + videoDuration);
-    logger('passiveRate:' + videoDuration);
+    logger('passiveRate:' + passiveRate);
     logger('videoTotalPlayedSeconds:' + videoTotalPlayedSeconds);
 
     if (Math.floor(videoDuration * (passiveRate / 100)) <= videoTotalPlayedSeconds) {
