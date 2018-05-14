@@ -36,7 +36,8 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
   var trainingUserId = btnPlayNext.data('training-user-id');
 
   function logger (message) {
-    console.log('video_aqua_pc :', message);
+    // debuggin 목적으로만 활성화할 것!
+    // console.log('video_aqua_pc :', message);
   }
 
   $(function () {
