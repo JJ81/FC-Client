@@ -35,20 +35,23 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
   var videoLastPlayedTime = playerContainer.data('current-time'); // 마지막 재생시점
   var trainingUserId = btnPlayNext.data('training-user-id');
 
+  function logger (message) {
+    console.log('video_aqua_pc :', message);
+  }
+
   $(function () {
     var data = {
       video_url: playerContainer.data('video-url'),
       watermark: playerContainer.data('watermark')
     };
 
-    // console.log(playerContainer.data('watermark'));
-
-    // console.log(data);
     var content;
 
     if (osName === 'Windows') {
+      logger('window');
       content = window.Handlebars.compile(templateWindow);
     } else {
+      logger('html5');
       content = window.Handlebars.compile(templateHTML5);
     }
 
@@ -72,16 +75,19 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
   });
 
   function initPlayer () {
+    console.log('initPlayer');
     player.setVolume(0.5);
 
     player.bindEvent('Error', function (ec, msg) {
+      logger('player:Error ' + msg);
       console.error(msg);
     });
 
     player.bindEvent('OpenStateChanged', function (state) {
+      logger('player:OpenStateChanged');
       switch (state) {
       case window.NPlayer.OpenState.Opened:
-        console.info('player: playing');
+        logger('player:OpenStateChanged:Opened');
 
         videoDuration = player.getDuration();
 
@@ -96,24 +102,28 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
         break;
 
       case window.NPlayer.OpenState.Closed:
-        console.log('closed');
+        logger('player:OpenStateChanged:Closed');
         break;
       }
     });
 
     player.bindEvent('PlayStateChanged', function (state) {
+      logger('player:PlayStateChanged');
       switch (state) {
       case window.NPlayer.PlayState.Playing:
+        logger('player:PlayStateChanged:Playing');
         // 세션시작로그
         sessionProgressStartLogger();
 
         // 로깅 시간간격 설정
-        timerLog.reset(1000 * timerLoggingInterval);
+        if (timerLog) {
+          timerLog.reset(1000 * timerLoggingInterval);
+        }
         break;
 
       case window.NPlayer.PlayState.Stopped: // 정지
       case window.NPlayer.PlayState.Paused:  // 일시정지
-        console.info('player: stop/pause');
+        logger('player:PlayStateChanged:Stopped/Paused');
 
         // 로깅 일시정지
         timerLog.pause();
@@ -125,7 +135,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
     });
 
     player.bindEvent('PlaybackCompleted', function () {
-      console.info('player: ended');
+      logger('player:PlaybackCompleted');
 
       // 로깅 일시정지
       timerLog.pause();
@@ -237,7 +247,8 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
    * 비디오 시청 종료시간 로깅
    */
   function videoEndTimeLogger () {
-    console.log('video log end');
+    logger('videoEndTimeLogger');
+
     $.ajax({
       type: 'POST',
       url: '/video/log/endtime',
@@ -257,6 +268,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
    * 세션 시작일시 로깅
    */
   function sessionProgressStartLogger () {
+    logger('sessionProgressStartLogger');
     $.ajax({
       type: 'POST',
       url: '/session/log/starttime',
@@ -281,6 +293,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
  * 다음버튼 클릭 시 발생 이벤트
  */
   btnPlayNext.on('click', function (event) {
+    logger('btnPlayNext:click');
     event.preventDefault();
     secondTimer.stop();
     // 세션 종료로그를 기록한다.
@@ -291,6 +304,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
    * 세션 종료일시 로깅
    */
   function sessionProgressEndLogger () {
+    logger('sessionProgressEndLogger');
     $.ajax({
       type: 'POST',
       url: '/session/log/endtime',
@@ -312,6 +326,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
    * 총 릴타임의 80% 이상을 시청한 경우 다음버튼을 활성화 한다.
    */
   function showPlayBtn () {
+    logger('showPlayBtn');
     if (Math.floor(videoDuration * (passiveRate / 100)) <= videoTotalPlayedSeconds) {
       btnPlayNext.removeClass('blind');
       btnReplayVideo.addClass('blind');
@@ -322,6 +337,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
    * 세션 비디오 로그를 삭제한다.
    */
   function deleteVideoLog () {
+    logger('deleteVideoLog');
     return axios.delete('/video/log', {
       params: {
         video_id: playerContainer.data('id')
@@ -336,6 +352,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
 
   // 세션 로그를 삭제한다.
   function deleteSessionLog () {
+    logger('deleteSessionLog');
     return axios.delete('/session/log', {
       params: {
         training_user_id: playerContainer.data('training-user-id'),
