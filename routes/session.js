@@ -1,5 +1,3 @@
-import { isNumber } from 'util';
-
 const express = require('express');
 const router = express.Router();
 const mysqlDbc = require('../commons/db_conn')();
