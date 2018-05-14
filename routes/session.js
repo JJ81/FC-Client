@@ -17,7 +17,7 @@ const util = require('../util/util');
 router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   console.log('req.params:', req.params);
 
-  if (!isNumber(req.params.course_list_id)) {
+  if (typeof req.params.course_list_id !== 'number') {
     return res.sendStatus(200);
   }
 
