@@ -39,8 +39,8 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
   let courseList;
   let videoType; // vimeo / aqua(pc, mobile)
 
-  console.log('trainingUserId', trainingUserId);
-  console.log('courseListId', courseListId);
+  // console.log('trainingUserId', trainingUserId);
+  // console.log('courseListId', courseListId);
 
   async.series([
     // 강의정보 조회
@@ -50,7 +50,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         console.log(data);
         courseList = data[0];
 
-        console.log('courseList ::', courseList);
+        // console.log('courseList ::', courseList);
         callback(err, data);
       });
     },
@@ -205,7 +205,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
             }
           }
 
-          console.log('returnData:', JSON.stringify(returnData, null, 2));
+          // console.log('returnData:', JSON.stringify(returnData, null, 2));
 
           switch (req.device.type.toUpperCase()) {
           case 'DESKTOP':
