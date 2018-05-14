@@ -15,7 +15,7 @@ const util = require('../util/util');
 router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   console.log('req.params:', req.params);
 
-  if (typeof req.params.course_list_id !== 'number') {
+  if (isNaN(parseInt(req.params.course_list_id))) {
     return res.sendStatus(200);
   }
 
