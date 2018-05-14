@@ -1,3 +1,5 @@
+import { isNumber } from 'util';
+
 const express = require('express');
 const router = express.Router();
 const mysqlDbc = require('../commons/db_conn')();
@@ -12,8 +14,12 @@ const util = require('../util/util');
 /**
  * 세션 학습시작
  */
-router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res) => {
+router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated, util.getLogoInfo, (req, res, next) => {
   console.log('req.params:', req.params);
+
+  if (!isNumber(req.params.course_list_id)) {
+    return res.sendStatus(200);
+  }
 
   const {
     training_user_id: trainingUserId,
