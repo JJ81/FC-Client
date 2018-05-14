@@ -32,12 +32,15 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
   let courseList;
   let videoType; // vimeo / aqua(pc, mobile)
 
+  console.log('trainingUserId', trainingUserId);
+  console.log('courseListId', courseListId);
+
   async.series([
     // 강의정보 조회
     // results[0]
     (callback) => {
       connection.query(QUERY.COURSE_LIST.SEL_INDEX, [trainingUserId, courseListId], (err, data) => {
-        // console.log(data);
+        console.log(data);
         courseList = data[0];
 
         console.log('courseList ::', courseList);
