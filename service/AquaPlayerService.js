@@ -90,7 +90,7 @@ exports.getPlayer = (req, res, next) => {
   // param += '&url=' + 'http://mst.aquan.dev.edu1004.kr/orangenamu/dev/cdnetworks.mp4';
   // param += '&NotifyInfo=' + NotifyInfo;
 
-  console.log('param : ', param);
+  // console.log('param : ', param);
 
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
@@ -103,12 +103,12 @@ exports.getPlayer = (req, res, next) => {
       const androidUrl = 'intent://cddr_dnp/webstream?param=' + stdout + '#Intent;scheme=cdnmp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.cdn.aquanmanager;end';
 
       if (device === 'ios') {
-        console.log(iosUrl);
+        // console.log(iosUrl);
         return res.send({
           iosUrl: iosUrl
         });
       } else if (device === 'android') {
-        console.log(androidUrl);
+        // console.log(androidUrl);
         return res.send({
           androidUrl: androidUrl
         });
@@ -125,7 +125,7 @@ exports.getBasePlayer = (req, res, next) => {
   } = req.query;
 
   // console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
-  console.log(returnUrl);
+  // console.log(returnUrl);
 
   // 사용자ID를 넣는 부분, 넘겨줄 ID가 없는 경우 중복로그인제한 회피를 위해 Unique 한 ID 로 랜덤처리 필요.
   const UserID = req.user !== undefined ? req.user.user_id : 'test_id';
@@ -190,7 +190,7 @@ exports.getBasePlayer = (req, res, next) => {
   param += '&url=' + video;
   param += '&progress=5';
 
-  console.log('param : ', param);
+  // console.log('param : ', param);
 
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
@@ -217,7 +217,7 @@ exports.getBasePlayer = (req, res, next) => {
 };
 
 exports.getBookmarkData = (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   res.sendStatus(200);
 };
 
@@ -285,7 +285,7 @@ exports.getEncodedParam = (req, res, next) => {
   param += '&dup_custom_key=' + AUTH_DUP_CP_KEY;
   // param += '&NotifyInfo=' + NotifyInfo;
 
-  console.log(param);
+  // console.log(param);
 
   execFile(path.join(__dirname, 'aquaplayer_modules/ENCAQALINK_V2_x64'),
     [ '-t', 'ENC', param ],
@@ -293,7 +293,7 @@ exports.getEncodedParam = (req, res, next) => {
       if (err) {
         throw err;
       }
-      console.log(stdout);
+      // console.log(stdout);
 
       res.send({
         encparam: stdout
