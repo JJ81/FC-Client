@@ -47,8 +47,6 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
 
     var content;
 
-    logger(osName);
-
     if (osName === 'Windows') {
       logger('window');
       content = window.Handlebars.compile(templateWindow);
