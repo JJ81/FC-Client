@@ -203,7 +203,7 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
    * 시청시간 로깅
    */
   function videoPlayTimeLogger () {
-    console.log('video played time logging...');
+    // console.log('video played time logging...');
     timerLogPlayedSeconds += timerLoggingInterval;
 
     var seconds = player.getCurrentPlaybackTime();

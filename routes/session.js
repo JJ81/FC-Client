@@ -173,7 +173,7 @@ router.get('/:training_user_id/:course_id/:course_list_id', util.isAuthenticated
         returnData.watermark = req.user.user_id;
         returnData.total_played_seconds = results[2][0].total_played_seconds;
         returnData.setting = {
-          interval: 5, // playtime 로깅 간격
+          interval: 10, // playtime 로깅 간격
           waiting_seconds: 30, // 비디오 종료 후 다음 버튼이 노출되는 시간
           passive_rate: 80 // 다음 버튼이 활성화되는 시청시간 (%)
         };
