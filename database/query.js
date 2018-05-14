@@ -110,7 +110,7 @@ QUERY.EDU = {
 
   // 지난 교육과정
   SEL_PASSED: (searchBy, searchText, page = 1, count = 10) => {
-    // console.log(searchBy, searchText);
+    // //console.log(searchBy, searchText);
     let sql =
     'SELECT SQL_CALC_FOUND_ROWS DATE_FORMAT(ut.`start_dt`, \'%Y-%m-%d\') AS `start_dt` ' +
     '     , DATE_FORMAT(ut.`end_dt`, \'%Y-%m-%d\') AS `end_dt` ' +

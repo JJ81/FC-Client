@@ -11,6 +11,6 @@ router.post('/routename', function (req, res) {
   res.json({
     'success': true,
     'msg': '성공!'
-  });  
+  });
 
 });
