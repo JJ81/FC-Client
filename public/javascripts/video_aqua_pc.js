@@ -91,12 +91,12 @@ function (Util, AquaPlayerService, Timer, templateHTML5, templateWindow) {
 
         videoDuration = player.getDuration();
 
-        if (videoLastPlayedTime < videoDuration - 5) {
-          if (window.confirm('마지막 재생시점으로 이동하시겠습니까?')) {
-            player.setCurrentPlaybackTime(videoLastPlayedTime);
-            // player.pause();
-          }
-        }
+        // if (videoLastPlayedTime < videoDuration - 5) {
+        //   if (window.confirm('마지막 재생시점으로 이동하시겠습니까?')) {
+        //     player.setCurrentPlaybackTime(videoLastPlayedTime);
+        //     // player.pause();
+        //   }
+        // }
 
         setPlayer();
         break;
